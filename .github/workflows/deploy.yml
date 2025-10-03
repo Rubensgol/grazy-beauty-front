@@ -1,0 +1,51 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install and Build
+      run: |
+        npm install
+        npm run build
+
+    - name: Zip artifact
+      run: zip -r dist.zip dist
+
+    - name: SCP to server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        source: "dist.zip"
+        target: "/home/opc"
+
+    - name: Deploy on server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          unzip -o /home/opc/dist.zip -d /home/opc
+          sudo rm -rf /usr/share/nginx/html/*
+          sudo mv /home/opc/dist/* /usr/share/nginx/html/
+          rm /home/opc/dist.zip
+          rm -rf /home/opc/dist
+          sudo chmod -R 755 /usr/share/nginx/html
+          sudo restorecon -Rv /usr/share/nginx/html
