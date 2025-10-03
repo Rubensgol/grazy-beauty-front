@@ -33,7 +33,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           # Descompacta o zip, sobrescrevendo arquivos existentes
-          unzip -o /home/opc/site.zip -d /usr/share/nginx/html/
+          sudo unzip -o /home/opc/site.zip -d /usr/share/nginx/html/
           # Remove o arquivo zip após o deploy
           rm /home/opc/site.zip
           # Garante as permissões corretas (opcional, mas recomendado)
