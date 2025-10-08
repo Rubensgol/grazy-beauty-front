@@ -9,10 +9,12 @@ async function doLogin(ev) {
   const originalTxt = btn ? btn.textContent : '';
   try {
     // Validação básica antes de enviar
-    if (!usuario) { showLoginError('Por favor, informe seu login.'); if (btn) btn.disabled = false; return; }
-    if (!senha) { showLoginError('Por favor, informe sua senha.'); if (btn) btn.disabled = false; return; }
+    if (!usuario) { showLoginError('Por favor, informe seu login.'); if (btn) { btn.disabled = false; btn.textContent = originalTxt; } return; }
+    if (!senha) { showLoginError('Por favor, informe sua senha.'); if (btn) { btn.disabled = false; btn.textContent = originalTxt; } return; }
     if (btn) { btn.disabled = true; btn.textContent = 'Entrando...'; }
+
     let resp;
+    
     try {
       resp = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
@@ -20,26 +22,31 @@ async function doLogin(ev) {
         body: JSON.stringify({ usuario, senha })
       });
     } catch (netErr) {
-      showLoginError('Não foi possível conectar ao servidor. Verifique sua conexão.');
-      if (btn) { btn.textContent = 'Entrar'; btn.disabled = false; }
+  showLoginError('Não foi possível conectar ao servidor. Verifique sua conexão.');
+  if (btn) { btn.textContent = originalTxt; btn.disabled = false; }
       return;
     }
+
     if (!resp.ok) {
       // Mapear status para mensagens mais amigáveis
       if (resp.status === 401 || resp.status === 403) {
-        showLoginError('Login ou senha incorretos. Verifique e tente novamente.');
-        return;
+      showLoginError('Login ou senha incorretos. Verifique e tente novamente.');
+      if (btn) { btn.textContent = originalTxt; btn.disabled = false; }
+      return;
       }
       if (resp.status >= 500) {
-        showLoginError('Erro no servidor. Tente novamente mais tarde.');
-        return;
+      showLoginError('Erro no servidor. Tente novamente mais tarde.');
+      if (btn) { btn.textContent = originalTxt; btn.disabled = false; }
+      return;
       }
       // tentar extrair mensagem do corpo
       const errBody = await resp.json().catch(()=>null);
       const msg = errBody?.message || errBody?.error || 'Erro ao autenticar. Tente novamente.';
-      showLoginError(msg);
-      return;
+    showLoginError(msg);
+    if (btn) { btn.textContent = originalTxt; btn.disabled = false; }
+    return;
     }
+
     const body = await resp.json();
     // suporte para { token } ou { data: { token } }
     const token = body.token || (body.data && body.data.token);
@@ -48,8 +55,8 @@ async function doLogin(ev) {
     // redirecionar para painel
     window.location.href = '/painelAdm.html';
   } catch (e) {
-    showLoginError(e.message || 'Erro ao autenticar');
-    if (btn) { btn.textContent = 'Entrar'; btn.disabled = false; }
+  showLoginError(e.message || 'Erro ao autenticar');
+  if (btn) { btn.textContent = originalTxt; btn.disabled = false; }
   }
 }
 
