@@ -11,6 +11,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Create runtime env (API_BASE)
+      run: |
+        mkdir -p js || true
+        echo "window.__API_BASE = '${{ secrets.API_BASE || 'http://localhost:8080' }}';" > js/env.js
+
     - name: Compactar Arquivos do Site
       run: zip -r site.zip .
 
