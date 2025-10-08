@@ -5,63 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Área Administrativa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/painelAdm.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="icon" href="images/makeup.jpg" type="image/jpeg">
     <meta name="api-base" content="http://localhost:8080">
 </head>
 <body class="bg-gray-50">
 
-    <div class="flex items-center justify-center min-h-screen">
-        <div class="flex w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-            
-            <div class="hidden md:block md:w-1/2 login-bg"></div>
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="w-full max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            <div class="hidden md:flex items-center justify-center rounded-xl overflow-hidden card-soft login-bg"></div>
 
-            <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
-                
-                <div class="text-center mb-8">
-                    <h1 class="text-3xl font-bold text-gray-800">Área Administrativa</h1>
-                    <p class="mt-2 text-gray-600">Faça login para gerenciar seu negócio.</p>
+            <main class="card-soft p-8 md:p-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="images/makeup.jpg" alt="logo" class="h-12 w-12 rounded-full object-cover">
+                    <div>
+                        <h1 class="text-2xl font-bold">G. Medeiros</h1>
+                        <div class="text-sm text-gray-600">Área Administrativa</div>
+                    </div>
                 </div>
 
+                <p class="mb-6 text-gray-600">Entre com suas credenciais para acessar o painel administrativo.</p>
+
                 <form class="space-y-6" onsubmit="event.preventDefault();">
-                    
                     <div>
                         <label for="login" class="text-sm font-medium text-gray-700">Login</label>
-                        <input 
-                            id="login" 
-                            name="login" 
-                            type="login" 
-                            autocomplete="login" 
-                            required 
-                            class="w-full px-4 py-3 mt-1 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition" 
-                            placeholder="Seu login"
-                        >
+                        <input id="login" name="login" type="text" autocomplete="username" required
+                          class="w-full mt-1 px-4 py-3 border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-opacity-75" placeholder="seu@email.com">
                     </div>
 
                     <div>
                         <label for="password" class="text-sm font-medium text-gray-700">Senha</label>
-                        <input 
-                            id="password" 
-                            name="password" 
-                            type="password" 
-                            autocomplete="current-password" 
-                            required 
-                            class="w-full px-4 py-3 mt-1 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition" 
-                            placeholder="********"
-                        >
+                        <input id="password" name="password" type="password" autocomplete="current-password" required
+                          class="w-full mt-1 px-4 py-3 border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-opacity-75" placeholder="********">
                     </div>
 
                     <div>
-                        <button 
-                            type="submit" 
-                            class="w-full py-3 font-bold text-white bg-gray-800 rounded-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 transition-colors"
-                        >
-                            Entrar
-                        </button>
+                        <button type="submit" class="w-full py-3 btn-accent font-semibold">Entrar</button>
                     </div>
                 </form>
-            </div>
+
+                <div class="mt-6 text-sm text-gray-500">Esqueceu sua senha? Entre em contato com o administrador.</div>
+            </main>
         </div>
     </div>
 

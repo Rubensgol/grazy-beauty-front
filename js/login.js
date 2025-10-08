@@ -93,10 +93,8 @@ async function showLoginError(msg) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('form[onsubmit]');
+  const form = document.querySelector('form');
   if (form) {
-    // substituir onsubmit inline por listener mais robusto
-    form.removeAttribute('onsubmit');
     form.addEventListener('submit', doLogin);
   }
 });
