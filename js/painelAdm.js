@@ -1,4 +1,5 @@
-import { LOG } from './logger.js';
+import { LOG } from './configuracao/logger.js';
+import { requireAuth } from './configuracao/auth.js';
 
 async function loadModals() {
     const container = document.getElementById('modals-container');
@@ -84,6 +85,8 @@ function initApp() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    if (!requireAuth()) return;
+
     await loadModals();
     const modalScripts = [
         'js/modals/agendamento.js',

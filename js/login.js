@@ -1,4 +1,5 @@
 import { apiUrl } from './config.js';
+import { getAuthToken } from './auth.js';
 
 async function doLogin(ev) {
   ev.preventDefault();
@@ -79,7 +80,6 @@ async function ensureLoginModal() {
     if (ok) ok.addEventListener('keydown', (e) => { if (e.key === 'Enter') hideModal(); });
     __loginModalLoaded = true;
   } catch (e) {
-    // ignore
   }
 }
 
@@ -92,7 +92,13 @@ async function showLoginError(msg) {
     const ok = document.getElementById('login-error-ok'); if (ok) ok.focus(); }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => 
+{
+  if (getAuthToken()) {
+    window.location.replace('/painelAdm.html');
+    return;
+  }
+  
   const form = document.querySelector('form');
   if (form) {
     form.addEventListener('submit', doLogin);
