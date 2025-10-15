@@ -1,0 +1,30 @@
+<div id="cliente-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden opacity-0 modal">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+    <button id="close-cliente-modal-button" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl" aria-label="Fechar">&times;</button>
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 font-playfair" id="cliente-modal-title">Adicionar Cliente</h2>
+    <form class="space-y-4" id="cliente-form">
+      <div>
+  <label for="cliente-nome" class="block text-sm font-medium text-gray-700">Nome</label>
+  <input type="text" id="cliente-nome" name="cliente-nome" title="Nome completo do cliente" class="mt-1 block w-full border-2 border-gray-200 rounded-xl shadow-sm hover:border-gray-300 focus:ring-[var(--accent)] focus:border-[var(--accent)]" required>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="cliente-telefone" class="block text-sm font-medium text-gray-700">Telefone</label>
+          <input type="tel" id="cliente-telefone" name="cliente-telefone" placeholder="(21) 99999-0000" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-[var(--accent)] focus:border-[var(--accent)]" required>
+        </div>
+        <div>
+          <label for="cliente-email" class="block text-sm font-medium text-gray-700">E-mail</label>
+          <input type="email" id="cliente-email" name="cliente-email" title="E-mail do cliente (ex: contato@exemplo.com)" class="mt-1 block w-full border-2 border-gray-200 rounded-xl shadow-sm hover:border-gray-300 focus:ring-[var(--accent)] focus:border-[var(--accent)]" />
+        </div>
+      </div>
+      <div>
+        <label for="cliente-anotacoes" class="block text-sm font-medium text-gray-700">Anotações</label>
+        <textarea id="cliente-anotacoes" name="cliente-anotacoes" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-[var(--accent)] focus:border-[var(--accent)]" placeholder="Preferências, observações..."></textarea>
+      </div>
+      <div class="pt-4 flex justify-end space-x-3">
+        <button type="button" id="cancel-cliente-modal-button" class="px-4 py-2 text-sm font-medium rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300">Cancelar</button>
+        <button type="submit" class="px-6 py-2 text-sm font-medium rounded-full btn-accent" id="cliente-submit-button">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,5 +1,7 @@
-// Sistema de carregamento de páginas
-class PageManager {
+import { LOG } from './configuracao/logger.js';
+
+class PageManager
+{
     constructor() {
         this.pagesContainer = document.getElementById('pages-container');
         this.currentPage = null;
@@ -14,13 +16,15 @@ class PageManager {
         }
 
         try {
-            const response = await fetch(`pages/${pageName}.html`);
+            const response = await fetch(`pages/${pageName}.html?v=${Date.now()}`);
             if (!response.ok) {
                 throw new Error(`Erro ao carregar página ${pageName}`);
             }
             const html = await response.text();
             this.loadedPages.set(pageName, html);
+            LOG.debug('[pages] html content', html);
             this.pagesContainer.insertAdjacentHTML('beforeend', html);
+            LOG.debug('[pages] after insert, #lista-clientes', document.querySelector('#lista-clientes'));
             const shown = this.showPage(pageName);
             window.dispatchEvent(new CustomEvent('page:loaded', { detail: { page: pageName }}));
             window.dispatchEvent(new CustomEvent('page:shown', { detail: { page: pageName }}));

@@ -6,7 +6,7 @@ export function getAuthToken()
 export function requireAuth({ redirectTo = '/login.html' } = {}) 
 {
   const token = getAuthToken();
-  console.log(token);
+
   if (!token) 
   {
     window.location.replace(redirectTo);

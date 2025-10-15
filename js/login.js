@@ -1,5 +1,5 @@
-import { apiUrl } from './config.js';
-import { getAuthToken } from './auth.js';
+import { apiUrl } from './configuracao/config.js';
+import { getAuthToken } from './configuracao/auth.js';
 
 async function doLogin(ev) {
   ev.preventDefault();

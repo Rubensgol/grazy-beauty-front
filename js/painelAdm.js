@@ -51,19 +51,13 @@ function initApp() {
     function handleLinkClick(event) {
         event.preventDefault();
     let targetId = this.getAttribute('href').substring(1);
-    if (targetId === 'clientes') targetId = 'usuarios'; // alias legado
+    if (targetId === 'clientes') targetId = 'clientes'; // alias legado
         
         setActiveLink(this);
         pageTitle.textContent = this.querySelector('span').textContent;
         
         if (window.pageManager) {
-            const prev = targetId;
-            window.pageManager.loadPage(targetId).then(() => {
-                if (prev === 'usuarios') {
-                    window.dispatchEvent(new CustomEvent('page:loaded', { detail: { page: 'usuarios' }}));
-                    window.dispatchEvent(new CustomEvent('page:shown', { detail: { page: 'usuarios' }}));
-                }
-            });
+            window.pageManager.loadPage(targetId);
         }
         
         if(!mobileSidebar.classList.contains('-translate-x-full')) {
@@ -87,13 +81,13 @@ function initApp() {
 document.addEventListener('DOMContentLoaded', async () => {
     if (!requireAuth()) return;
 
-    await loadModals();
-    const modalScripts = [
-        'js/modals/agendamento.js',
-        'js/modals/servico.js',
-        'js/modals/payment.js',
-        'js/modals/day-details.js'
-    ];
+    // await loadModals();
+    // const modalScripts = [
+    //     'js/modals/agendamento.js',
+    //     'js/modals/servico.js',
+    //     'js/modals/payment.js',
+    //     'js/modals/day-details.js'
+    // ];
 
     function loadScript(src) {
         return new Promise((resolve, reject) => {
@@ -105,13 +99,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    for (const src of modalScripts) {
-        try {
-            await loadScript(src);
-        } catch (err) {
-            LOG.error(err);
-        }
-    }
+    // for (const src of modalScripts) {
+    //     try {
+    //         await loadScript(src);
+    //     } catch (err) {
+    //         LOG.error(err);
+    //     }
+    // }
 
     if (window.initAgendamentoModal) window.initAgendamentoModal();
     if (window.initServicoModal) window.initServicoModal();
