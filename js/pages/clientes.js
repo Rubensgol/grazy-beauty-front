@@ -60,18 +60,29 @@ function renderizarCliente(cliente) {
   if (!listaClientesEl) return;
   const c = normalizarCliente(cliente);
   let item = document.createElement('div');
-  item.className = 'cliente-item bg-white border border-gray-200 rounded-lg p-4 mb-4 shadow-md hover:shadow-lg transition-shadow';
+  item.className = 'bg-white p-4 rounded-2xl shadow-md border border-gray-100 flex flex-col group relative transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:border-gray-200';
+  const emailDisplay = c.email ? `<a href="mailto:${c.email}" class="hover:text-[var(--accent)] transition-colors" title="Enviar e-mail para ${c.email}">${c.email}</a>` : '<span class="text-gray-400">Não informado</span>';
+  const telefoneDisplay = c.telefone ? `<a href="tel:${c.telefone}" class="hover:text-[var(--accent)] transition-colors" title="Ligar para ${c.telefone}">${c.telefone}</a>` : '<span class="text-gray-400">Não informado</span>';
+
   item.innerHTML = `
-    <div class="flex justify-between items-start">
-      <div class="flex-1">
-        <h4 class="text-lg font-semibold text-gray-800 mb-2">${c.nome}</h4>
-        <p class="text-gray-600 mb-1"><i class="fas fa-envelope mr-2"></i>${c.email}</p>
-        <p class="text-gray-600 mb-1"><i class="fas fa-phone mr-2"></i>${c.telefone || 'N/A'}</p>
-        ${c.obs ? `<p class="text-gray-600 mb-1"><i class="fas fa-sticky-note mr-2"></i>${c.obs}</p>` : ''}
+    <div class="flex-1">
+      <h4 class="text-lg font-bold text-gray-800 mb-2 truncate transition-colors group-hover:text-[var(--accent)]" title="${c.nome}">${c.nome || 'Cliente sem nome'}</h4>
+      <div class="space-y-2">
+        <p class="text-sm text-gray-600 flex items-start gap-2">
+          <i class="fas fa-envelope fa-fw text-gray-400 w-4 text-center pt-1"></i>
+          <span>${emailDisplay}</span>
+        </p>
+        <p class="text-sm text-gray-600 flex items-start gap-2">
+          <i class="fas fa-phone fa-fw text-gray-400 w-4 text-center pt-1"></i>
+          <span>${telefoneDisplay}</span>
+        </p>
       </div>
-      <button class="btn-editar-cliente text-blue-600 hover:text-blue-800 p-2 rounded-full hover:bg-blue-50 transition-colors" data-id="${c.id}" title="Editar cliente">
-        <i class="fas fa-edit"></i>
-      </button>
+      ${c.obs ? `<div class="text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100 line-clamp-2"><i class="fas fa-sticky-note fa-fw text-gray-400 mr-1"></i>${c.obs}</div>` : ''}
+    </div>
+    <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
+        <button class="btn-editar-cliente h-8 w-8 flex items-center justify-center rounded-full bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] transition-colors" data-id="${c.id}" title="Editar cliente">
+            <i class="fas fa-pencil-alt text-xs"></i>
+        </button>
     </div>
   `;
   item.querySelector('.btn-editar-cliente').addEventListener('click', async () => {
