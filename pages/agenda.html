@@ -1,0 +1,30 @@
+<!-- Página da Agenda (linha do tempo) -->
+<main id="agenda" class="p-6 sm:p-10 page-content hidden">
+    <div class="card-soft p-6">
+        <!-- Navegação de datas -->
+        <div class="agenda-nav mb-6">
+            <div class="agenda-nav-main">
+                <div class="agenda-nav-group">
+                    <button id="agenda-prev-dia" class="agenda-nav-btn" aria-label="Dia anterior" title="Dia anterior">
+                        <span class="chevron">◀</span>
+                    </button>
+                    <div class="agenda-date-wrapper">
+                        <h3 id="agenda-data-label" class="agenda-date-label font-playfair">—</h3>
+                        <div id="agenda-semana-mini" class="agenda-week-mini"></div>
+                    </div>
+                    <button id="agenda-next-dia" class="agenda-nav-btn" aria-label="Próximo dia" title="Próximo dia">
+                        <span class="chevron">▶</span>
+                    </button>
+                    <button id="agenda-hoje" class="agenda-nav-chip" aria-label="Voltar para hoje">Hoje</button>
+                </div>
+                <div class="agenda-nav-group hidden sm:flex">
+                    <button id="agenda-prev-semana" class="agenda-nav-btn-sm" aria-label="Semana anterior" title="Semana anterior">Semana ◀</button>
+                    <button id="agenda-next-semana" class="agenda-nav-btn-sm" aria-label="Próxima semana" title="Próxima semana">▶ Semana</button>
+                </div>
+            </div>
+        </div>
+
+    <!-- Linha do tempo dinâmica -->
+    <div class="overflow-y-auto max-h-[calc(100vh-250px)] pr-2" id="agenda-timeline"></div>
+    </div>
+</main>
