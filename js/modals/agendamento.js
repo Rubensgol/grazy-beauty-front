@@ -1,4 +1,3 @@
-import { apiUrl } from '../configuracao/config.js';
 import { fetchWithAuth } from '../configuracao/http.js';
 import { adicionarNotificacao } from './notificacoes.js';
 
@@ -30,7 +29,7 @@ export function limparCamposModalAgendamento(modal) {
 
 async function carregarClientes() {
     try {
-        const response = await fetchWithAuth(apiUrl('/api/cliente'));
+        const response = await fetchWithAuth('/api/cliente');
         
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);
@@ -66,7 +65,7 @@ async function carregarClientes() {
 
 async function carregarServicos() {
     try {
-        const response = await fetchWithAuth(apiUrl('/api/servicos'));
+        const response = await fetchWithAuth('/api/servicos');
         
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);
@@ -207,7 +206,7 @@ async function salvarAgendamento(form) {
     };
     
     const isEditing = form.dataset.editingId;
-    const url = isEditing ? apiUrl(`/api/agendamentos/${isEditing}`) : apiUrl('/api/agendamentos');
+    const url = isEditing ? `/api/agendamentos/${isEditing}` : '/api/agendamentos';
     const method = isEditing ? 'PUT' : 'POST';
     
     const response = await fetchWithAuth(url, {
@@ -337,7 +336,7 @@ if (!window.__agendamentoEditListener) {
         // Se veio só id, tentar buscar detalhes
         if (a && a.id && (!a.dataHora && !a.data_hora)) {
             try {
-                const res = await fetch(apiUrl(`/api/agendamentos/${a.id}`));
+                const res = await fetchWithAuth(`/api/agendamentos/${a.id}`);
                 if (res.ok) {
                     let full = await res.json();
                     if (full && full.data) full = full.data;

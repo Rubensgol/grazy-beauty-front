@@ -1,7 +1,6 @@
 // Modal para adicionar imagem na galeria
 import { adicionarNotificacao } from './notificacoes.js';
 import { fetchWithAuth } from '../configuracao/http.js';
-import { apiUrl } from '../configuracao/config.js';
 import { LOG } from '../configuracao/logger.js';
 import { initGaleriaPage } from '../pages/galeria.js';
 
@@ -62,7 +61,7 @@ export async function carregarModalAdicionarImagem() {
       if (url) {
         // Envio por URL -> POST JSON para /api/images/from-url
         LOG.debug('[form-adicionar-imagem] enviando por URL', url);
-        const res = await fetchWithAuth(apiUrl('/api/images/from-url'), {
+        const res = await fetchWithAuth('/api/images/from-url', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url, descricao })
@@ -85,7 +84,7 @@ export async function carregarModalAdicionarImagem() {
         formData.append('file', file);
         if (descricao) formData.append('descricao', descricao);
 
-        const res = await fetchWithAuth(apiUrl('/api/images/upload'), {
+        const res = await fetchWithAuth('/api/images/upload', {
           method: 'POST',
           body: formData
         });

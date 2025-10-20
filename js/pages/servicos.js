@@ -1,6 +1,5 @@
 import { carregarEAbrirModalServico, ensureServicoModalIsLoaded } from '../modals/servico-modal.js';
 import { abrirConfirmacaoExclusao } from '../modals/confirmar-acao.js';
-import { apiUrl } from '../configuracao/config.js';
 import { adicionarNotificacao } from '../modals/notificacoes.js';
 import { LOG } from '../configuracao/logger.js';
 import { fetchWithAuth } from '../configuracao/http.js';
@@ -9,7 +8,7 @@ let servicosCache = [];
 
 async function fetchServicos() {
   try {
-    const res = await fetch(apiUrl('/api/servicos'));
+    const res = await fetchWithAuth('/api/servicos');
     if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
     const body = await res.json();
     if (Array.isArray(body)) return body; // lista direta
@@ -34,7 +33,7 @@ function limparGrid() {
 function buildImageUrl(servico) {
   const stored = servico.imageStoredFilename || servico.storedFilename || servico.stored_filename;
   if (!stored) return null;
-  return apiUrl(`/api/images/download/${encodeURIComponent(stored)}`);
+  return `/api/images/download/${encodeURIComponent(stored)}`;
 }
 
 function criarCardServico(servico) {
@@ -208,7 +207,7 @@ window.addEventListener('DOMContentLoaded', () => {
       abrirConfirmacaoExclusao(id, async (servicoId) => {
         try {
           LOG.debug('[servicos] excluindo serviço:', servicoId);
-          const res = await fetchWithAuth(apiUrl(`/api/servicos/${servicoId}`), {
+          const res = await fetchWithAuth(`/api/servicos/${servicoId}`, {
             method: 'DELETE'
           });
 

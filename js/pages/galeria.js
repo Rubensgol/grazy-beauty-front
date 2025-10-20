@@ -1,6 +1,5 @@
 // Script para carregar as imagens da galeria a partir do backend
 import { fetchWithAuth } from '../configuracao/http.js';
-import { apiUrl } from '../configuracao/config.js';
 import { adicionarNotificacao } from '../modals/notificacoes.js';
 import { confirmarAcao } from '../modals/confirmar-acao.js';
 import { LOG } from '../configuracao/logger.js';
@@ -35,14 +34,14 @@ function buildImageSrc(item) {
   // item pode ser string (filename) ou objeto
   if (!item) return null;
   if (typeof item === 'string') {
-    return apiUrl(`/api/images/download/${encodeURIComponent(item)}`);
+    return `/api/images/download/${encodeURIComponent(item)}`;
   }
   if (item.src) return item.src; // já tem URL completa
   if (item.storedFilename) {
-    return apiUrl(`/api/images/download/${encodeURIComponent(item.storedFilename)}`);
+    return `/api/images/download/${encodeURIComponent(item.storedFilename)}`;
   }
   if (item.filename) {
-    return apiUrl(`/api/images/download/${encodeURIComponent(item.filename)}`);
+    return `/api/images/download/${encodeURIComponent(item.filename)}`;
   }
   return null;
 }

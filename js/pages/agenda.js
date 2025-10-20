@@ -23,7 +23,7 @@ function resetarCamposModalAgendamento(modal) {
   selects.forEach(s => { s.selectedIndex = 0; });
 }
 import { carregarModalAgendamento } from '../modals/agendamento.js';
-import { apiUrl } from '../configuracao/config.js';
+import { fetchWithAuth } from '../configuracao/http.js';
 
 let agendaDataAtual = new Date();
 const INICIO_DIA_PADRAO = 8;   // 08:00
@@ -37,8 +37,8 @@ function sameDay(a,b) {
 
 async function carregarAgendamentosDia(d) {
   try {
-    const url = apiUrl(`/api/agendamentos?data=${dataISO(d)}`);
-    const res = await fetch(url, { cache: 'no-store' });
+    const url = `/api/agendamentos?data=${dataISO(d)}`;
+    const res = await fetchWithAuth(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     let body = await res.json();
     let json = body?.data || body;

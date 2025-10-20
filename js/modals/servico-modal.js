@@ -1,7 +1,6 @@
 import { fetchWithAuth } from '../configuracao/http.js';
 import { adicionarNotificacao } from './notificacoes.js';
 import { LOG } from '../configuracao/logger.js';
-import { apiUrl } from '../configuracao/config.js';
 
 export async function ensureServicoModalIsLoaded() {
   if (document.getElementById('servico-modal')) {
@@ -86,7 +85,7 @@ export function wireServicoModal() {
     formData.append('forServico', 'true');
 
     try {
-      const res = await fetchWithAuth(apiUrl('/api/images/upload'), {
+      const res = await fetchWithAuth('/api/images/upload', {
         method: 'POST',
         body: formData
         // NÃO definir Content-Type: FormData é enviado automaticamente
@@ -148,7 +147,7 @@ export function wireServicoModal() {
       const urlPath = editingId ? `/api/servicos/${editingId}` : '/api/servicos';
       
       LOG.debug('[servico-modal] salvando', method, urlPath, data);
-      const res = await fetchWithAuth(apiUrl(urlPath), {
+      const res = await fetchWithAuth(urlPath, {
         method,
         body: JSON.stringify(data)
       });

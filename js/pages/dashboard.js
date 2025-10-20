@@ -1,10 +1,10 @@
 // Script para atualizar métricas do dashboard
 import { adicionarNotificacao } from '../modals/notificacoes.js';
-import { apiUrl } from '../configuracao/config.js';
+import { fetchWithAuth } from '../configuracao/http.js';
 
 export async function buscarMetricasDashboard() {
   try {
-    const response = await fetch(apiUrl('/api/transacoes/valores'));
+    const response = await fetchWithAuth('/api/transacoes/valores');
     if (response.ok) {
       const valores = await response.json();
       atualizarMetricas(valores);
@@ -21,7 +21,7 @@ async function buscarEstatisticaAgendamentosMes() {
   const el = document.getElementById('agendamentos-mes');
   if (!el) return;
   try {
-    const res = await fetch(apiUrl('/api/agendamentos/estatistica/mes'));
+    const res = await fetchWithAuth('/api/agendamentos/estatistica/mes');
     if (!res.ok) throw new Error('Falha estatística agendamentos');
     let json = await res.json();
     // Se resposta tem propriedade 'data' (mesmo que 0), desembrulha
@@ -176,7 +176,7 @@ async function carregarAgendamentosDashboard() {
   const empty = document.getElementById('agendamentos-empty');
   if (!grid) return;
   try {
-    const res = await fetch(apiUrl('/api/agendamentos?limit=12&proximos=true'), { cache: 'no-store' });
+    const res = await fetchWithAuth('/api/agendamentos?limit=12&proximos=true', { cache: 'no-store' });
     if (!res.ok) throw new Error('Falha ao buscar agendamentos');
     let data = await res.json();
     if (data && data.data) data = data.data;

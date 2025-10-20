@@ -60,7 +60,7 @@ export async function carregarModalPayment() {
                     const btn = form.querySelector('button[type="submit"]');
                     try {
                         if (btn) { btn.disabled = true; btn.dataset.originalText = btn.textContent; btn.textContent = 'Finalizando...'; }
-                        const res = await fetch(apiUrl(`/api/agendamentos/${agId}/finalizar`), {
+                        const res = await fetchWithAuth(`/api/agendamentos/${agId}/finalizar`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ valorPago: valorPago ? Number(valorPago) : null, metodoPagamento: metodo })
