@@ -1,5 +1,5 @@
 // Modal de Pagamento: carrega o HTML e conecta eventos (padronizado)
-import { apiUrl } from '../configuracao/config.js';
+import { fetchWithAuth } from '../configuracao/http.js';
 export async function carregarModalPayment() {
     try {
         if (window.__paymentModalInit || document.getElementById('payment-modal')) {

@@ -1,0 +1,38 @@
+<!-- Página Financeiro -->
+<main id="financeiro" class="p-6 sm:p-10 page-content hidden">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="p-6 card-soft text-center">
+            <p class="text-sm font-medium text-gray-500">Receita Total (mês)</p>
+            <p class="text-3xl font-bold text-green-500 mt-2" id="receita-total">R$ 0,00</p>
+        </div>
+    <div class="p-6 card-soft text-center">
+            <p class="text-sm font-medium text-gray-500">Despesas Totais (mês)</p>
+            <p class="text-3xl font-bold text-red-500 mt-2" id="despesas-totais">R$ 0,00</p>
+        </div>
+    <div class="p-6 card-soft text-center">
+            <p class="text-sm font-medium text-gray-500">Lucro Líquido (mês)</p>
+            <p class="text-3xl font-bold text-gray-800 mt-2" id="lucro-liquido">R$ 0,00</p>
+        </div>
+    </div>
+    <div class="card-soft">
+        <div class="p-6 border-b flex justify-between items-center">
+            <h3 class="text-xl font-semibold text-gray-800">Últimas Transações</h3>
+            <button class="px-4 py-2 text-sm font-medium rounded-full btn-accent financeiro-add-transacao">Adicionar Transação</button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <!-- As transações serão carregadas dinamicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
