@@ -8,7 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/painelAdm.css">
     <link rel="stylesheet" href="css/login.css">
-    <link rel="icon" href="images/makeup.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="css/logo.css">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <meta name="api-base" content="https://grazybeauty.com.br">
 </head>
 <body class="bg-gray-50">
@@ -18,15 +19,19 @@
             <div class="hidden md:flex items-center justify-center rounded-xl overflow-hidden card-soft login-bg"></div>
 
             <main class="card-soft p-8 md:p-12">
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="images/makeup.jpg" alt="logo" class="h-12 w-12 rounded-full object-cover">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="h-14 w-14 rounded-full bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center border-2 border-accent">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
+                            <text x="100" y="145" font-family="Georgia, serif" font-size="100" font-weight="300" text-anchor="middle" fill="#b5879d" letter-spacing="-6">GB</text>
+                        </svg>
+                    </div>
                     <div>
-                        <h1 class="text-2xl font-bold">G. Medeiros</h1>
-                        <div class="text-sm text-gray-600">Área Administrativa</div>
+                        <h1 class="text-2xl font-bold text-gray-800">G. Medeiros</h1>
+                        <div class="text-sm text-gray-500 font-medium">Beleza & Estética</div>
                     </div>
                 </div>
 
-                <p class="mb-6 text-gray-600">Entre com suas credenciais para acessar o painel administrativo.</p>
+                <p class="mb-8 text-gray-600 text-sm">Entre com suas credenciais para acessar o painel administrativo.</p>
 
                 <form class="space-y-6" onsubmit="event.preventDefault();">
                     <div>

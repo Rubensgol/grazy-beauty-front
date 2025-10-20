@@ -1,0 +1,6 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#f8f6f4" stroke="#b5879d" stroke-width="3"/>
+  <!-- GB text -->
+  <text x="100" y="130" font-family="Georgia, serif" font-size="100" font-weight="600" text-anchor="middle" dominant-baseline="middle" fill="#b5879d" letter-spacing="-6">GB</text>
+</svg>

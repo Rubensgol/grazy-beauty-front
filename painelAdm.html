@@ -7,8 +7,10 @@
     <meta name="api-base" content="https://grazybeauty.com.br">
     <title>Painel Administrativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/painelAdm.css">
+    <link rel="stylesheet" href="css/logo.css">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-MdUqB..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -18,8 +20,11 @@
     <div class="flex h-screen bg-gray-100">
 
         <aside class="hidden md:flex flex-col w-64 bg-white shadow-lg">
-            <div class="flex items-center justify-center h-20 border-b">
-                <h1 class="text-2xl font-bold text-gray-800">G. Medeiros</h1>
+            <div class="flex items-center justify-center h-20 border-b border-gray-100 gap-2">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
+                    <text x="100" y="145" font-family="Georgia, serif" font-size="100" font-weight="300" text-anchor="middle" fill="#b5879d" letter-spacing="-6">GB</text>
+                </svg>
+                <span class="text-lg font-playfair font-bold text-gray-800">G. Medeiros</span>
             </div>
             <nav id="sidebar-nav" class="flex-1 px-4 py-6 space-y-2">
                 <a href="#dashboard" class="sidebar-link flex items-center px-4 py-2 rounded-lg active">
@@ -103,8 +108,11 @@
         <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
         <aside id="mobile-sidebar"
             class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-30 transform -translate-x-full md:hidden">
-            <div class="flex items-center justify-center h-20 border-b">
-                <h1 class="text-2xl font-bold text-gray-800">G. Medeiros</h1>
+            <div class="flex items-center justify-center h-20 border-b border-gray-100 gap-2">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
+                    <text x="100" y="145" font-family="Georgia, serif" font-size="100" font-weight="300" text-anchor="middle" fill="#b5879d" letter-spacing="-6">GB</text>
+                </svg>
+                <span class="text-lg font-playfair font-bold text-gray-800">G. Medeiros</span>
             </div>
             <nav id="mobile-sidebar-nav" class="flex-1 px-4 py-6 space-y-2">
             </nav>

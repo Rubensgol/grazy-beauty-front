@@ -1,0 +1,50 @@
+/* Logo styles */
+.logo-gb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f7f3f0 0%, #fff8f5 100%);
+  border: 2px solid #b5879d;
+  font-family: 'Georgia', serif;
+  font-size: 20px;
+  font-weight: 300;
+  color: #b5879d;
+  letter-spacing: -2px;
+  box-shadow: 0 2px 8px rgba(181, 135, 157, 0.15);
+  transition: all 0.3s ease;
+}
+
+.logo-gb:hover {
+  box-shadow: 0 4px 16px rgba(181, 135, 157, 0.25);
+  transform: translateY(-2px);
+}
+
+.logo-gb-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+  letter-spacing: -0.5px;
+}
+
+/* Logo container responsive */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .logo-gb {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .logo-gb-text {
+    font-size: 16px;
+  }
+}
