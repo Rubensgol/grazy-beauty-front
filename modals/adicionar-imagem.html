@@ -1,0 +1,27 @@
+<!-- Modal: Adicionar Imagem -->
+<div id="modal-adicionar-imagem" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg w-full max-w-lg p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Adicionar Nova Imagem</h3>
+      <button id="close-modal-adicionar-imagem" class="text-gray-600 hover:text-gray-800">✕</button>
+    </div>
+    <form id="form-adicionar-imagem" class="space-y-4">
+      <div>
+        <label class="block text-sm text-gray-600">URL da imagem (opcional)</label>
+        <input type="url" name="url" id="imagem-url" class="w-full border rounded px-3 py-2" placeholder="https://...">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600">Ou enviar arquivo</label>
+        <input type="file" name="file" id="imagem-file" accept="image/*" class="w-full">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600">Descrição (opcional)</label>
+        <input type="text" name="descricao" id="imagem-descricao" class="w-full border rounded px-3 py-2">
+      </div>
+      <div class="flex justify-end">
+        <button type="button" id="cancel-adicionar-imagem" class="px-4 py-2 mr-2 bg-gray-200 rounded">Cancelar</button>
+        <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">Adicionar</button>
+      </div>
+    </form>
+  </div>
+</div>

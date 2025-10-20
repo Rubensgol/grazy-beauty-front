@@ -1,5 +1,5 @@
 import { carregarEAbrirModalServico, ensureServicoModalIsLoaded } from '../modals/servico-modal.js';
-import { abrirConfirmacaoExclusao } from '../modals/confirmar-exclusao.js';
+import { abrirConfirmacaoExclusao } from '../modals/confirmar-acao.js';
 import { apiUrl } from '../configuracao/config.js';
 import { adicionarNotificacao } from '../modals/notificacoes.js';
 import { LOG } from '../configuracao/logger.js';
@@ -204,7 +204,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const id = btnDeletar.getAttribute('data-deletar-servico');
       if (!id) return;
       
-      // Abre modal de confirmação com callback
+      // Abre modal de confirmação com callback (padrão unificado)
       abrirConfirmacaoExclusao(id, async (servicoId) => {
         try {
           LOG.debug('[servicos] excluindo serviço:', servicoId);
