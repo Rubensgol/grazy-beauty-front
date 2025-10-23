@@ -525,6 +525,52 @@ function initAgendaTimeline() {
       abrirModalPreenchendoHorario(new Date(agendaDataAtual), horaStr);
     }
   });
+  
+  // Menu de contexto (botão direito) para cancelar agendamento
+  timeline.addEventListener('contextmenu', async (e) => {
+    const bloco = e.target.closest('.appointment-block');
+    if (!bloco) return;
+    
+    e.preventDefault();
+    const encoded = bloco.getAttribute('data-agendamento');
+    if (!encoded) return;
+    
+    try {
+      const dados = JSON.parse(decodeURIComponent(encoded));
+      if (!dados || !dados.id) return;
+      
+      // Importar módulos necessários
+      const { confirmarAcao } = await import('../modals/confirmar-acao.js');
+      const { fetchWithAuth } = await import('../configuracao/http.js');
+      const { adicionarNotificacao } = await import('../modals/notificacoes.js');
+      
+      // Confirmar cancelamento
+      const confirmado = await confirmarAcao(
+        'Cancelar Agendamento',
+        `Tem certeza que deseja cancelar este agendamento?`,
+        'warning'
+      );
+      
+      if (!confirmado) return;
+      
+      const response = await fetchWithAuth(`/api/agendamentos/${dados.id}/cancelar`, {
+        method: 'PUT'
+      });
+      
+      if (response.ok) {
+        adicionarNotificacao('Agendamento cancelado com sucesso', 'success');
+        // Recarregar agenda
+        atualizarAgendaDia();
+        // Disparar evento
+        window.dispatchEvent(new CustomEvent('agendamento:cancelado', { detail: { id: dados.id } }));
+      } else {
+        const errorText = await response.text().catch(() => response.statusText);
+        adicionarNotificacao(`Erro ao cancelar agendamento: ${errorText}`, 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao cancelar agendamento:', error);
+    }
+  });
 }
 
 async function atualizarAgendaDia() {
@@ -567,6 +613,14 @@ window.addEventListener('agendamento:adicionado', () => {
 });
 
 window.addEventListener('agendamento:atualizado', () => {
+  // Recarregar agenda atual
+  const agendaPage = document.getElementById('agenda');
+  if (agendaPage && !agendaPage.classList.contains('hidden')) {
+    atualizarAgendaDia();
+  }
+});
+
+window.addEventListener('agendamento:cancelado', () => {
   // Recarregar agenda atual
   const agendaPage = document.getElementById('agenda');
   if (agendaPage && !agendaPage.classList.contains('hidden')) {

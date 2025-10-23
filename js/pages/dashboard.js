@@ -141,7 +141,10 @@ function criarCardAgendamento(aRaw) {
     </div>
     <div class="flex items-center justify-between text-[11px] text-gray-600">
       <span class="flex items-center gap-1"><svg class="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>${dataHora}</span>
-      <button class="text-[10px] px-2 py-1 rounded-full bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] btn-editar-agendamento">Editar</button>
+      <div class="flex gap-1">
+        <button class="text-[10px] px-2 py-1 rounded-full bg-red-500 text-white hover:bg-red-600 btn-cancelar-agendamento" title="Cancelar agendamento">Cancelar</button>
+        <button class="text-[10px] px-2 py-1 rounded-full bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] btn-editar-agendamento">Editar</button>
+      </div>
     </div>
   </div>`;
 }
@@ -226,6 +229,53 @@ if (!window.__dashboardAgEditDelegated) {
     window.dispatchEvent(new CustomEvent('agendamento:editar', { detail: data }));
   });
   window.__dashboardAgEditDelegated = true;
+}
+
+// Delegar clique no botão Cancelar agendamento
+if (!window.__dashboardAgCancelDelegated) {
+  document.addEventListener('click', async (ev) => {
+    const cancelBtn = ev.target.closest && ev.target.closest('.btn-cancelar-agendamento');
+    if (!cancelBtn) return;
+    const card = cancelBtn.closest('.ag-card');
+    if (!card) return;
+    let data;
+    try { data = card.getAttribute('data-agendamento'); if (data) data = JSON.parse(decodeURIComponent(data)); } catch { data = null; }
+    if (!data || !data.id) return;
+    
+    // Importar módulos necessários
+    const { confirmarAcao } = await import('../modals/confirmar-acao.js');
+    const { fetchWithAuth } = await import('../configuracao/http.js');
+    const { adicionarNotificacao } = await import('../modals/notificacoes.js');
+    
+    // Confirmar cancelamento
+    const confirmado = await confirmarAcao(
+      'Cancelar Agendamento',
+      `Tem certeza que deseja cancelar o agendamento de ${data.usuario?.nome || 'este cliente'}?`,
+      'warning'
+    );
+    
+    if (!confirmado) return;
+    
+    try {
+      const response = await fetchWithAuth(`/api/agendamentos/${data.id}/cancelar`, {
+        method: 'PUT'
+      });
+      
+      if (response.ok) {
+        adicionarNotificacao('Agendamento cancelado com sucesso', 'success');
+        // Remover card do dashboard
+        card.remove();
+        // Disparar evento para outras páginas atualizarem
+        window.dispatchEvent(new CustomEvent('agendamento:cancelado', { detail: { id: data.id } }));
+      } else {
+        const errorText = await response.text().catch(() => response.statusText);
+        adicionarNotificacao(`Erro ao cancelar agendamento: ${errorText}`, 'error');
+      }
+    } catch (error) {
+      adicionarNotificacao('Erro de conexão ao cancelar agendamento', 'error');
+    }
+  });
+  window.__dashboardAgCancelDelegated = true;
 }
 
 // Delegar clique no botão Finalizar
