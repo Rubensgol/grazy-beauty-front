@@ -56,6 +56,14 @@ function initApp() {
         setActiveLink(this);
         pageTitle.textContent = this.querySelector('span').textContent;
         
+        // Salvar última página visitada no localStorage
+        try {
+            localStorage.setItem('lastVisitedPage', targetId);
+            LOG.debug('[painelAdm] Página salva:', targetId);
+        } catch (e) {
+            LOG.warn('[painelAdm] Erro ao salvar página:', e);
+        }
+        
         if (window.pageManager) {
             window.pageManager.loadPage(targetId);
         }
@@ -114,7 +122,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initApp();
     
+    // Restaurar última página visitada ou carregar dashboard por padrão
+    let pageToLoad = 'dashboard';
+    try {
+        const lastPage = localStorage.getItem('lastVisitedPage');
+        if (lastPage) {
+            pageToLoad = lastPage;
+            LOG.info('[painelAdm] Restaurando última página:', lastPage);
+            
+            // Ativar o link correspondente no menu
+            const targetLink = document.querySelector(`.sidebar-link[href="#${lastPage}"]`);
+            if (targetLink) {
+                // Atualizar visual do menu
+                document.querySelectorAll('.sidebar-link').forEach(l => {
+                    l.classList.remove('active', 'bg-gray-800', 'text-white');
+                    l.classList.add('text-gray-600', 'hover:bg-gray-200');
+                });
+                
+                const correspondingLinks = document.querySelectorAll(`.sidebar-link[href="#${lastPage}"]`);
+                correspondingLinks.forEach(link => {
+                    link.classList.add('active', 'bg-gray-800', 'text-white');
+                    link.classList.remove('text-gray-600', 'hover:bg-gray-200');
+                });
+                
+                // Atualizar título da página
+                const pageTitle = document.getElementById('page-title');
+                if (pageTitle && targetLink.querySelector('span')) {
+                    pageTitle.textContent = targetLink.querySelector('span').textContent;
+                }
+            }
+        }
+    } catch (e) {
+        LOG.warn('[painelAdm] Erro ao restaurar página:', e);
+    }
+    
     if (window.pageManager) {
-        window.pageManager.loadPage('dashboard');
+        window.pageManager.loadPage(pageToLoad);
     }
 });
