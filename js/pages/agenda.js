@@ -310,7 +310,6 @@ function configurarNavegacaoAgenda() {
   window.addEventListener('agendamento:atualizado', (e) => { if (e.detail) atualizarAgendaDia(); });
 }
 
-// ================= Funções utilitárias que estavam faltando =================
 function dataISO(d) {
   if (!(d instanceof Date)) {
     return '';
@@ -557,6 +556,23 @@ async function atualizarAgendaDia() {
   initAgendaTimeline();
   if (label) label.textContent = formatarDataLabel(dataRef);
 }
+
+// Listener para recarregar agenda quando agendamento for criado/atualizado
+window.addEventListener('agendamento:adicionado', () => {
+  // Recarregar agenda atual
+  const agendaPage = document.getElementById('agenda');
+  if (agendaPage && !agendaPage.classList.contains('hidden')) {
+    atualizarAgendaDia();
+  }
+});
+
+window.addEventListener('agendamento:atualizado', () => {
+  // Recarregar agenda atual
+  const agendaPage = document.getElementById('agenda');
+  if (agendaPage && !agendaPage.classList.contains('hidden')) {
+    atualizarAgendaDia();
+  }
+});
 
 // Inicialização automátia
 if (document.readyState === 'loading') {

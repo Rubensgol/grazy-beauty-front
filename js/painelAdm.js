@@ -89,14 +89,6 @@ function initApp() {
 document.addEventListener('DOMContentLoaded', async () => {
     if (!requireAuth()) return;
 
-    // await loadModals();
-    // const modalScripts = [
-    //     'js/modals/agendamento.js',
-    //     'js/modals/servico.js',
-    //     'js/modals/payment.js',
-    //     'js/modals/day-details.js'
-    // ];
-
     function loadScript(src) {
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
@@ -106,14 +98,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.head.appendChild(s);
         });
     }
-
-    // for (const src of modalScripts) {
-    //     try {
-    //         await loadScript(src);
-    //     } catch (err) {
-    //         LOG.error(err);
-    //     }
-    // }
 
     if (window.initAgendamentoModal) window.initAgendamentoModal();
     if (window.initServicoModal) window.initServicoModal();
