@@ -64,8 +64,9 @@ function criarCardServico(servico) {
   
   const imgUrl = buildImageUrl(servico);
   const card = document.createElement('div');
-  card.className = 'bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 ease-in-out group flex flex-col';
+  card.className = 'bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 ease-in-out group flex flex-col cursor-move';
   card.dataset.serviceId = servico.id || '';
+  card.draggable = true;
   card.innerHTML = `
     <div class="relative bg-gradient-to-br from-gray-100 to-gray-200">
       <div class="w-full h-48 flex items-center justify-center overflow-hidden">
@@ -78,6 +79,9 @@ function criarCardServico(servico) {
         <button class="bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" data-deletar-servico="${servico.id || ''}" title="Excluir serviço">
           <i class="fas fa-trash"></i>
         </button>
+      </div>
+      <div class="absolute top-3 left-3 bg-gray-800 bg-opacity-70 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300" title="Arrastar para reordenar">
+        <i class="fas fa-grip-vertical text-sm"></i>
       </div>
     </div>
     <div class="p-5 flex-grow flex flex-col">
@@ -124,8 +128,35 @@ async function carregarListaServicos() {
     grid.innerHTML = `<div class="col-span-full text-sm text-gray-500">Nenhum serviço cadastrado</div>`;
     return;
   }
-  servicosCache = lista;
-  lista.forEach(s => inserirCardServico(s));
+  
+  // Aplicar ordem salva, se existir
+  let listaOrdenada = [...lista];
+  try {
+    const ordemSalva = localStorage.getItem('servicos-ordem');
+    if (ordemSalva) {
+      const ordem = JSON.parse(ordemSalva);
+      LOG.debug('[servicos] Aplicando ordem salva:', ordem);
+      
+      // Reordenar lista baseado na ordem salva
+      listaOrdenada = ordem
+        .map(id => lista.find(s => String(s.id) === String(id)))
+        .filter(s => s !== undefined);
+      
+      // Adicionar serviços novos que não estão na ordem salva
+      const idsOrdenados = ordem.map(String);
+      lista.forEach(servico => {
+        if (!idsOrdenados.includes(String(servico.id))) {
+          listaOrdenada.push(servico);
+        }
+      });
+    }
+  } catch (e) {
+    LOG.warn('[servicos] Erro ao aplicar ordem salva:', e);
+    listaOrdenada = lista;
+  }
+  
+  servicosCache = listaOrdenada;
+  listaOrdenada.forEach(inserirCardServico);
 }
 
 export function initServicosPage() {
@@ -241,4 +272,111 @@ window.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
+  // ===== Sistema de Drag and Drop para reordenar serviços =====
+  let draggedElement = null;
+
+  document.addEventListener('dragstart', (e) => {
+    const card = e.target.closest('[data-service-id]');
+    if (!card) return;
+    
+    draggedElement = card;
+    card.style.opacity = '0.5';
+    e.dataTransfer.effectAllowed = 'move';
+  });
+
+  document.addEventListener('dragend', (e) => {
+    const card = e.target.closest('[data-service-id]');
+    if (!card) return;
+    
+    card.style.opacity = '1';
+    draggedElement = null;
+    
+    // Remover indicadores visuais
+    document.querySelectorAll('[data-service-id]').forEach(c => {
+      c.classList.remove('border-t-4', 'border-[#b5879d]');
+    });
+  });
+
+  document.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const card = e.target.closest('[data-service-id]');
+    if (!card || card === draggedElement) return;
+    
+    e.dataTransfer.dropEffect = 'move';
+    
+    // Indicador visual de onde vai soltar
+    document.querySelectorAll('[data-service-id]').forEach(c => {
+      c.classList.remove('border-t-4', 'border-[#b5879d]');
+    });
+    card.classList.add('border-t-4', 'border-[#b5879d]');
+  });
+
+  document.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const targetCard = e.target.closest('[data-service-id]');
+    if (!targetCard || !draggedElement || targetCard === draggedElement) return;
+    
+    const grid = document.getElementById('servicos-grid');
+    if (!grid) return;
+    
+    // Determinar posição relativa
+    const rect = targetCard.getBoundingClientRect();
+    const mouseY = e.clientY;
+    const targetMiddle = rect.top + rect.height / 2;
+    
+    // Inserir antes ou depois
+    if (mouseY < targetMiddle) {
+      grid.insertBefore(draggedElement, targetCard);
+    } else {
+      grid.insertBefore(draggedElement, targetCard.nextSibling);
+    }
+    
+    // Remover indicador visual
+    targetCard.classList.remove('border-t-4', 'border-[#b5879d]');
+    
+    // Atualizar ordem no array e salvar
+    atualizarOrdemServicos();
+  });
+
+  async function atualizarOrdemServicos() {
+    const grid = document.getElementById('servicos-grid');
+    if (!grid) return;
+    
+    const cards = Array.from(grid.querySelectorAll('[data-service-id]'));
+    const novaOrdem = cards.map(card => parseInt(card.dataset.serviceId));
+    
+    LOG.debug('[servicos] Nova ordem:', novaOrdem);
+    
+    // Salvar no localStorage
+    try {
+      localStorage.setItem('servicos-ordem', JSON.stringify(novaOrdem));
+    } catch (e) {
+      LOG.warn('[servicos] Erro ao salvar ordem no localStorage:', e);
+    }
+    
+    // Enviar ao backend
+    try {
+      LOG.info('[servicos] Enviando nova ordem ao backend...');
+      const response = await fetchWithAuth('/api/servicos/ordenacao', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ids: novaOrdem })
+      });
+      
+      if (response.ok) {
+        LOG.info('[servicos] Ordem atualizada no backend com sucesso');
+        adicionarNotificacao('Ordem dos serviços atualizada', 'success');
+      } else {
+        const errorText = await response.text().catch(() => response.statusText);
+        LOG.error('[servicos] Erro ao atualizar ordem no backend:', response.status, errorText);
+        adicionarNotificacao('Erro ao salvar ordem no servidor', 'error');
+      }
+    } catch (error) {
+      LOG.error('[servicos] Erro ao enviar ordem ao backend:', error);
+      adicionarNotificacao('Erro de conexão ao salvar ordem', 'error');
+    }
+  }
 });
