@@ -3,6 +3,7 @@ import { abrirConfirmacaoExclusao } from '../modals/confirmar-acao.js';
 import { adicionarNotificacao } from '../modals/notificacoes.js';
 import { LOG } from '../configuracao/logger.js';
 import { fetchWithAuth } from '../configuracao/http.js';
+import { apiUrl } from '../configuracao/config.js';
 
 let servicosCache = [];
 
@@ -62,7 +63,7 @@ function criarCardServico(servico) {
     duracao = servico.duracao || servico.tempo || '';
   }
   
-  const imgUrl = buildImageUrl(servico);
+  const imgUrl = apiUrl(buildImageUrl(servico));
   const card = document.createElement('div');
   card.className = 'bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 ease-in-out group flex flex-col cursor-move';
   card.dataset.serviceId = servico.id || '';

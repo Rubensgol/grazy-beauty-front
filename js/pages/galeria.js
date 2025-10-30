@@ -3,6 +3,7 @@ import { fetchWithAuth } from '../configuracao/http.js';
 import { adicionarNotificacao } from '../modals/notificacoes.js';
 import { confirmarAcao } from '../modals/confirmar-acao.js';
 import { LOG } from '../configuracao/logger.js';
+import { apiUrl } from '../configuracao/config.js';
 
 async function fetchGalleryList() {
   LOG.debug('[fetchGalleryList] buscando imagens da galeria');
@@ -49,7 +50,7 @@ function buildImageSrc(item) {
 function inserirImagemGrid(item) {
   const grid = document.querySelector('#galeria .grid');
   if (!grid) return;
-  const src = buildImageSrc(item);
+  const src = apiUrl(buildImageSrc(item));
   if (!src) return;
   const desc = (typeof item === 'object' && item.descricao) ? item.descricao : (typeof item === 'object' && item.description) ? item.description : '';
   const wrapper = document.createElement('div');
