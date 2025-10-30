@@ -33,7 +33,10 @@ function limparGrid() {
 
 function buildImageUrl(servico) {
   const stored = servico.imageStoredFilename || servico.storedFilename || servico.stored_filename;
-  if (!stored) return null;
+  if (!stored || stored === '' || stored === 'null' || stored === 'undefined') {
+    LOG.debug('[buildImageUrl] imagem não disponível para serviço:', servico.id || servico.nome);
+    return null;
+  }
   return `/api/images/download/${encodeURIComponent(stored)}`;
 }
 
@@ -63,7 +66,12 @@ function criarCardServico(servico) {
     duracao = servico.duracao || servico.tempo || '';
   }
   
-  const imgUrl = apiUrl(buildImageUrl(servico));
+  const baseImgUrl = buildImageUrl(servico);
+  const imgUrl = baseImgUrl ? apiUrl(baseImgUrl) : null;
+  
+  // Placeholder SVG para erro de carregamento
+  const placeholderSvg = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect fill="%23f3f4f6" width="400" height="300"/%3E%3Cpath fill="%23d1d5db" d="M150 100h100v80h-100z"/%3E%3Ccircle cx="180" cy="130" r="10" fill="%23e5e7eb"/%3E%3Cpath fill="%23d1d5db" d="M150 160l30-20 20 15 30-10v25h-80z"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="14" x="50%25" y="220" text-anchor="middle"%3ESem imagem%3C/text%3E%3C/svg%3E';
+  
   const card = document.createElement('div');
   card.className = 'bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 ease-in-out group flex flex-col cursor-move';
   card.dataset.serviceId = servico.id || '';
@@ -71,7 +79,7 @@ function criarCardServico(servico) {
   card.innerHTML = `
     <div class="relative bg-gradient-to-br from-gray-100 to-gray-200">
       <div class="w-full h-48 flex items-center justify-center overflow-hidden">
-        ${imgUrl ? `<img src="${imgUrl}" alt="${nome}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">` : `<svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`}
+        ${imgUrl ? `<img src="${imgUrl}" alt="${nome}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='${placeholderSvg}'; this.classList.remove('object-cover', 'group-hover:scale-110'); this.classList.add('object-contain', 'opacity-50');">` : `<img src="${placeholderSvg}" alt="Sem imagem" class="w-full h-full object-contain opacity-50">`}
       </div>
       <div class="absolute top-3 right-3 flex gap-2">
         <button class="bg-[#b5879d] hover:bg-[#9f6b7f] text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" data-editar-servico="${servico.id || ''}" title="Editar serviço">
