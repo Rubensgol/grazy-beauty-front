@@ -1,0 +1,16 @@
+@import 'variables.css';
+@import 'reset.css';
+
+@import 'buttons.css';
+@import 'header.css';
+
+@import 'sections.css';
+@import 'hero.css';
+@import 'about.css';
+@import 'courses.css';
+@import 'booking.css';
+@import 'portfolio.css';
+@import 'contact.css';
+@import 'footer.css';
+
+@import 'utilities.css';
