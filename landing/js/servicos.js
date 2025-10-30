@@ -113,9 +113,11 @@ export async function initServicos() {
     // Limpar grid antes de adicionar novos serviços
     grid.innerHTML = '';
     
-    // Filtrar apenas serviços válidos
+    // Filtrar apenas serviços válidos E ATIVOS (landing page mostra só ativos)
     const servicosValidos = lista.filter(servico => {
-      return servico.nome || servico.nomeServico;
+      const temNome = servico.nome || servico.nomeServico;
+      const estaAtivo = servico.ativo !== false && servico.ativo !== 0;
+      return temNome && estaAtivo;
     });
     
     if (servicosValidos.length === 0) {

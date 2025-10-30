@@ -9,7 +9,7 @@ let servicosCache = [];
 
 async function fetchServicos() {
   try {
-    const res = await fetchWithAuth('/api/servicos');
+    const res = await fetchWithAuth('/api/servicos/todos');
     if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
     const body = await res.json();
     if (Array.isArray(body)) return body; // lista direta
@@ -72,20 +72,27 @@ function criarCardServico(servico) {
   // Placeholder SVG para erro de carregamento
   const placeholderSvg = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect fill="%23f3f4f6" width="400" height="300"/%3E%3Cpath fill="%23d1d5db" d="M150 100h100v80h-100z"/%3E%3Ccircle cx="180" cy="130" r="10" fill="%23e5e7eb"/%3E%3Cpath fill="%23d1d5db" d="M150 160l30-20 20 15 30-10v25h-80z"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="14" x="50%25" y="220" text-anchor="middle"%3ESem imagem%3C/text%3E%3C/svg%3E';
   
+  const isAtivo = servico.ativo !== false && servico.ativo !== 0;
+  
   const card = document.createElement('div');
-  card.className = 'bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 ease-in-out group flex flex-col cursor-move';
+  card.className = `bg-white rounded-xl shadow-md hover:shadow-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 ease-in-out group flex flex-col cursor-move ${!isAtivo ? 'opacity-60 grayscale' : ''}`;
   card.dataset.serviceId = servico.id || '';
+  card.dataset.ativo = isAtivo ? 'true' : 'false';
   card.draggable = true;
   card.innerHTML = `
     <div class="relative bg-gradient-to-br from-gray-100 to-gray-200">
       <div class="w-full h-48 flex items-center justify-center overflow-hidden">
         ${imgUrl ? `<img src="${imgUrl}" alt="${nome}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='${placeholderSvg}'; this.classList.remove('object-cover', 'group-hover:scale-110'); this.classList.add('object-contain', 'opacity-50');">` : `<img src="${placeholderSvg}" alt="Sem imagem" class="w-full h-full object-contain opacity-50">`}
       </div>
+      ${!isAtivo ? '<div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center"><span class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold text-sm uppercase">Inativo</span></div>' : ''}
       <div class="absolute top-3 right-3 flex gap-2">
         <button class="bg-[#b5879d] hover:bg-[#9f6b7f] text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" data-editar-servico="${servico.id || ''}" title="Editar serviço">
           <i class="fas fa-edit"></i>
         </button>
-        <button class="bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" data-deletar-servico="${servico.id || ''}" title="Excluir serviço">
+        ${!isAtivo ? `<button class="bg-green-500 hover:bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" data-ativar-servico="${servico.id || ''}" title="Ativar serviço">
+          <i class="fas fa-check"></i>
+        </button>` : ''}
+        <button class="bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" data-deletar-servico="${servico.id || ''}" title="${isAtivo ? 'Excluir serviço' : 'Serviço já inativo'}">
           <i class="fas fa-trash"></i>
         </button>
       </div>
@@ -237,6 +244,49 @@ window.addEventListener('DOMContentLoaded', () => {
       window.dispatchEvent(new CustomEvent('servico:editar', { detail: servico }));
     }
 
+    // Delegated click para ativar
+    const btnAtivar = e.target.closest && e.target.closest('[data-ativar-servico]');
+    if (btnAtivar) {
+      const id = btnAtivar.getAttribute('data-ativar-servico');
+      if (!id) return;
+      
+      try {
+        LOG.debug('[servicos] ativando serviço:', id);
+        const res = await fetchWithAuth(`/api/servicos/${id}/ativar`, {
+          method: 'PUT'
+        });
+
+        LOG.debug('[servicos] resposta ativar:', res.status);
+
+        if (!res.ok) {
+          const json = await res.json().catch(() => null);
+          throw new Error(json?.message || `Status ${res.status}`);
+        }
+
+        // Pegar resposta do backend
+        const responseData = await res.json().catch(() => null);
+        const mensagem = responseData?.message || responseData?.msg || 'Serviço ativado com sucesso';
+
+        LOG.debug('[servicos] resposta do backend:', responseData);
+
+        // Atualizar status no cache
+        const servicoNoCache = servicosCache.find(s => String(s.id) === String(id));
+        if (servicoNoCache) {
+          servicoNoCache.ativo = true;
+          atualizarCardServico(servicoNoCache);
+        } else {
+          // Se não está no cache, recarregar
+          await carregarListaServicos();
+        }
+
+        // Mostrar mensagem retornada pelo backend
+        adicionarNotificacao(mensagem, 'success');
+      } catch (err) {
+        LOG.error('[servicos] erro ao ativar:', err);
+        adicionarNotificacao('Erro ao ativar serviço: ' + err.message, 'error');
+      }
+    }
+
     // Delegated click para deletar
     const btnDeletar = e.target.closest && e.target.closest('[data-deletar-servico]');
     if (btnDeletar) {
@@ -246,7 +296,7 @@ window.addEventListener('DOMContentLoaded', () => {
       // Abre modal de confirmação com callback (padrão unificado)
       abrirConfirmacaoExclusao(id, async (servicoId) => {
         try {
-          LOG.debug('[servicos] excluindo serviço:', servicoId);
+          LOG.debug('[servicos] excluindo/desativando serviço:', servicoId);
           const res = await fetchWithAuth(`/api/servicos/${servicoId}`, {
             method: 'DELETE'
           });
@@ -258,25 +308,46 @@ window.addEventListener('DOMContentLoaded', () => {
             throw new Error(json?.message || `Status ${res.status}`);
           }
 
-          // Remove do cache
-          servicosCache = servicosCache.filter(s => String(s.id) !== String(servicoId));
-          
-          // Remove do DOM
-          const grid = document.getElementById('servicos-grid');
-          if (grid) {
-            const card = grid.querySelector(`[data-service-id="${servicoId}"]`);
-            if (card) card.remove();
+          // Pegar resposta do backend
+          const responseData = await res.json().catch(() => null);
+          const mensagem = responseData?.message || responseData?.msg || 'Operação realizada com sucesso';
+          const foiExcluido = responseData?.deleted === true || mensagem.toLowerCase().includes('excluído');
+          const foiDesativado = responseData?.deactivated === true || mensagem.toLowerCase().includes('desativado');
+
+          LOG.debug('[servicos] resposta do backend:', responseData);
+
+          if (foiExcluido) {
+            // Remove do cache
+            servicosCache = servicosCache.filter(s => String(s.id) !== String(servicoId));
             
-            // Se ficou vazio, mostrar mensagem
-            if (servicosCache.length === 0) {
-              grid.innerHTML = `<div class="col-span-full text-sm text-gray-500">Nenhum serviço cadastrado</div>`;
+            // Remove do DOM
+            const grid = document.getElementById('servicos-grid');
+            if (grid) {
+              const card = grid.querySelector(`[data-service-id="${servicoId}"]`);
+              if (card) card.remove();
+              
+              // Se ficou vazio, mostrar mensagem
+              if (servicosCache.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-sm text-gray-500">Nenhum serviço cadastrado</div>`;
+              }
             }
+          } else if (foiDesativado) {
+            // Atualizar status no cache
+            const servicoNoCache = servicosCache.find(s => String(s.id) === String(servicoId));
+            if (servicoNoCache) {
+              servicoNoCache.ativo = false;
+              atualizarCardServico(servicoNoCache);
+            }
+          } else {
+            // Recarregar lista para refletir mudanças
+            await carregarListaServicos();
           }
 
-          adicionarNotificacao('Serviço excluído com sucesso', 'success');
+          // Mostrar mensagem retornada pelo backend
+          adicionarNotificacao(mensagem, 'success');
         } catch (err) {
-          LOG.error('[servicos] erro ao excluir:', err);
-          adicionarNotificacao('Erro ao excluir serviço: ' + err.message, 'error');
+          LOG.error('[servicos] erro ao excluir/desativar:', err);
+          adicionarNotificacao('Erro ao processar serviço: ' + err.message, 'error');
         }
       });
     }
