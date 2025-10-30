@@ -41,10 +41,17 @@ function buildImageSrc(item) {
 
 function inserirImagemPortfolio(item, index) {
   const grid = document.querySelector('.portfolio-grid');
-  if (!grid) return;
+  if (!grid) {
+    console.warn('[inserirImagemPortfolio] grid não encontrado');
+    return;
+  }
   
   const src = buildImageSrc(item);
-  if (!src) return;
+  
+  if (!src) {
+    console.warn('[inserirImagemPortfolio] imagem sem src válido, pulando:', item);
+    return;
+  }
   
   const desc = (typeof item === 'object' && item.descricao) ? item.descricao : 
                (typeof item === 'object' && item.description) ? item.description : '';
@@ -56,9 +63,12 @@ function inserirImagemPortfolio(item, index) {
   const portfolioItem = document.createElement('div');
   portfolioItem.className = 'portfolio-item';
   
+  // Imagem placeholder para caso de erro
+  const placeholderSvg = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect fill="%23f0f0f0" width="400" height="300"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="18" dy="10.5" font-weight="bold" x="50%25" y="50%25" text-anchor="middle"%3EImagem indisponível%3C/text%3E%3C/svg%3E';
+  
   portfolioItem.innerHTML = `
     <div class="portfolio-image">
-      <img src="${src}" alt="${title}" loading="lazy">
+      <img src="${src}" alt="${title}" loading="lazy" onerror="this.src='${placeholderSvg}'; this.style.opacity='0.5';">
       <div class="portfolio-overlay">
         <div class="portfolio-info">
           <p class="portfolio-category">${category.toUpperCase()}</p>
@@ -85,28 +95,34 @@ function inserirImagemPortfolio(item, index) {
 
 export async function initPortfolio() {
   const grid = document.querySelector('.portfolio-grid');
-  if (!grid) return;
+  if (!grid) {
+    console.warn('[initPortfolio] grid não encontrado');
+    return;
+  }
   
   const lista = await fetchPortfolioList();
   
   if (lista.length > 0) {
     grid.innerHTML = '';
     
-    const portfolioImages = lista.slice(0, 6);
+    // Filtrar apenas imagens válidas (com src não nulo)
+    const imagensValidas = lista.filter(item => {
+      const src = buildImageSrc(item);
+      return src !== null && src !== undefined && src !== '';
+    });
+    
+    if (imagensValidas.length === 0) {
+      console.warn('[initPortfolio] nenhuma imagem válida encontrada');
+      grid.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">Nenhuma imagem disponível no momento.</p>';
+      return;
+    }
+    
+    const portfolioImages = imagensValidas.slice(0, 6);
     portfolioImages.forEach((item, index) => inserirImagemPortfolio(item, index));
     
-    console.log('[initPortfolio] portfolio carregado com', portfolioImages.length, 'imagens');
+    console.log('[initPortfolio] portfolio carregado com', portfolioImages.length, 'imagens válidas');
   } else {
-    // Manter imagens estáticas se não houver imagens no backend
-    console.log('[initPortfolio] usando imagens estáticas (backend vazio)');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
-    portfolioItems.forEach(item => {
-      item.addEventListener('click', () => {
-        item.style.transform = 'scale(0.98)';
-        setTimeout(() => {
-          item.style.transform = '';
-        }, 200);
-      });
-    });
+    console.log('[initPortfolio] backend sem imagens');
+    grid.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">Nenhuma imagem disponível no momento.</p>';
   }
 }
