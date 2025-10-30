@@ -18,6 +18,8 @@ import {
 
 import { initPortfolio } from './portfolio.js';
 
+import { initServicos } from './servicos.js';
+
 import { 
   preloadImages, 
   logConsoleMessage 
@@ -37,6 +39,7 @@ function init() {
   initLazyLoading();
   
   initPortfolio();
+  initServicos();
   
   preloadImages();
   logConsoleMessage();

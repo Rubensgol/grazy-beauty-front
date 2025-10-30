@@ -4,7 +4,7 @@ async function loadSections() {
     { id: 'hero-placeholder', file: 'landing/sections/hero.html' },
     { id: 'about-placeholder', file: 'landing/sections/about.html' },
     { id: 'courses-placeholder', file: 'landing/sections/courses.html' },
-    { id: 'booking-placeholder', file: 'landing/sections/booking.html' },
+    { id: 'booking-placeholder', file: 'landing/sections/servicos.html' },
     { id: 'portfolio-placeholder', file: 'landing/sections/portfolio.html' },
     { id: 'contact-placeholder', file: 'landing/sections/contact.html' },
     { id: 'footer-placeholder', file: 'landing/sections/footer.html' }
