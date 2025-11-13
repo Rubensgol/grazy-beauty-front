@@ -7,8 +7,40 @@ import { LOG } from '../configuracao/logger.js';
 let configAtual = {
   ativo: false,
   periodoMinutos: 30,
-  plataformas: { EMAIL: '' }
+  plataformas: { EMAIL: '' },
+  resumoAtivo: false,
+  resumoEmail: ''
 };
+
+function extrairResumoAtivo(dados = {}) {
+  if (typeof dados.resumoAtivo === 'boolean') {
+    return dados.resumoAtivo;
+  }
+
+  const resumo = dados.resumoAgendamentos;
+  if (typeof resumo === 'boolean') {
+    return resumo;
+  }
+
+  if (resumo && typeof resumo === 'object' && typeof resumo.ativo === 'boolean') {
+    return resumo.ativo;
+  }
+
+  return false;
+}
+
+function extrairResumoEmail(dados = {}) {
+  if (dados.resumoEmail) {
+    return dados.resumoEmail;
+  }
+
+  const resumo = dados.resumoAgendamentos;
+  if (resumo && typeof resumo === 'object' && resumo.email) {
+    return resumo.email;
+  }
+
+  return '';
+}
 
 /**
  * Buscar configurações atuais do servidor
@@ -27,10 +59,14 @@ export async function buscarConfiguracoes() {
       LOG.debug('📊 Dados de configuração:', dados);
       
       // Atualizar estado local com estrutura correta
+      const resumoAtivo = extrairResumoAtivo(dados);
+      const resumoEmail = extrairResumoEmail(dados);
       configAtual = {
         ativo: dados.ativo !== false,
         periodoMinutos: dados.periodoMinutos || 30,
-        plataformas: dados.plataformas || { EMAIL: '' }
+        plataformas: dados.plataformas || { EMAIL: '' },
+        resumoAtivo: resumoAtivo,
+        resumoEmail: resumoEmail
       };
       
       LOG.debug('💾 Estado local atualizado:', configAtual);
@@ -51,6 +87,16 @@ export async function buscarConfiguracoes() {
  * Atualizar interface com valores atuais
  */
 function atualizarInterface() {
+  const resumoToggle = document.getElementById('resumo-agendamentos-toggle');
+  if (resumoToggle) {
+    resumoToggle.checked = configAtual.resumoAtivo === true;
+  }
+
+  const resumoEmailInput = document.getElementById('resumo-email-input');
+  if (resumoEmailInput) {
+    resumoEmailInput.value = configAtual.resumoEmail || '';
+  }
+
   // Toggle de lembretes
   const toggleCheckbox = document.getElementById('toggle');
   if (toggleCheckbox) {
@@ -92,17 +138,6 @@ function atualizarInterface() {
   if (whatsappCheckbox) whatsappCheckbox.checked = plataformas.hasOwnProperty('WHATSAPP');
   if (smsCheckbox) smsCheckbox.checked = plataformas.hasOwnProperty('SMS');
   if (emailCheckbox) emailCheckbox.checked = plataformas.hasOwnProperty('EMAIL');
-
-  // Gerenciar e preencher inputs
-  gerenciarInputsNotificacao();
-
-  const whatsappInput = document.getElementById('whatsapp-input');
-  const smsInput = document.getElementById('sms-input');
-  const emailInput = document.getElementById('email-input');
-
-  if (whatsappInput) whatsappInput.value = plataformas.WHATSAPP || '';
-  if (smsInput) smsInput.value = plataformas.SMS || '';
-  if (emailInput) emailInput.value = plataformas.EMAIL || '';
 }
 
 /**
@@ -137,6 +172,8 @@ function converterParaMinutos(valor, unidade) {
  * Coletar dados do formulário
  */
 function coletarDados() {
+  const resumoToggle = document.getElementById('resumo-agendamentos-toggle');
+  const resumoEmailInput = document.getElementById('resumo-email-input');
   const toggleCheckbox = document.getElementById('toggle');
   const periodoInput = document.querySelector('input[type="number"]');
   const periodoSelect = document.querySelector('select');
@@ -144,31 +181,33 @@ function coletarDados() {
   const smsCheckbox = document.getElementById('sms');
   const emailCheckbox = document.getElementById('email');
   
-  // Coletar plataformas e contatos
+  // Coletar plataformas (sem valores de input)
   const plataformas = {};
-  const whatsappInput = document.getElementById('whatsapp-input');
-  const smsInput = document.getElementById('sms-input');
-  const emailInput = document.getElementById('email-input');
 
-  if (whatsappCheckbox && whatsappCheckbox.checked && whatsappInput.value) {
-    plataformas.WHATSAPP = whatsappInput.value;
+  if (whatsappCheckbox && whatsappCheckbox.checked) {
+    plataformas.WHATSAPP = '';
   }
-  if (smsCheckbox && smsCheckbox.checked && smsInput.value) {
-    plataformas.SMS = smsInput.value;
+  if (smsCheckbox && smsCheckbox.checked) {
+    plataformas.SMS = '';
   }
-  if (emailCheckbox && emailCheckbox.checked && emailInput.value) {
-    plataformas.EMAIL = emailInput.value;
+  if (emailCheckbox && emailCheckbox.checked) {
+    plataformas.EMAIL = '';
   }
 
   // Converter período para minutos
   const periodoValor = periodoInput ? parseInt(periodoInput.value) || 30 : 30;
   const unidadeSelecionada = periodoSelect ? periodoSelect.value : 'Horas antes';
   const periodoMinutos = converterParaMinutos(periodoValor, unidadeSelecionada);
+  const resumoAtivo = resumoToggle ? resumoToggle.checked : false;
+  const resumoEmail = resumoEmailInput ? resumoEmailInput.value : '';
   
   return {
     ativo: toggleCheckbox ? toggleCheckbox.checked : false,
     periodoMinutos: periodoMinutos,
-    plataformas: plataformas
+    plataformas: plataformas,
+    resumoAtivo: resumoAtivo,
+    resumoEmail: resumoEmail,
+    resumoAgendamentos: { ativo: resumoAtivo, email: resumoEmail }
   };
 }
 
@@ -206,10 +245,14 @@ async function salvarConfiguracoes() {
       
       // Atualizar estado local com a resposta
       const dadosRetorno = resultado.data || resultado;
+      const resumoAtivo = extrairResumoAtivo(dadosRetorno);
+      const resumoEmail = extrairResumoEmail(dadosRetorno);
       configAtual = {
         ativo: dadosRetorno.ativo !== false,
         periodoMinutos: dadosRetorno.periodoMinutos || 30,
-        plataformas: dadosRetorno.plataformas || {}
+        plataformas: dadosRetorno.plataformas || {},
+        resumoAtivo: resumoAtivo,
+        resumoEmail: resumoEmail
       };
       
       // Atualizar interface
@@ -233,29 +276,6 @@ async function salvarConfiguracoes() {
 }
 
 /**
- * Gerenciar a visibilidade dos inputs de notificação
- */
-function gerenciarInputsNotificacao() {
-  const whatsappCheckbox = document.getElementById('whatsapp');
-  const smsCheckbox = document.getElementById('sms');
-  const emailCheckbox = document.getElementById('email');
-
-  const whatsappContainer = document.getElementById('whatsapp-input-container');
-  const smsContainer = document.getElementById('sms-input-container');
-  const emailContainer = document.getElementById('email-input-container');
-
-  if (whatsappCheckbox && whatsappContainer) {
-    whatsappContainer.classList.toggle('hidden', !whatsappCheckbox.checked);
-  }
-  if (smsCheckbox && smsContainer) {
-    smsContainer.classList.toggle('hidden', !smsCheckbox.checked);
-  }
-  if (emailCheckbox && emailContainer) {
-    emailContainer.classList.toggle('hidden', !emailCheckbox.checked);
-  }
-}
-
-/**
  * Inicializar página de configurações
  */
 export function initConfiguracoes() {
@@ -271,21 +291,6 @@ export function initConfiguracoes() {
     LOG.debug('✅ Botão salvar conectado');
   } else {
     LOG.warn('⚠️ Botão salvar não encontrado');
-  }
-
-  // Adicionar listeners para os checkboxes de notificação
-  const whatsappCheckbox = document.getElementById('whatsapp');
-  const smsCheckbox = document.getElementById('sms');
-  const emailCheckbox = document.getElementById('email');
-
-  if (whatsappCheckbox) {
-    whatsappCheckbox.addEventListener('change', gerenciarInputsNotificacao);
-  }
-  if (smsCheckbox) {
-    smsCheckbox.addEventListener('change', gerenciarInputsNotificacao);
-  }
-  if (emailCheckbox) {
-    emailCheckbox.addEventListener('change', gerenciarInputsNotificacao);
   }
   
   LOG.info('✅ Página de configurações inicializada');
