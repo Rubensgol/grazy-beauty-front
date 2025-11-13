@@ -1,0 +1,146 @@
+<!-- Página de Conteúdo do Site -->
+<main id="conteudo" class="p-6 sm:p-10 page-content hidden">
+    <!-- Hero Section -->
+    <div class="card-soft mb-6">
+        <div class="p-6 border-b">
+            <h3 class="text-xl font-semibold text-gray-800 font-playfair">Seção Hero (Banner Principal)</h3>
+            <p class="text-sm text-gray-500 mt-1">Configure o texto e imagem do banner principal da landing page.</p>
+        </div>
+        <div class="p-6 space-y-6">
+            <!-- Título -->
+            <div>
+                <label for="hero-titulo" class="block text-sm font-medium text-gray-700 mb-2">
+                    Título Principal
+                </label>
+                <input type="text" id="hero-titulo" placeholder="Ex: Sua Beleza, Minha Inspiração" 
+                    class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+            </div>
+
+            <!-- Subtítulo -->
+            <div>
+                <label for="hero-subtitulo" class="block text-sm font-medium text-gray-700 mb-2">
+                    Subtítulo
+                </label>
+                <textarea id="hero-subtitulo" rows="3" placeholder="Ex: Transformando momentos especiais em memórias inesquecíveis através da arte da maquiagem" 
+                    class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm"></textarea>
+            </div>
+
+            <!-- Imagem de Fundo -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Imagem de Fundo
+                </label>
+                <div class="flex items-center space-x-4">
+                    <div id="hero-imagem-preview" class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden">
+                        <span class="text-gray-400 text-sm text-center">Nenhuma imagem</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" id="hero-imagem-upload" accept="image/*" class="hidden">
+                        <button type="button" id="hero-imagem-button" class="px-4 py-2 text-sm font-medium rounded-md btn-accent">
+                            Selecionar Imagem
+                        </button>
+                        <p class="text-xs text-gray-500 mt-2">Tamanho recomendado: 1920x1080px</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-6 bg-gray-50 text-right rounded-b-lg">
+            <button id="hero-save-button" class="px-6 py-2 text-sm font-medium rounded-full btn-accent">
+                Salvar Hero
+            </button>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="card-soft">
+        <div class="p-6 border-b">
+            <h3 class="text-xl font-semibold text-gray-800 font-playfair">Seção Sobre (About)</h3>
+            <p class="text-sm text-gray-500 mt-1">Configure o conteúdo da seção "Sobre Mim".</p>
+        </div>
+        <div class="p-6 space-y-6">
+            <!-- Título -->
+            <div>
+                <label for="about-titulo" class="block text-sm font-medium text-gray-700 mb-2">
+                    Título da Seção
+                </label>
+                <input type="text" id="about-titulo" placeholder="Ex: Sobre Mim" 
+                    class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+            </div>
+
+            <!-- Subtítulo -->
+            <div>
+                <label for="about-subtitulo" class="block text-sm font-medium text-gray-700 mb-2">
+                    Subtítulo
+                </label>
+                <input type="text" id="about-subtitulo" placeholder="Ex: Conheça Minha História" 
+                    class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+            </div>
+
+            <!-- Texto Principal -->
+            <div>
+                <label for="about-texto" class="block text-sm font-medium text-gray-700 mb-2">
+                    Texto Principal
+                </label>
+                <textarea id="about-texto" rows="6" placeholder="Conte sua história, experiência e paixão pela maquiagem..." 
+                    class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm"></textarea>
+            </div>
+
+            <!-- Imagem -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Imagem
+                </label>
+                <div class="flex items-center space-x-4">
+                    <div id="about-imagem-preview" class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden">
+                        <span class="text-gray-400 text-sm text-center">Nenhuma imagem</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" id="about-imagem-upload" accept="image/*" class="hidden">
+                        <button type="button" id="about-imagem-button" class="px-4 py-2 text-sm font-medium rounded-md btn-accent">
+                            Selecionar Imagem
+                        </button>
+                        <p class="text-xs text-gray-500 mt-2">Tamanho recomendado: 600x800px</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Destaques -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Destaques / Estatísticas
+                </label>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="about-stat1-numero" class="block text-xs text-gray-600 mb-1">Número</label>
+                        <input type="text" id="about-stat1-numero" placeholder="500+" 
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+                        <label for="about-stat1-texto" class="block text-xs text-gray-600 mb-1 mt-2">Descrição</label>
+                        <input type="text" id="about-stat1-texto" placeholder="Clientes Satisfeitas" 
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="about-stat2-numero" class="block text-xs text-gray-600 mb-1">Número</label>
+                        <input type="text" id="about-stat2-numero" placeholder="10+" 
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+                        <label for="about-stat2-texto" class="block text-xs text-gray-600 mb-1 mt-2">Descrição</label>
+                        <input type="text" id="about-stat2-texto" placeholder="Anos de Experiência" 
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="about-stat3-numero" class="block text-xs text-gray-600 mb-1">Número</label>
+                        <input type="text" id="about-stat3-numero" placeholder="100%" 
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+                        <label for="about-stat3-texto" class="block text-xs text-gray-600 mb-1 mt-2">Descrição</label>
+                        <input type="text" id="about-stat3-texto" placeholder="Dedicação e Amor" 
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-6 bg-gray-50 text-right rounded-b-lg">
+            <button id="about-save-button" class="px-6 py-2 text-sm font-medium rounded-full btn-accent">
+                Salvar About
+            </button>
+        </div>
+    </div>
+</main>
