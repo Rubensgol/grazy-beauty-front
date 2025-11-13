@@ -87,7 +87,9 @@ function initApp() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    if (!requireAuth()) return;
+    // Validar token no servidor antes de continuar
+    const isAuthenticated = await requireAuth({ validateRemote: true });
+    if (!isAuthenticated) return;
 
     function loadScript(src) {
         return new Promise((resolve, reject) => {
