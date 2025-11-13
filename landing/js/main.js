@@ -20,6 +20,10 @@ import { initPortfolio } from './portfolio.js';
 
 import { initServicos } from './servicos.js';
 
+import { initHero } from './hero.js';
+
+import { initAbout } from './about.js';
+
 import { 
   preloadImages, 
   logConsoleMessage 
@@ -38,6 +42,8 @@ function init() {
   initStatsCounter();
   initLazyLoading();
   
+  initHero();
+  initAbout();
   initPortfolio();
   initServicos();
   
