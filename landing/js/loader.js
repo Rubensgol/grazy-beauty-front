@@ -10,21 +10,32 @@ async function loadSections() {
     { id: 'footer-placeholder', file: 'landing/sections/footer.html' }
   ];
 
-  for (const section of sections) {
-    try {
-      const response = await fetch(section.file);
-      if (response.ok) {
+  try {
+    const promises = sections.map(async (section) => {
+      try {
+        const response = await fetch(section.file);
+        if (!response.ok) throw new Error(`Failed to load ${section.file}: ${response.statusText}`);
         const html = await response.text();
-        const placeholder = document.getElementById(section.id);
-        if (placeholder) {
-          placeholder.outerHTML = html;
-        }
-      } else {
-        console.error(`Failed to load ${section.file}:`, response.statusText);
+        return { id: section.id, html };
+      } catch (error) {
+        console.error(error);
+        return null;
       }
-    } catch (error) {
-      console.error(`Error loading ${section.file}:`, error);
-    }
+    });
+
+    const results = await Promise.all(promises);
+
+    results.forEach(result => {
+      if (result) {
+        const placeholder = document.getElementById(result.id);
+        if (placeholder) {
+          placeholder.outerHTML = result.html;
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Error loading sections:', error);
   }
 
   window.dispatchEvent(new Event('sectionsLoaded'));
