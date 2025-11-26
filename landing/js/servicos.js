@@ -68,7 +68,8 @@ function inserirServicoCard(servico) {
   const duracao = formatDuracao(servico);
   
   const imgUrl = buildImageUrl(servico);
-  const placeholderSvg = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect fill="%23f3f4f6" width="400" height="300"/%3E%3Cpath fill="%23d1d5db" d="M150 100h100v80h-100z"/%3E%3Ccircle cx="180" cy="130" r="10" fill="%23e5e7eb"/%3E%3Cpath fill="%23d1d5db" d="M150 160l30-20 20 15 30-10v25h-80z"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="14" x="50%25" y="220" text-anchor="middle"%3ESem imagem%3C/text%3E%3C/svg%3E';
+  // SVG placeholder elegante para quando não houver imagem
+  const placeholderSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f8f9fa'/%3E%3Cpath d='M160 120h80v60h-80z' fill='%23e9ecef'/%3E%3Ccircle cx='185' cy='140' r='10' fill='%23dee2e6'/%3E%3Cpath d='M160 180l25-25 15 10 20-15 20 30h-80z' fill='%23dee2e6'/%3E%3Ctext x='200' y='220' font-family='Arial, sans-serif' font-size='14' fill='%23adb5bd' text-anchor='middle'%3EImagem indisponível%3C/text%3E%3C/svg%3E";
   
   const mensagemWhatsApp = encodeURIComponent(`Olá, gostaria de agendar o serviço: ${nome}`);
   
