@@ -62,19 +62,22 @@ async function carregarHero() {
 }
 
 /**
- * Exibir mensagem de erro no Hero
+ * Exibir conteúdo padrão no Hero quando o backend falhar
  */
 function exibirErroHero() {
   const heroTitle = document.querySelector('.hero-title');
   const heroDescription = document.querySelector('.hero-description');
   
+  // Usar conteúdo padrão elegante em vez de mensagem de erro
   if (heroTitle) {
-    heroTitle.innerHTML = '<span style="color: #ef4444;">Erro ao carregar conteúdo</span>';
+    heroTitle.innerHTML = 'Graziella<span class="hero-title-sub">Medeiros</span>';
   }
   
   if (heroDescription) {
-    heroDescription.textContent = 'Não foi possível carregar o conteúdo do Hero. Tente novamente mais tarde.';
+    heroDescription.textContent = 'Especialista em maquiagem profissional. Transformando beleza em arte e momentos especiais em memórias inesquecíveis.';
   }
+  
+  console.log('[hero] Usando conteúdo padrão');
 }
 
 export function initHero() {

@@ -3,7 +3,6 @@ async function loadSections() {
     { id: 'header-placeholder', file: 'landing/sections/header.html' },
     { id: 'hero-placeholder', file: 'landing/sections/hero.html' },
     { id: 'about-placeholder', file: 'landing/sections/about.html' },
-    { id: 'courses-placeholder', file: 'landing/sections/courses.html' },
     { id: 'booking-placeholder', file: 'landing/sections/servicos.html' },
     { id: 'portfolio-placeholder', file: 'landing/sections/portfolio.html' },
     { id: 'contact-placeholder', file: 'landing/sections/contact.html' },

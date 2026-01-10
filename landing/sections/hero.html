@@ -1,24 +1,24 @@
 <!-- Hero Section -->
-<section class="hero">
+<section class="hero" role="banner" aria-label="Seção principal">
   <div class="container">
     <div class="hero-grid">
       <div class="hero-content">
         <div class="hero-text">
           <p class="hero-subtitle animate-fade-in-up">Makeup Artist Professional</p>
           <h1 class="hero-title animate-fade-in-up delay-100" id="hero-titulo">
-            <!-- Carregado do backend -->
+            Graziella<span class="hero-title-sub">Medeiros</span>
           </h1>
           <p class="hero-description animate-fade-in-up delay-200" id="hero-subtitulo">
-            <!-- Carregado do backend -->
+            Especialista em maquiagem profissional. Transformando beleza em arte.
           </p>
         </div>
 
         <div class="hero-buttons animate-fade-in-up delay-300">
-          <button class="btn btn-primary btn-lg"
+          <button class="btn btn-primary btn-lg" aria-label="Agendar uma consulta"
             onclick="document.getElementById('agendamento').scrollIntoView({behavior: 'smooth'})">
             Agendar Consulta
           </button>
-          <button class="btn btn-outline btn-lg"
+          <button class="btn btn-outline btn-lg" aria-label="Ver portfólio de trabalhos"
             onclick="document.getElementById('portfolio').scrollIntoView({behavior: 'smooth'})">
             Ver Portfólio
           </button>
@@ -28,12 +28,12 @@
 
       <div class="hero-image animate-fade-in delay-200">
         <div class="image-wrapper">
-          <img id="hero-imagem" src="images/makeup.jpg" alt="Grazy - Makeup Artist Professional">
+          <img id="hero-imagem" src="images/makeup.jpg" alt="Graziella Medeiros - Maquiadora Profissional" loading="eager">
         </div>
-        <div class="image-bg-1"></div>
-        <div class="image-bg-2"></div>
+        <div class="image-bg-1" aria-hidden="true"></div>
+        <div class="image-bg-2" aria-hidden="true"></div>
         <!-- Decorative elements -->
-        <div class="decorative-circle"></div>
+        <div class="decorative-circle" aria-hidden="true"></div>
       </div>
     </div>
   </div>

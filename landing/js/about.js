@@ -95,24 +95,31 @@ async function carregarAbout() {
 }
 
 /**
- * Exibir mensagem de erro no About
+ * Exibir conteúdo padrão no About quando o backend falhar
  */
 function exibirErroAbout() {
   const aboutTitle = document.querySelector('.about .section-title');
   const aboutSubtitle = document.querySelector('.about .section-subtitle');
   const aboutText = document.querySelector('.about-text');
   
+  // Usar conteúdo padrão elegante em vez de mensagem de erro
   if (aboutTitle) {
-    aboutTitle.innerHTML = '<span style="color: #ef4444;">Erro ao carregar</span>';
+    aboutTitle.textContent = 'SOBRE MIM';
   }
   
   if (aboutSubtitle) {
-    aboutSubtitle.textContent = 'Erro';
+    aboutSubtitle.textContent = 'Conheça minha história';
   }
   
   if (aboutText) {
-    aboutText.innerHTML = '<p style="color: #ef4444;">Não foi possível carregar o conteúdo da seção Sobre. Tente novamente mais tarde.</p>';
+    aboutText.innerHTML = `
+      <p>Sou Graziella Medeiros, maquiadora profissional apaixonada por transformar beleza em arte.</p>
+      <p>Com anos de experiência no mercado da beleza, meu objetivo é realçar a beleza natural de cada cliente, criando looks personalizados para ocasiões especiais, noivas, formaturas e eventos.</p>
+      <p>Acredito que a maquiagem tem o poder de elevar a autoestima e fazer cada pessoa se sentir única e especial.</p>
+    `;
   }
+  
+  console.log('[about] Usando conteúdo padrão');
 }
 
 export function initAbout() {

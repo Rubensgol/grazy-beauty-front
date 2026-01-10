@@ -129,6 +129,11 @@
   font-weight: 500;
 }
 
+.form-group label .required {
+  color: var(--color-primary);
+  margin-left: 0.25rem;
+}
+
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -150,9 +155,34 @@
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
+.form-group input:invalid:not(:placeholder-shown),
+.form-group select:invalid:not(:placeholder-shown),
+.form-group textarea:invalid:not(:placeholder-shown) {
+  border-color: #ef4444;
+}
+
+.form-group input:valid:not(:placeholder-shown),
+.form-group select:valid,
+.form-group textarea:valid:not(:placeholder-shown) {
+  border-color: #10b981;
+}
+
 .form-group textarea {
   resize: vertical;
   min-height: 120px;
+}
+
+/* Button loading state */
+.btn .btn-loading {
+  display: none;
+}
+
+.btn.loading .btn-text {
+  display: none;
+}
+
+.btn.loading .btn-loading {
+  display: inline;
 }
 
 /* Responsive */

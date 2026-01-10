@@ -1,5 +1,6 @@
 import { showNotification } from './notifications.js';
 import { fetchWithAuth } from '../../js/configuracao/http.js';
+import { formatPhone } from './utils.js';
 
 // Carregar serviços no select
 async function carregarServicosNoSelect() {
@@ -81,7 +82,7 @@ ${data.message}
       `.trim();
       
       const encodedMessage = encodeURIComponent(message);
-      const whatsappURL = `https://wa.me/5511999999999?text=${encodedMessage}`;
+      const whatsappURL = `https://wa.me/5521976180101?text=${encodedMessage}`;
       
       // Abrir WhatsApp
       window.open(whatsappURL, '_blank');
@@ -100,18 +101,58 @@ ${data.message}
  */
 export function initFormValidation() {
   const inputs = document.querySelectorAll('.contact-form input, .contact-form textarea, .contact-form select');
+  const phoneInput = document.getElementById('phone');
+
+  // Adicionar máscara de telefone
+  if (phoneInput) {
+    phoneInput.addEventListener('input', (e) => {
+      e.target.value = formatPhone(e.target.value);
+    });
+  }
 
   inputs.forEach(input => {
     input.addEventListener('blur', () => {
-      if (input.hasAttribute('required') && !input.value.trim()) {
-        input.style.borderColor = '#ef4444';
-      } else {
-        input.style.borderColor = '';
-      }
+      validateField(input);
     });
     
     input.addEventListener('focus', () => {
       input.style.borderColor = '';
     });
+    
+    input.addEventListener('input', () => {
+      // Remove error state on input
+      if (input.style.borderColor === 'rgb(239, 68, 68)') {
+        input.style.borderColor = '';
+      }
+    });
   });
+}
+
+/**
+ * Validate a single form field
+ */
+function validateField(input) {
+  if (input.hasAttribute('required') && !input.value.trim()) {
+    input.style.borderColor = '#ef4444';
+    return false;
+  }
+  
+  if (input.type === 'email' && input.value) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(input.value)) {
+      input.style.borderColor = '#ef4444';
+      return false;
+    }
+  }
+  
+  if (input.type === 'tel' && input.value) {
+    const phoneDigits = input.value.replace(/\D/g, '');
+    if (phoneDigits.length < 10 || phoneDigits.length > 11) {
+      input.style.borderColor = '#ef4444';
+      return false;
+    }
+  }
+  
+  input.style.borderColor = '#10b981';
+  return true;
 }
