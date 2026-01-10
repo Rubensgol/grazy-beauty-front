@@ -1,0 +1,85 @@
+<!-- Modal Confirmar Logout -->
+<div id="modal-logout" class="fixed inset-0 z-50 hidden">
+    <!-- Overlay -->
+    <div class="modal-logout-overlay fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
+    
+    <!-- Modal Content -->
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="modal-logout-content bg-white rounded-2xl shadow-2xl w-full max-w-sm transform transition-all scale-95 opacity-0">
+            <!-- Header com ícone -->
+            <div class="p-6 text-center">
+                <div class="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-gray-900 font-playfair mb-2">Sair do Sistema</h3>
+                <p class="text-gray-500 text-sm">Tem certeza que deseja encerrar sua sessão?</p>
+            </div>
+            
+            <!-- Botões -->
+            <div class="flex border-t border-gray-100">
+                <button id="btn-logout-cancel" 
+                    class="flex-1 px-4 py-4 text-gray-600 font-medium hover:bg-gray-50 transition-colors rounded-bl-2xl">
+                    Cancelar
+                </button>
+                <button id="btn-logout-confirm" 
+                    class="flex-1 px-4 py-4 text-red-600 font-medium hover:bg-red-50 transition-colors rounded-br-2xl border-l border-gray-100">
+                    Sair
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #modal-logout.show .modal-logout-overlay {
+        animation: fadeIn 0.2s ease-out forwards;
+    }
+    
+    #modal-logout.show .modal-logout-content {
+        animation: scaleIn 0.2s ease-out forwards;
+    }
+    
+    #modal-logout.hiding .modal-logout-overlay {
+        animation: fadeOut 0.15s ease-in forwards;
+    }
+    
+    #modal-logout.hiding .modal-logout-content {
+        animation: scaleOut 0.15s ease-in forwards;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    
+    @keyframes scaleIn {
+        from { 
+            opacity: 0; 
+            transform: scale(0.95); 
+        }
+        to { 
+            opacity: 1; 
+            transform: scale(1); 
+        }
+    }
+    
+    @keyframes scaleOut {
+        from { 
+            opacity: 1; 
+            transform: scale(1); 
+        }
+        to { 
+            opacity: 0; 
+            transform: scale(0.95); 
+        }
+    }
+</style>

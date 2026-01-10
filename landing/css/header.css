@@ -67,7 +67,7 @@
 }
 
 .nav-links a:hover {
-  color: var(--color-gray-900);
+  color: var(--color-primary);
 }
 
 .header-actions {
@@ -87,7 +87,7 @@
 }
 
 .social-links-header a:hover {
-  color: var(--color-gray-600);
+  color: var(--color-primary);
 }
 
 .btn-admin {

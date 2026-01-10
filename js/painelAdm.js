@@ -1,5 +1,96 @@
 import { LOG } from './configuracao/logger.js';
-import { requireAuth } from './configuracao/auth.js';
+import { requireAuth, logout } from './configuracao/auth.js';
+import { initTenantTheme, getCurrentConfig } from './configuracao/tenant-config.js';
+import { fetchWithAuth } from './configuracao/http.js';
+
+/**
+ * Carrega o modal de logout
+ */
+async function loadLogoutModal() {
+    try {
+        const res = await fetch('modals/confirmar-logout.html');
+        if (res.ok) {
+            const html = await res.text();
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
+    } catch (err) {
+        LOG.error('[painelAdm] Erro ao carregar modal de logout:', err);
+    }
+}
+
+/**
+ * Mostra o modal de confirmação de logout
+ */
+function showLogoutModal() {
+    const modal = document.getElementById('modal-logout');
+    if (!modal) return;
+    
+    modal.classList.remove('hidden', 'hiding');
+    modal.classList.add('show');
+    
+    // Focar no botão cancelar
+    setTimeout(() => {
+        document.getElementById('btn-logout-cancel')?.focus();
+    }, 100);
+}
+
+/**
+ * Esconde o modal de logout
+ */
+function hideLogoutModal() {
+    const modal = document.getElementById('modal-logout');
+    if (!modal) return;
+    
+    modal.classList.remove('show');
+    modal.classList.add('hiding');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('hiding');
+    }, 150);
+}
+
+/**
+ * Configura o botão de logout
+ */
+function setupLogoutButton() {
+    const logoutBtn = document.getElementById('btn-logout');
+    const mobileLogoutBtn = document.querySelector('#mobile-sidebar #btn-logout-mobile');
+    
+    const handleLogout = (e) => {
+        e.preventDefault();
+        showLogoutModal();
+    };
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
+    
+    if (mobileLogoutBtn) {
+        mobileLogoutBtn.addEventListener('click', handleLogout);
+    }
+    
+    // Configurar botões do modal
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'btn-logout-cancel' || e.target.closest('.modal-logout-overlay')) {
+            hideLogoutModal();
+        }
+        
+        if (e.target.id === 'btn-logout-confirm') {
+            logout();
+        }
+    });
+    
+    // Fechar com ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('modal-logout');
+            if (modal && modal.classList.contains('show')) {
+                hideLogoutModal();
+            }
+        }
+    });
+}
 
 async function loadModals() {
     const container = document.getElementById('modals-container');
@@ -17,6 +108,68 @@ async function loadModals() {
             LOG.error(err);
         }
     }
+}
+
+/**
+ * Aplica branding do tenant no painel
+ */
+async function applyPanelBranding(config) {
+    LOG.debug('[painelAdm] Aplicando branding com config:', config);
+    
+    // Atualizar nome do negócio no sidebar e título da página
+    const businessNameEls = document.querySelectorAll('.tenant-name');
+    const businessName = config.businessName || config.nomeExibicao || config.nomeNegocio;
+    businessNameEls.forEach(el => {
+        if (businessName) {
+            el.textContent = businessName;
+        }
+    });
+    
+    // Atualizar título da página (aba do navegador)
+    if (businessName) {
+        document.title = `${businessName} - Painel`;
+    }
+    
+    // Atualizar logo se existir
+    const logoUrl = config.logoUrl;
+    LOG.debug('[painelAdm] Logo URL:', logoUrl);
+    
+    if (logoUrl && logoUrl.trim() !== '') {
+        const logoContainers = document.querySelectorAll('.tenant-logo-container');
+        logoContainers.forEach(container => {
+            container.innerHTML = `<img src="${logoUrl}" alt="${businessName || 'Logo'}" class="h-8 w-8 object-contain">`;
+        });
+        LOG.debug('[painelAdm] Logo aplicada em', logoContainers.length, 'containers');
+    } else {
+        LOG.debug('[painelAdm] Nenhuma logo configurada, mantendo SVG padrão');
+    }
+    
+    // Buscar nome do usuário logado para saudação
+    try {
+        const response = await fetchWithAuth('/api/users/me');
+        if (response.ok) {
+            const data = await response.json();
+            const user = data.data || data;
+            const userName = user.nome || user.name || '';
+            const firstName = userName.split(' ')[0];
+            
+            const greetingEl = document.querySelector('.tenant-greeting');
+            if (greetingEl && firstName) {
+                greetingEl.textContent = `Olá, ${firstName}!`;
+            }
+            
+            // Atualizar avatar se tiver foto
+            const avatarEl = document.querySelector('.tenant-avatar');
+            if (avatarEl && firstName) {
+                avatarEl.src = `https://placehold.co/100x100/f3e8e8/333333?text=${firstName.charAt(0).toUpperCase()}`;
+                avatarEl.alt = `Foto de ${firstName}`;
+            }
+        }
+    } catch (err) {
+        LOG.warn('[painelAdm] Erro ao buscar usuário logado:', err);
+    }
+    
+    LOG.debug('[painelAdm] Branding do painel aplicado');
 }
 
 function initApp() {
@@ -84,12 +237,27 @@ function initApp() {
 
     mobileMenuButton.addEventListener('click', toggleMobileMenu);
     mobileSidebarOverlay.addEventListener('click', toggleMobileMenu);
+    
+    // Configurar botão de logout
+    setupLogoutButton();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Validar token no servidor antes de continuar
     const isAuthenticated = await requireAuth({ validateRemote: true });
     if (!isAuthenticated) return;
+
+    // Carregar modal de logout
+    await loadLogoutModal();
+
+    // Inicializar tema do tenant
+    try {
+        const tenantConfig = await initTenantTheme();
+        applyPanelBranding(tenantConfig);
+        LOG.info('[painelAdm] Tema do tenant aplicado');
+    } catch (err) {
+        LOG.warn('[painelAdm] Erro ao aplicar tema do tenant:', err);
+    }
 
     function loadScript(src) {
         return new Promise((resolve, reject) => {

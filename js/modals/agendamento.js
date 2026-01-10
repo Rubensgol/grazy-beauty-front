@@ -202,7 +202,7 @@ async function salvarAgendamento(form) {
         usuarioId: parseInt(clienteId),
         servicoId: parseInt(servicoId),
         dataHora: `${data}T${hora}:00`,
-        observacoes: observacoes
+        obs: observacoes
     };
     
     const isEditing = form.dataset.editingId;

@@ -11,23 +11,47 @@
     <link rel="stylesheet" href="css/logo.css">
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <meta name="api-base" content="https://grazybeauty.com.br">
+    <style>
+        :root {
+            --login-accent: #b5879d;
+            --login-accent-hover: #a77e92;
+        }
+        .login-accent { color: var(--login-accent); }
+        .login-accent-bg { background-color: var(--login-accent); }
+        .login-accent-bg:hover { background-color: var(--login-accent-hover); }
+        .login-accent-border { border-color: var(--login-accent); }
+        .login-gradient {
+            background: linear-gradient(135deg, var(--login-accent) 0%, #9c6cba 100%);
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
 
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="w-full max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-            <div class="hidden md:flex items-center justify-center rounded-xl overflow-hidden card-soft login-bg"></div>
+            <!-- Lado decorativo -->
+            <div class="hidden md:flex flex-col items-center justify-center rounded-xl overflow-hidden card-soft login-gradient p-8 text-white">
+                <div id="login-logo-container" class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mb-6">
+                    <svg id="login-default-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="h-14 w-14">
+                        <text x="100" y="145" font-family="Georgia, serif" font-size="100" font-weight="300" text-anchor="middle" fill="white" letter-spacing="-6">GB</text>
+                    </svg>
+                    <img id="login-custom-logo" src="" alt="Logo" class="h-16 w-16 object-contain hidden">
+                </div>
+                <h2 id="login-brand-name" class="text-2xl font-bold text-center">Área Administrativa</h2>
+                <p id="login-brand-tagline" class="text-white/80 mt-2 text-center">Sistema de Gestão</p>
+            </div>
 
+            <!-- Formulário de login -->
             <main class="card-soft p-8 md:p-12">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="h-14 w-14 rounded-full bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center border-2 border-accent">
+                <div class="flex items-center gap-4 mb-8 md:hidden">
+                    <div id="login-mobile-logo" class="h-14 w-14 rounded-full login-gradient flex items-center justify-center">
                         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
-                            <text x="100" y="145" font-family="Georgia, serif" font-size="100" font-weight="300" text-anchor="middle" fill="#b5879d" letter-spacing="-6">GB</text>
+                            <text x="100" y="145" font-family="Georgia, serif" font-size="100" font-weight="300" text-anchor="middle" fill="white" letter-spacing="-6">GB</text>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">G. Medeiros</h1>
-                        <div class="text-sm text-gray-500 font-medium">Beleza & Estética</div>
+                        <h1 id="login-mobile-title" class="text-2xl font-bold text-gray-800">Área Administrativa</h1>
+                        <div id="login-mobile-subtitle" class="text-sm text-gray-500 font-medium">Sistema de Gestão</div>
                     </div>
                 </div>
 
@@ -47,7 +71,7 @@
                     </div>
 
                     <div>
-                        <button type="submit" class="w-full py-3 btn-accent font-semibold">Entrar</button>
+                        <button type="submit" class="w-full py-3 login-accent-bg text-white rounded-xl font-semibold transition-colors">Entrar</button>
                     </div>
                 </form>
 

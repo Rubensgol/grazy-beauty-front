@@ -61,3 +61,19 @@ export function clearAuth()
 {
   try { localStorage.removeItem('authToken'); } catch (e) {}
 }
+
+/**
+ * Faz logout do usuário e redireciona para login
+ */
+export function logout(redirectTo = '/login.html') 
+{
+  clearAuth();
+  // Limpar outros dados do localStorage
+  try {
+    localStorage.removeItem('tenantConfig');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('lastPage');
+  } catch (e) {}
+  
+  window.location.replace(redirectTo);
+}

@@ -3,7 +3,8 @@
   --color-primary: #b5879d;
   --color-primary-dark: #966b82;
   --color-primary-light: #d4b0c2;
-  --color-secondary: #fdf2f8;
+  --color-primary-hover: #a77e92;
+  --color-secondary: #2d3748;
   --color-accent: #db2777;
 
   --color-dark: #1f2937;
@@ -104,14 +105,15 @@ h6 {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-gray-800) 100%);
+  background: var(--color-primary);
   color: var(--color-white);
   box-shadow: var(--shadow-md);
   border: 1px solid transparent;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--color-gray-800) 0%, var(--color-gray-700) 100%);
+  background: var(--color-primary);
+  filter: brightness(0.9);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
@@ -247,7 +249,7 @@ h6 {
 }
 
 .nav-links a:hover {
-  color: var(--color-gray-900);
+  color: var(--color-primary);
 }
 
 .header-actions {
@@ -267,7 +269,7 @@ h6 {
 }
 
 .social-links-header a:hover {
-  color: var(--color-gray-600);
+  color: var(--color-primary);
 }
 
 .btn-admin {
@@ -524,7 +526,7 @@ section {
 .stat-number {
   font-size: 2.5rem;
   font-weight: 600;
-  color: var(--color-gray-900);
+  color: var(--color-primary);
   margin-bottom: 0.5rem;
   font-family: var(--font-display);
 }
@@ -979,7 +981,7 @@ section {
 
 .service-price {
   font-size: 1.125rem;
-  color: var(--color-gray-900);
+  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -1030,7 +1032,7 @@ section {
 }
 
 .booking-cta {
-  background-color: var(--color-gray-900);
+  background-color: var(--color-secondary, var(--color-gray-900));
   border-radius: var(--border-radius-xl);
   padding: 3rem;
   text-align: center;
@@ -1365,7 +1367,7 @@ section {
 }
 
 .footer {
-  background-color: var(--color-gray-900);
+  background-color: var(--color-secondary, var(--color-gray-900));
   color: var(--color-white);
   padding: 4rem 0;
 }
@@ -1418,7 +1420,7 @@ section {
 }
 
 .footer-social a:hover {
-  background-color: var(--color-gray-700);
+  background-color: var(--color-primary);
   transform: translateY(-2px);
 }
 
@@ -1448,7 +1450,7 @@ section {
 }
 
 .footer-links a:hover {
-  color: var(--color-white);
+  color: var(--color-primary);
   transform: translateX(4px);
 }
 
@@ -1470,7 +1472,7 @@ section {
 }
 
 .footer-contact-item:hover {
-  color: var(--color-white);
+  color: var(--color-primary);
   transform: translateX(4px);
 }
 
@@ -1560,7 +1562,7 @@ section {
   right: 2rem;
   width: 56px;
   height: 56px;
-  background-color: var(--color-gray-900);
+  background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
   border-radius: 50%;
@@ -1581,7 +1583,8 @@ section {
 }
 
 .scroll-to-top:hover {
-  background-color: var(--color-gray-800);
+  background-color: var(--color-primary);
+  filter: brightness(0.85);
   transform: translateY(-4px);
 }
 

@@ -1,12 +1,50 @@
-import { fetchWithAuth } from '../../js/configuracao/http.js';
 import { apiUrl } from '../../js/configuracao/config.js';
+
+/**
+ * Detectar subdomínio do tenant
+ */
+function detectTenantSubdomain() {
+  // Verificar parâmetro na URL (para testes em localhost)
+  const urlParams = new URLSearchParams(window.location.search);
+  const tenantParam = urlParams.get('tenant');
+  if (tenantParam) {
+    return tenantParam;
+  }
+  
+  const hostname = window.location.hostname;
+  
+  // Se for localhost ou IP, retornar null
+  if (hostname === 'localhost' || /^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
+    return null;
+  }
+  
+  // Extrair subdomínio (ex: joao.grazybeauty.com.br → joao)
+  const parts = hostname.split('.');
+  if (parts.length > 2) {
+    const potentialSubdomain = parts[0];
+    // Ignorar www
+    if (potentialSubdomain !== 'www') {
+      return potentialSubdomain;
+    }
+  }
+  
+  return null;
+}
 
 /**
  * Buscar e aplicar conteúdo do Hero do backend
  */
 async function carregarHero() {
   try {
-    const res = await fetchWithAuth('/api/conteudo');
+    // Detectar subdomínio para buscar conteúdo do tenant correto
+    const subdomain = detectTenantSubdomain();
+    
+    // Usar endpoint por subdomínio se disponível, senão endpoint padrão
+    const endpoint = subdomain 
+      ? `/api/conteudo/${subdomain}` 
+      : '/api/conteudo';
+    
+    const res = await fetch(apiUrl(endpoint));
     if (!res.ok) {
       console.warn('[hero] Erro ao buscar conteúdo:', res.status);
       exibirErroHero();

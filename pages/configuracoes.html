@@ -1,6 +1,173 @@
 <!-- Página de Configurações -->
 <main id="configuracoes" class="p-6 sm:p-10 page-content hidden">
-    <div class="card-soft">
+    
+    <!-- Tabs de navegação -->
+    <div class="mb-6">
+        <div class="flex flex-wrap gap-2 border-b border-gray-200">
+            <button class="config-tab active px-4 py-2 text-sm font-medium border-b-2 border-transparent transition-colors" data-tab="identidade">
+                Identidade Visual
+            </button>
+            <button class="config-tab px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors" data-tab="notificacoes">
+                Notificações
+            </button>
+            <button class="config-tab px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors" data-tab="redes">
+                Redes Sociais
+            </button>
+            <button class="config-tab px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors" data-tab="conta">
+                Minha Conta
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab: Identidade Visual -->
+    <div class="config-panel card-soft" data-panel="identidade">
+        <div class="p-6 border-b">
+            <h3 class="text-xl font-semibold text-gray-800 font-playfair">Identidade Visual</h3>
+            <p class="text-sm text-gray-500 mt-1">Personalize as cores e logo do seu sistema e site.</p>
+        </div>
+        <div class="p-6 space-y-6">
+            <!-- Nome do Negócio -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Negócio</label>
+                <input type="text" id="config-business-name" placeholder="Ex: Studio Maria Beleza"
+                    class="w-full max-w-md px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+            </div>
+            
+            <!-- Slogan/Tagline -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Slogan</label>
+                <input type="text" id="config-tagline" placeholder="Ex: Beleza & Estética"
+                    class="w-full max-w-md px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+            </div>
+
+            <hr>
+
+            <!-- Cor Principal -->
+            <div>
+                <h4 class="text-lg font-medium text-gray-800 font-playfair mb-3">Cor Principal</h4>
+                <p class="text-sm text-gray-500 mb-4">Esta cor será aplicada em botões, links e elementos de destaque.</p>
+                
+                <div class="flex flex-wrap gap-3 mb-4" id="color-presets">
+                    <button class="color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #b5879d" data-color="#b5879d" title="Rosa Elegante"></button>
+                    <button class="color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #9c6cba" data-color="#9c6cba" title="Roxo"></button>
+                    <button class="color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #61b3d7" data-color="#61b3d7" title="Azul"></button>
+                    <button class="color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #10b981" data-color="#10b981" title="Verde"></button>
+                    <button class="color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #f59e0b" data-color="#f59e0b" title="Amarelo"></button>
+                    <button class="color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #ef4444" data-color="#ef4444" title="Vermelho"></button>
+                    <button class="color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #ec4899" data-color="#ec4899" title="Pink"></button>
+                    <button class="color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #6366f1" data-color="#6366f1" title="Indigo"></button>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <input type="color" id="config-primary-color" value="#b5879d" 
+                        class="w-12 h-12 rounded-lg cursor-pointer border-0">
+                    <input type="text" id="config-color-hex" value="#b5879d" placeholder="#000000"
+                        class="w-32 px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1 font-mono"
+                        pattern="^#([A-Fa-f0-9]{6})$">
+                    <span class="text-sm text-gray-400">Código HEX</span>
+                </div>
+                
+            </div>
+
+            <hr>
+
+            <!-- Cor Secundária -->
+            <div>
+                <h4 class="text-lg font-medium text-gray-800 font-playfair mb-3">Cor Secundária</h4>
+                <p class="text-sm text-gray-500 mb-4">Esta cor será usada em elementos de apoio, seções alternativas e detalhes.</p>
+                
+                <div class="flex flex-wrap gap-3 mb-4" id="secondary-color-presets">
+                    <button class="secondary-color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #2d3748" data-color="#2d3748" title="Cinza Escuro"></button>
+                    <button class="secondary-color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #1a202c" data-color="#1a202c" title="Preto Suave"></button>
+                    <button class="secondary-color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #744d5f" data-color="#744d5f" title="Rosa Escuro"></button>
+                    <button class="secondary-color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #5b21b6" data-color="#5b21b6" title="Roxo Escuro"></button>
+                    <button class="secondary-color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #065f46" data-color="#065f46" title="Verde Escuro"></button>
+                    <button class="secondary-color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #92400e" data-color="#92400e" title="Marrom"></button>
+                    <button class="secondary-color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #1e3a5f" data-color="#1e3a5f" title="Azul Escuro"></button>
+                    <button class="secondary-color-preset w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-transform" style="background: #831843" data-color="#831843" title="Pink Escuro"></button>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <input type="color" id="config-secondary-color" value="#2d3748" 
+                        class="w-12 h-12 rounded-lg cursor-pointer border-0">
+                    <input type="text" id="config-secondary-color-hex" value="#2d3748" placeholder="#000000"
+                        class="w-32 px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1 font-mono"
+                        pattern="^#([A-Fa-f0-9]{6})$">
+                    <span class="text-sm text-gray-400">Código HEX</span>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Preview -->
+            <div>
+                <h4 class="text-lg font-medium text-gray-800 font-playfair mb-3">Pré-visualização</h4>
+                <div class="p-4 bg-gray-50 rounded-xl">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <button id="config-preview-btn" class="btn-accent px-6 py-2 rounded-xl font-medium">Botão Principal</button>
+                        <button id="config-preview-btn-secondary" class="px-6 py-2 rounded-xl font-medium text-white" style="background: var(--secondary-color, #2d3748)">Botão Secundário</button>
+                        <a href="#" id="config-preview-link" class="text-sm font-medium" style="color: var(--accent)">Link de exemplo</a>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Logo -->
+            <div>
+                <h4 class="text-lg font-medium text-gray-800 font-playfair mb-3">Logo</h4>
+                <p class="text-sm text-gray-500 mb-4">Sua logo aparecerá no site e no painel. Recomendamos PNG ou SVG com fundo transparente.</p>
+                
+                <div class="flex items-start gap-6">
+                    <div id="config-logo-preview" class="w-24 h-24 bg-gray-100 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-300">
+                        <span class="text-gray-400 text-sm">Sem logo</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" id="config-logo-input" accept="image/*" class="hidden">
+                        <button type="button" id="config-logo-upload-btn" class="px-4 py-2 border border-gray-300 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
+                            Fazer Upload
+                        </button>
+                        <button type="button" id="config-logo-remove-btn" class="ml-2 px-4 py-2 text-red-500 hover:text-red-700 transition-colors hidden">
+                            Remover
+                        </button>
+                        <p class="text-xs text-gray-400 mt-2">PNG, JPG ou SVG (máx. 2MB)</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Favicon -->
+            <div>
+                <h4 class="text-lg font-medium text-gray-800 font-playfair mb-3">Favicon</h4>
+                <p class="text-sm text-gray-500 mb-4">O ícone que aparece na aba do navegador. Recomendamos PNG ou SVG quadrado (32x32 ou 64x64 pixels).</p>
+                
+                <div class="flex items-start gap-6">
+                    <div id="config-favicon-preview" class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" id="config-favicon-input" accept="image/png,image/svg+xml,image/x-icon,image/ico" class="hidden">
+                        <button type="button" id="config-favicon-upload-btn" class="px-4 py-2 border border-gray-300 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
+                            Fazer Upload
+                        </button>
+                        <button type="button" id="config-favicon-remove-btn" class="ml-2 px-4 py-2 text-red-500 hover:text-red-700 transition-colors hidden">
+                            Remover
+                        </button>
+                        <p class="text-xs text-gray-400 mt-2">PNG, SVG ou ICO (máx. 500KB)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-6 bg-gray-50 text-right rounded-b-lg">
+            <button id="config-identity-save" class="px-6 py-2 text-sm font-medium rounded-full btn-accent">Salvar Alterações</button>
+        </div>
+    </div>
+
+    <!-- Tab: Notificações -->
+    <div class="config-panel card-soft hidden" data-panel="notificacoes">
         <div class="p-6 border-b">
             <h3 class="text-xl font-semibold text-gray-800 font-playfair">Configurações de Notificação</h3>
             <p class="text-sm text-gray-500 mt-1">Gerencie como seus clientes são notificados sobre os agendamentos.</p>
@@ -77,6 +244,106 @@
         </div>
         <div class="p-6 bg-gray-50 text-right rounded-b-lg">
             <button id="configuracoes-save-button" class="px-6 py-2 text-sm font-medium rounded-full btn-accent">Salvar Alterações</button>
+        </div>
+    </div>
+
+    <!-- Tab: Redes Sociais -->
+    <div class="config-panel card-soft hidden" data-panel="redes">
+        <div class="p-6 border-b">
+            <h3 class="text-xl font-semibold text-gray-800 font-playfair">Redes Sociais e Contato</h3>
+            <p class="text-sm text-gray-500 mt-1">Configure seus links de contato e redes sociais que aparecerão no site.</p>
+        </div>
+        <div class="p-6 space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp (com DDD)</label>
+                <div class="flex items-center gap-2 max-w-md">
+                    <span class="text-gray-400">+55</span>
+                    <input type="tel" id="config-whatsapp" placeholder="21999999999"
+                        class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+                </div>
+                <p class="text-xs text-gray-400 mt-1">Apenas números, sem espaços ou traços</p>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
+                <div class="flex items-center gap-2 max-w-md">
+                    <span class="text-gray-400">instagram.com/</span>
+                    <input type="text" id="config-instagram" placeholder="seuperfil"
+                        class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Facebook</label>
+                <div class="flex items-center gap-2 max-w-md">
+                    <span class="text-gray-400">facebook.com/</span>
+                    <input type="text" id="config-facebook" placeholder="suapagina"
+                        class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">E-mail de Contato</label>
+                <input type="email" id="config-email" placeholder="contato@seunegocio.com"
+                    class="w-full max-w-md px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Endereço</label>
+                <textarea id="config-address" rows="2" placeholder="Rua, número, bairro, cidade - UF"
+                    class="w-full max-w-md px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1 resize-none"></textarea>
+            </div>
+        </div>
+        <div class="p-6 bg-gray-50 text-right rounded-b-lg">
+            <button id="config-social-save" class="px-6 py-2 text-sm font-medium rounded-full btn-accent">Salvar Alterações</button>
+        </div>
+    </div>
+
+    <!-- Tab: Minha Conta -->
+    <div class="config-panel card-soft hidden" data-panel="conta">
+        <div class="p-6 border-b">
+            <h3 class="text-xl font-semibold text-gray-800 font-playfair">Minha Conta</h3>
+            <p class="text-sm text-gray-500 mt-1">Gerencie suas informações de acesso.</p>
+        </div>
+        <div class="p-6 space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Seu Nome</label>
+                <input type="text" id="config-owner-name" placeholder="Seu nome"
+                    class="w-full max-w-md px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">E-mail de Login</label>
+                <input type="email" id="config-owner-email" placeholder="seu@email.com" disabled
+                    class="w-full max-w-md px-4 py-2.5 border border-gray-200 rounded-xl bg-gray-50 text-gray-500">
+                <p class="text-xs text-gray-400 mt-1">Entre em contato para alterar o e-mail de login</p>
+            </div>
+            
+            <hr>
+            
+            <div>
+                <h4 class="text-lg font-medium text-gray-800 font-playfair mb-3">Alterar Senha</h4>
+                <div class="space-y-4 max-w-md">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Senha Atual</label>
+                        <input type="password" id="config-current-password" placeholder="••••••••"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nova Senha</label>
+                        <input type="password" id="config-new-password" placeholder="••••••••"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Confirmar Nova Senha</label>
+                        <input type="password" id="config-confirm-password" placeholder="••••••••"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-6 bg-gray-50 text-right rounded-b-lg">
+            <button id="config-account-save" class="px-6 py-2 text-sm font-medium rounded-full btn-accent">Salvar Alterações</button>
         </div>
     </div>
 </main>

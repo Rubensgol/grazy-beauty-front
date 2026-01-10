@@ -40,7 +40,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--color-gray-600);
+  color: var(--color-primary);
 }
 
 .contact-details h3 {

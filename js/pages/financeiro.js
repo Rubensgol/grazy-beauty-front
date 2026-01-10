@@ -10,8 +10,10 @@ export async function buscarValoresFinanceiros() {
     const response = await fetchWithAuth('/api/transacoes/valores');
     LOG.debug('📡 Resposta da API valores:', response.status);
     if (response.ok) {
-      const valores = await response.json();
-      LOG.debug('✅ Valores financeiros recebidos:', valores);
+      const json = await response.json();
+      LOG.debug('✅ Valores financeiros recebidos:', json);
+      // Extrair data do envelope ApiResposta se existir
+      const valores = (json && json.data) ? json.data : json;
       atualizarValoresFinanceiros(valores);
     } else {
       adicionarNotificacao('Erro ao buscar valores financeiros: ' + response.statusText, 'error');
@@ -52,9 +54,11 @@ export async function buscarTransacoes() {
     const response = await fetchWithAuth('/api/transacoes');
     LOG.debug('📡 Resposta da API:', response.status);
     if (response.ok) {
-      const transacoes = await response.json();
-      LOG.debug('✅ Transações recebidas:', transacoes.length, 'itens');
-      atualizarTabelaTransacoes(transacoes);
+      const json = await response.json();
+      // Extrair data do envelope ApiResposta se existir
+      const transacoes = (json && json.data) ? json.data : json;
+      LOG.debug('✅ Transações recebidas:', Array.isArray(transacoes) ? transacoes.length : 0, 'itens');
+      atualizarTabelaTransacoes(Array.isArray(transacoes) ? transacoes : []);
     } else {
       adicionarNotificacao('Erro ao buscar transações: ' + response.statusText, 'error');
     }

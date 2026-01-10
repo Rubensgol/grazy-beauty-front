@@ -1,5 +1,5 @@
 .footer {
-  background-color: var(--color-gray-900);
+  background-color: var(--color-secondary, var(--color-gray-900));
   color: var(--color-white);
   padding: 4rem 0;
 }
@@ -52,7 +52,7 @@
 }
 
 .footer-social a:hover {
-  background-color: var(--color-gray-700);
+  background-color: var(--color-primary);
   transform: translateY(-2px);
 }
 
@@ -82,7 +82,7 @@
 }
 
 .footer-links a:hover {
-  color: var(--color-white);
+  color: var(--color-primary);
   transform: translateX(4px);
 }
 
@@ -104,7 +104,7 @@
 }
 
 .footer-contact-item:hover {
-  color: var(--color-white);
+  color: var(--color-primary);
   transform: translateX(4px);
 }
 
