@@ -17,9 +17,13 @@ async function doLogin(ev) {
     let resp;
     
     try {
-      resp = await fetch(apiUrl('/api/auth/login'), {
+      // Usar endpoint V2 que valida tenant baseado no Host
+      resp = await fetch(apiUrl('/api/auth/login/v2'), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Host': window.location.host  // Garante que o Host seja enviado corretamente
+        },
         body: JSON.stringify({ usuario, senha })
       });
     } catch (netErr) {
@@ -31,9 +35,18 @@ async function doLogin(ev) {
     if (!resp.ok) {
       // Mapear status para mensagens mais amigáveis
       if (resp.status === 401 || resp.status === 403) {
-      showLoginError('Login ou senha incorretos. Verifique e tente novamente.');
-      if (btn) { btn.textContent = originalTxt; btn.disabled = false; }
-      return;
+        // Tentar extrair mensagem específica do servidor
+        const errBody = await resp.json().catch(() => null);
+        const msg = errBody?.mensagem || errBody?.message || errBody?.error;
+        
+        // Se a mensagem menciona tenant, mostrar erro específico
+        if (msg && msg.toLowerCase().includes('tenant')) {
+          showLoginError('Usuário não pertence a este tenant. Verifique se você está acessando o domínio correto.');
+        } else {
+          showLoginError('Login ou senha incorretos. Verifique e tente novamente.');
+        }
+        if (btn) { btn.textContent = originalTxt; btn.disabled = false; }
+        return;
       }
       if (resp.status >= 500) {
       showLoginError('Erro no servidor. Tente novamente mais tarde.');
