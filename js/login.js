@@ -29,7 +29,7 @@ async function doLogin(ev) {
           'Content-Type': 'application/json',
           'X-Tenant-ID': currentTenant  // Envia o tenant ID no header
         },
-        body: JSON.stringify({ usuario, senha, tenantId: currentTenant })
+        body: JSON.stringify({ usuario, senha, tenantNome: currentTenant })
       });
     } catch (netErr) {
   showLoginError('Não foi possível conectar ao servidor. Verifique sua conexão.');
