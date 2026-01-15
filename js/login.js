@@ -22,12 +22,12 @@ async function doLogin(ev) {
     
     try {
       // Usar endpoint V2 que valida tenant baseado no Host
+      // O navegador já envia o header Host automaticamente
       resp = await fetch(apiUrl('/api/auth/login/v2'), {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'X-Tenant-ID': currentTenant,  // Envia o tenant ID no header
-          'Host': window.location.host   // Garante que o Host seja enviado corretamente
+          'X-Tenant-ID': currentTenant  // Envia o tenant ID no header
         },
         body: JSON.stringify({ usuario, senha, tenantId: currentTenant })
       });
@@ -39,7 +39,21 @@ async function doLogin(ev) {
 
     if (!resp.ok) {
       // Mapear status para mensagens mais amigáveis
-      if (resp.status === 401 || resp.status === 403) {
+      if (resp.status === 403) {
+        // Tentar extrair mensagem específica do servidor
+        const errBody = await resp.json().catch(() => null);
+        const msg = errBody?.mensagem || errBody?.message || errBody?.error;
+        
+        // Mostrar mensagem específica de tenant ou erro genérico
+        if (msg) {
+          showLoginError(msg);
+        } else {
+          showLoginError('Acesso negado. Verifique se você está acessando o domínio correto.');
+        }
+        if (btn) { btn.textContent = originalTxt; btn.disabled = false; }
+        return;
+      }
+      if (resp.status === 401) {
         // Tentar extrair mensagem específica do servidor
         const errBody = await resp.json().catch(() => null);
         const msg = errBody?.mensagem || errBody?.message || errBody?.error;
