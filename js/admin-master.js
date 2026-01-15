@@ -4,23 +4,16 @@
  */
 
 import { apiUrl } from './configuracao/config.js';
+import { 
+  getSuperAdminToken, 
+  setSuperAdminToken, 
+  clearSuperAdminAuth,
+  isSuperAdmin 
+} from './configuracao/auth.js';
 
 // =====================
-// AUTH SUPER ADMIN (isolado do tenant auth)
+// AUTH SUPER ADMIN (usa auth.js centralizado)
 // =====================
-const SUPER_ADMIN_TOKEN_KEY = 'superAdminToken';
-
-function getSuperAdminToken() {
-  return localStorage.getItem(SUPER_ADMIN_TOKEN_KEY);
-}
-
-function setSuperAdminToken(token) {
-  localStorage.setItem(SUPER_ADMIN_TOKEN_KEY, token);
-}
-
-function clearSuperAdminToken() {
-  localStorage.removeItem(SUPER_ADMIN_TOKEN_KEY);
-}
 
 function isAuthenticated() {
   return !!getSuperAdminToken();
@@ -46,7 +39,7 @@ async function fetchSuperAdmin(path, options = {}) {
   
   // Se 401/403, mostrar login novamente
   if (resp.status === 401 || resp.status === 403) {
-    clearSuperAdminToken();
+    clearSuperAdminAuth();
     showLoginModal();
     throw new Error('Não autorizado');
   }
@@ -59,13 +52,21 @@ async function fetchSuperAdmin(path, options = {}) {
  */
 async function doSuperAdminLogin(usuario, senha) {
   try {
-    // Primeiro tentar endpoint específico do super admin
-    let resp = await fetch(apiUrl('/api/auth/login'), {
+    // Usar endpoint específico do super admin/master
+    let resp = await fetch(apiUrl('/api/auth/login/master'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ usuario, senha })
     });
     
+    // Se não existir endpoint master, tentar o padrão
+    if (resp.status === 404) {
+      resp = await fetch(apiUrl('/api/auth/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, senha })
+      });
+    }
 
     if (!resp.ok) {
       if (resp.status === 401 || resp.status === 403) {
@@ -81,6 +82,7 @@ async function doSuperAdminLogin(usuario, senha) {
       throw new Error('Token não retornado');
     }
     
+    // Usar função centralizada do auth.js
     setSuperAdminToken(token);
     return true;
   } catch (err) {
@@ -762,10 +764,10 @@ function setupEventListeners() {
     updateStats();
   });
   
-  // Logout
+  // Logout - usa função centralizada do auth.js
   document.getElementById('btn-logout').addEventListener('click', () => {
     if (confirm('Deseja sair do painel?')) {
-      clearSuperAdminToken();
+      clearSuperAdminAuth();
       showLoginModal();
     }
   });

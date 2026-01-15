@@ -1,5 +1,5 @@
 import { apiUrl } from './configuracao/config.js';
-import { getAuthToken } from './configuracao/auth.js';
+import { getAuthToken, setAuthToken, getCurrentTenant, setCurrentTenant } from './configuracao/auth.js';
 
 async function doLogin(ev) {
   ev.preventDefault();
@@ -8,6 +8,10 @@ async function doLogin(ev) {
   const senha = form.querySelector('#password').value;
   const btn = form.querySelector('button[type="submit"]');
   const originalTxt = btn ? btn.textContent : '';
+  
+  // Detectar tenant atual
+  const currentTenant = getCurrentTenant();
+  
   try {
     // Validação básica antes de enviar
     if (!usuario) { showLoginError('Por favor, informe seu login.'); if (btn) { btn.disabled = false; btn.textContent = originalTxt; } return; }
@@ -65,7 +69,11 @@ async function doLogin(ev) {
     // suporte para { token } ou { data: { token } }
     const token = body.token || (body.data && body.data.token);
     if (!token) throw new Error('Token não retornado pelo servidor');
-    localStorage.setItem('authToken', token);
+    
+    // Salvar token específico do tenant
+    setAuthToken(token, currentTenant);
+    setCurrentTenant(currentTenant);
+    
     // redirecionar para painel
     window.location.href = '/painelAdm.html';
   } catch (e) {
@@ -208,7 +216,9 @@ document.addEventListener('DOMContentLoaded', () =>
   // Carregar branding do tenant primeiro
   loadTenantBranding();
   
-  if (getAuthToken()) {
+  // Verificar se já tem token para o tenant atual
+  const currentTenant = getCurrentTenant();
+  if (getAuthToken(currentTenant)) {
     window.location.replace('/painelAdm.html');
     return;
   }

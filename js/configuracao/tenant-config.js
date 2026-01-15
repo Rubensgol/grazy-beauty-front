@@ -9,6 +9,7 @@
 import { apiUrl } from './config.js';
 import { fetchWithAuth } from './http.js';
 import { LOG } from './logger.js';
+import { getAuthToken } from './auth.js';
 
 // Cache da configuração
 let cachedConfig = null;
@@ -290,11 +291,12 @@ export async function uploadLogo(file) {
     const formData = new FormData();
     formData.append('logo', file);
     
+    const token = getAuthToken();
     const res = await fetch(apiUrl('/api/config/logo'), {
       method: 'POST',
       body: formData,
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${token}`
       }
     });
     

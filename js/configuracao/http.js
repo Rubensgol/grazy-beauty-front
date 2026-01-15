@@ -1,28 +1,39 @@
 import { apiUrl } from './config.js';
 import { LOG } from './logger.js';
-import { clearAuth } from './auth.js';
+import { clearAuth, getAuthToken, getCurrentTenant } from './auth.js';
 
 // Flag para evitar múltiplos redirecionamentos simultâneos
 let isRedirecting = false;
 
+/**
+ * Obtém o token do tenant atual
+ */
 function getToken() {
-  try { return localStorage.getItem('authToken') || null; } catch { return null; }
+  return getAuthToken();
 }
 
 export async function fetchWithAuth(path, options = {}) {
   const url = path.startsWith('http') ? path : apiUrl(path);
   const headers = new Headers(options.headers || {});
   const token = getToken();
+  const currentTenant = getCurrentTenant();
+  
   if (token && !headers.has('Authorization')) {
     headers.set('Authorization', `Bearer ${token}`);
   }
+  
+  // Adicionar tenant no header para requisições multi-tenant
+  if (currentTenant && currentTenant !== 'default') {
+    headers.set('X-Tenant-ID', currentTenant);
+  }
+  
   if (!headers.has('Content-Type') && options.body && !(options.body instanceof FormData)) {
     headers.set('Content-Type', 'application/json');
   }
 
   // Log de diagnóstico
   try {
-    LOG.debug('[fetchWithAuth] request', { url, method: (options && options.method) || 'GET', hasToken: !!token, headers: Object.fromEntries(headers.entries()) });
+    LOG.debug('[fetchWithAuth] request', { url, method: (options && options.method) || 'GET', hasToken: !!token, tenant: currentTenant, headers: Object.fromEntries(headers.entries()) });
     const resp = await fetch(url, { ...options, headers });
     LOG.debug('[fetchWithAuth] response status', resp.status, 'for', url);
     
@@ -41,9 +52,9 @@ export async function fetchWithAuth(path, options = {}) {
       // Marcar que está redirecionando
       isRedirecting = true;
       
-      // Limpar token inválido/expirado
+      // Limpar token inválido/expirado do tenant atual
       clearAuth();
-      LOG.info('[fetchWithAuth] Token limpo devido a não autorização');
+      LOG.info('[fetchWithAuth] Token do tenant limpo devido a não autorização');
       
       // Verificar se já estamos na página de login para evitar loop
       const currentPath = window.location.pathname;
