@@ -26,9 +26,10 @@ async function doLogin(ev) {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Host': window.location.host  // Garante que o Host seja enviado corretamente
+          'X-Tenant-ID': currentTenant,  // Envia o tenant ID no header
+          'Host': window.location.host   // Garante que o Host seja enviado corretamente
         },
-        body: JSON.stringify({ usuario, senha })
+        body: JSON.stringify({ usuario, senha, tenantId: currentTenant })
       });
     } catch (netErr) {
   showLoginError('Não foi possível conectar ao servidor. Verifique sua conexão.');
