@@ -307,6 +307,9 @@ export function initConfiguracoes() {
   // Inicializar seção de identidade visual
   initIdentitySection();
   
+  // Inicializar seção de WhatsApp
+  initWhatsappSection();
+  
   // Inicializar seção de redes sociais
   initSocialSection();
   
@@ -954,6 +957,409 @@ async function saveAccountData() {
     if (saveBtn) {
       saveBtn.disabled = false;
       saveBtn.textContent = originalText;
+    }
+  }
+}
+
+// ============================================
+// SEÇÃO WHATSAPP
+// ============================================
+
+// Estado do WhatsApp
+let whatsappState = {
+  status: 'unknown', // 'open', 'close', 'connecting', 'error'
+  phoneNumber: '',
+  instanceName: '',
+  checkInterval: null
+};
+
+/**
+ * Inicializar seção de WhatsApp
+ */
+function initWhatsappSection() {
+  LOG.info('📱 Inicializando seção WhatsApp...');
+  
+  // Verificar status inicial
+  checkWhatsappStatus();
+  
+  // Conectar botão de atualizar QR Code
+  const refreshBtn = document.getElementById('whatsapp-refresh-qr');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => {
+      connectWhatsapp();
+    });
+  }
+  
+  // Conectar botão de cancelar
+  const cancelBtn = document.getElementById('whatsapp-cancel-connect');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      cancelWhatsappConnection();
+    });
+  }
+  
+  // Conectar botão de teste
+  const testBtn = document.getElementById('whatsapp-send-test');
+  if (testBtn) {
+    testBtn.addEventListener('click', () => {
+      sendWhatsappTest();
+    });
+  }
+}
+
+/**
+ * Verificar status da conexão WhatsApp
+ */
+async function checkWhatsappStatus() {
+  LOG.debug('🔍 Verificando status do WhatsApp...');
+  
+  try {
+    const response = await fetchWithAuth('/api/whatsapp/status');
+    
+    if (!response.ok) {
+      throw new Error('Erro ao verificar status');
+    }
+    
+    const data = await response.json();
+    LOG.debug('📊 Status WhatsApp:', data);
+    
+    updateWhatsappUI(data);
+    
+  } catch (error) {
+    LOG.error('Erro ao verificar status do WhatsApp:', error);
+    updateWhatsappUI({ status: 'error', message: 'Não foi possível verificar o status' });
+  }
+}
+
+/**
+ * Atualizar UI do WhatsApp baseado no status
+ */
+function updateWhatsappUI(data) {
+  const statusIcon = document.getElementById('whatsapp-status-icon');
+  const statusTitle = document.getElementById('whatsapp-status-title');
+  const statusDescription = document.getElementById('whatsapp-status-description');
+  const actionButtons = document.getElementById('whatsapp-action-buttons');
+  const qrContainer = document.getElementById('whatsapp-qr-container');
+  const testSection = document.getElementById('whatsapp-test-section');
+  
+  whatsappState.status = data.status;
+  whatsappState.phoneNumber = data.phoneNumber || '';
+  whatsappState.instanceName = data.instanceName || '';
+  
+  // Limpar botões
+  if (actionButtons) {
+    actionButtons.innerHTML = '';
+  }
+  
+  // Verificar se é modo legado
+  const isLegacyMode = data.instanceName === 'legacy' || (data.phoneNumber && data.phoneNumber.includes('Legado'));
+  
+  switch (data.status) {
+    case 'open':
+      // Conectado
+      if (statusIcon) {
+        statusIcon.innerHTML = `
+          <div class="w-12 h-12 rounded-full ${isLegacyMode ? 'bg-blue-100' : 'bg-green-100'} flex items-center justify-center">
+            <svg class="w-6 h-6 ${isLegacyMode ? 'text-blue-500' : 'text-green-500'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        `;
+      }
+      if (statusTitle) {
+        statusTitle.textContent = isLegacyMode ? '✅ Ativo (Modo Legado)' : '✅ Conectado';
+        statusTitle.className = `font-medium ${isLegacyMode ? 'text-blue-600' : 'text-green-600'}`;
+      }
+      if (statusDescription) {
+        if (isLegacyMode) {
+          statusDescription.textContent = 'WhatsApp funcionando via API oficial. Para usar QR Code, configure a Evolution API.';
+        } else {
+          statusDescription.textContent = data.phoneNumber 
+            ? `WhatsApp conectado como ${data.phoneNumber}`
+            : 'WhatsApp conectado e pronto para enviar mensagens';
+        }
+      }
+      if (actionButtons && !isLegacyMode) {
+        actionButtons.innerHTML = `
+          <button id="whatsapp-disconnect-btn" class="px-4 py-2 text-sm text-red-500 hover:text-red-700 border border-red-200 rounded-xl hover:bg-red-50 transition-colors">
+            Desconectar
+          </button>
+        `;
+        document.getElementById('whatsapp-disconnect-btn')?.addEventListener('click', disconnectWhatsapp);
+      }
+      if (qrContainer) qrContainer.classList.add('hidden');
+      if (testSection) testSection.classList.remove('hidden');
+      
+      // Parar verificação periódica
+      stopStatusCheck();
+      break;
+      
+    case 'connecting':
+      // Aguardando QR Code
+      if (statusIcon) {
+        statusIcon.innerHTML = `
+          <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+            <svg class="w-6 h-6 text-yellow-500 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </div>
+        `;
+      }
+      if (statusTitle) {
+        statusTitle.textContent = '⏳ Aguardando conexão...';
+        statusTitle.className = 'font-medium text-yellow-600';
+      }
+      if (statusDescription) {
+        statusDescription.textContent = 'Escaneie o QR Code com seu WhatsApp';
+      }
+      if (qrContainer) qrContainer.classList.remove('hidden');
+      if (testSection) testSection.classList.add('hidden');
+      break;
+      
+    case 'close':
+    default:
+      // Desconectado
+      if (statusIcon) {
+        statusIcon.innerHTML = `
+          <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+          </div>
+        `;
+      }
+      if (statusTitle) {
+        statusTitle.textContent = 'Não conectado';
+        statusTitle.className = 'font-medium text-gray-800';
+      }
+      if (statusDescription) {
+        statusDescription.textContent = data.message || 'Conecte seu WhatsApp para enviar notificações aos clientes';
+      }
+      if (actionButtons) {
+        actionButtons.innerHTML = `
+          <button id="whatsapp-connect-btn" class="px-6 py-2 text-sm font-medium text-white bg-green-500 rounded-xl hover:bg-green-600 transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            </svg>
+            Conectar
+          </button>
+        `;
+        document.getElementById('whatsapp-connect-btn')?.addEventListener('click', connectWhatsapp);
+      }
+      if (qrContainer) qrContainer.classList.add('hidden');
+      if (testSection) testSection.classList.add('hidden');
+      
+      // Parar verificação periódica
+      stopStatusCheck();
+      break;
+  }
+}
+
+/**
+ * Conectar WhatsApp (gerar QR Code)
+ */
+async function connectWhatsapp() {
+  LOG.info('📱 Iniciando conexão WhatsApp...');
+  
+  const qrContainer = document.getElementById('whatsapp-qr-container');
+  const qrCode = document.getElementById('whatsapp-qr-code');
+  
+  // Mostrar container do QR Code com loading
+  if (qrContainer) qrContainer.classList.remove('hidden');
+  if (qrCode) {
+    qrCode.innerHTML = `
+      <div class="text-center">
+        <svg class="w-12 h-12 text-gray-300 animate-spin mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <p class="text-sm text-gray-400 mt-2">Gerando QR Code...</p>
+      </div>
+    `;
+  }
+  
+  try {
+    const response = await fetchWithAuth('/api/whatsapp/connect', {
+      method: 'POST'
+    });
+    
+    const data = await response.json();
+    LOG.debug('📊 Resposta connect:', data);
+    
+    if (data.success && data.qrCode) {
+      // Mostrar QR Code
+      if (qrCode) {
+        qrCode.innerHTML = `<img src="${data.qrCode}" alt="QR Code WhatsApp" class="w-full h-full object-contain rounded-lg">`;
+      }
+      
+      // Atualizar status para connecting
+      updateWhatsappUI({ status: 'connecting' });
+      
+      // Iniciar verificação periódica do status
+      startStatusCheck();
+      
+    } else if (data.message && data.message.includes('já está conectado')) {
+      adicionarNotificacao('WhatsApp já está conectado!', 'success');
+      checkWhatsappStatus();
+    } else {
+      throw new Error(data.message || 'Erro ao gerar QR Code');
+    }
+    
+  } catch (error) {
+    LOG.error('Erro ao conectar WhatsApp:', error);
+    adicionarNotificacao(error.message || 'Erro ao conectar WhatsApp', 'error');
+    
+    if (qrCode) {
+      qrCode.innerHTML = `
+        <div class="text-center">
+          <svg class="w-12 h-12 text-red-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p class="text-sm text-red-400 mt-2">Erro ao gerar QR Code</p>
+        </div>
+      `;
+    }
+  }
+}
+
+/**
+ * Desconectar WhatsApp
+ */
+async function disconnectWhatsapp() {
+  if (!confirm('Tem certeza que deseja desconectar o WhatsApp?')) {
+    return;
+  }
+  
+  LOG.info('📱 Desconectando WhatsApp...');
+  
+  try {
+    const response = await fetchWithAuth('/api/whatsapp/disconnect', {
+      method: 'POST'
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      adicionarNotificacao('WhatsApp desconectado com sucesso', 'success');
+      checkWhatsappStatus();
+    } else {
+      throw new Error(data.message || 'Erro ao desconectar');
+    }
+    
+  } catch (error) {
+    LOG.error('Erro ao desconectar WhatsApp:', error);
+    adicionarNotificacao(error.message || 'Erro ao desconectar WhatsApp', 'error');
+  }
+}
+
+/**
+ * Cancelar conexão WhatsApp
+ */
+function cancelWhatsappConnection() {
+  LOG.info('❌ Cancelando conexão WhatsApp...');
+  
+  stopStatusCheck();
+  
+  const qrContainer = document.getElementById('whatsapp-qr-container');
+  if (qrContainer) qrContainer.classList.add('hidden');
+  
+  checkWhatsappStatus();
+}
+
+/**
+ * Iniciar verificação periódica do status
+ */
+function startStatusCheck() {
+  // Parar verificação anterior se existir
+  stopStatusCheck();
+  
+  LOG.debug('⏰ Iniciando verificação periódica do status...');
+  
+  // Verificar a cada 3 segundos
+  whatsappState.checkInterval = setInterval(async () => {
+    try {
+      const response = await fetchWithAuth('/api/whatsapp/status');
+      const data = await response.json();
+      
+      LOG.debug('📊 Status check:', data.status);
+      
+      // Se conectou, parar verificação e atualizar UI
+      if (data.status === 'open') {
+        stopStatusCheck();
+        updateWhatsappUI(data);
+        adicionarNotificacao('🎉 WhatsApp conectado com sucesso!', 'success');
+      }
+      
+    } catch (error) {
+      LOG.error('Erro na verificação periódica:', error);
+    }
+  }, 3000);
+}
+
+/**
+ * Parar verificação periódica
+ */
+function stopStatusCheck() {
+  if (whatsappState.checkInterval) {
+    clearInterval(whatsappState.checkInterval);
+    whatsappState.checkInterval = null;
+    LOG.debug('⏰ Verificação periódica parada');
+  }
+}
+
+/**
+ * Enviar mensagem de teste
+ */
+async function sendWhatsappTest() {
+  const numberInput = document.getElementById('whatsapp-test-number');
+  const sendBtn = document.getElementById('whatsapp-send-test');
+  
+  if (!numberInput || !numberInput.value.trim()) {
+    adicionarNotificacao('Digite um número de telefone', 'warning');
+    return;
+  }
+  
+  const phoneNumber = numberInput.value.trim();
+  const originalText = sendBtn?.innerHTML;
+  
+  // Desabilitar botão
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = `
+      <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      Enviando...
+    `;
+  }
+  
+  try {
+    const response = await fetchWithAuth('/api/whatsapp/test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        phoneNumber: phoneNumber,
+        message: '✅ Teste de integração WhatsApp - Grazy Beauty\n\nSe você recebeu esta mensagem, a conexão está funcionando corretamente!'
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      adicionarNotificacao('Mensagem de teste enviada com sucesso!', 'success');
+      numberInput.value = '';
+    } else {
+      throw new Error(data.message || 'Erro ao enviar mensagem');
+    }
+    
+  } catch (error) {
+    LOG.error('Erro ao enviar mensagem de teste:', error);
+    adicionarNotificacao(error.message || 'Erro ao enviar mensagem de teste', 'error');
+  } finally {
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = originalText;
     }
   }
 }
