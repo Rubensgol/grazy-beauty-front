@@ -1,0 +1,80 @@
+<!-- Tab: Notificações -->
+<div class="config-panel card-soft hidden" data-panel="notificacoes">
+    <div class="p-6 border-b">
+        <h3 class="text-xl font-semibold text-gray-800 font-playfair">Configurações de Notificação</h3>
+        <p class="text-sm text-gray-500 mt-1">Gerencie como seus clientes são notificados sobre os agendamentos.</p>
+    </div>
+    <div class="p-6 space-y-6">
+        <!-- Lembretes de Agendamento -->
+        <div>
+            <h4 class="text-lg font-medium text-gray-800 font-playfair">Lembretes de Agendamento</h4>
+            <div class="flex items-center justify-between mt-4">
+                <span class="text-gray-600">Ativar lembretes automáticos</span>
+                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Período de Envio -->
+        <div>
+             <h4 class="text-lg font-medium text-gray-800 font-playfair">Período de Envio</h4>
+             <p class="text-sm text-gray-500 mt-1 mb-4">Defina com que antecedência o lembrete deve ser enviado.</p>
+             <div class="flex items-center space-x-2">
+                <input type="number" value="24" class="w-20 border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+                <select class="border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+                    <option>Minutos antes</option>
+                    <option>Horas antes</option>
+                    <option>Dias antes</option>
+                </select>
+             </div>
+        </div>
+
+        <hr>
+
+        <!-- Canais de Notificação -->
+        <div>
+             <h4 class="text-lg font-medium text-gray-800 font-playfair">Canais de Notificação</h4>
+             <p class="text-sm text-gray-500 mt-1 mb-4">Selecione por onde as notificações serão enviadas.</p>
+             <div class="space-y-2">
+                <div class="flex items-center">
+                    <input id="whatsapp" name="whatsapp" type="checkbox" checked class="h-4 w-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500">
+                    <label for="whatsapp" class="ml-3 text-sm text-gray-600">WhatsApp</label>
+                </div>
+                <div class="flex items-center">
+                    <input id="sms" name="sms" type="checkbox" class="h-4 w-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500">
+                    <label for="sms" class="ml-3 text-sm text-gray-600">SMS</label>
+                </div>
+                <div class="flex items-center">
+                    <input id="email" name="email" type="checkbox" class="h-4 w-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500">
+                    <label for="email" class="ml-3 text-sm text-gray-600">E-mail</label>
+                </div>
+             </div>
+        </div>
+
+        <hr>
+
+        <!-- Resumo de Agendamentos -->
+        <div>
+            <h4 class="text-lg font-medium text-gray-800 font-playfair">Resumo de Agendamentos</h4>
+            <p class="text-sm text-gray-500 mt-1 mb-4">Receba um resumo diário dos agendamentos confirmados.</p>
+            <div class="flex items-center justify-between mt-4">
+                <span class="text-gray-600">Ativar resumo diário</span>
+                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" id="resumo-agendamentos-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                    <label for="resumo-agendamentos-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                </div>
+            </div>
+            <div id="resumo-email-container" class="mt-4">
+                <label for="resumo-email-input" class="block text-sm text-gray-600 mb-2">E-mail para receber resumo</label>
+                <input type="email" id="resumo-email-input" placeholder="seu@email.com" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+            </div>
+        </div>
+    </div>
+    <div class="p-6 bg-gray-50 text-right rounded-b-lg">
+        <button id="configuracoes-save-button" class="px-6 py-2 text-sm font-medium rounded-full btn-accent">Salvar Alterações</button>
+    </div>
+</div>
