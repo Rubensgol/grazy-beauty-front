@@ -296,10 +296,49 @@ async function salvarConfiguracoes() {
 }
 
 /**
+ * Carregar módulos HTML das subseções
+ */
+async function loadConfigModules() {
+  const modules = [
+    { container: 'config-identidade-container', file: 'pages/configuracoes/identidade.html' },
+    { container: 'config-whatsapp-container', file: 'pages/configuracoes/whatsapp.html' },
+    { container: 'config-notificacoes-container', file: 'pages/configuracoes/notificacoes.html' },
+    { container: 'config-redes-container', file: 'pages/configuracoes/redes-sociais.html' },
+    { container: 'config-conta-container', file: 'pages/configuracoes/conta.html' }
+  ];
+
+  const loadPromises = modules.map(async (module) => {
+    try {
+      LOG.debug(`📄 Carregando ${module.file}...`);
+      const response = await fetch(module.file);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      const html = await response.text();
+      const container = document.getElementById(module.container);
+      if (container) {
+        container.innerHTML = html;
+        LOG.debug(`✅ ${module.file} carregado`);
+      } else {
+        LOG.warn(`⚠️ Container ${module.container} não encontrado`);
+      }
+    } catch (err) {
+      LOG.error(`❌ Erro ao carregar ${module.file}:`, err);
+    }
+  });
+
+  await Promise.all(loadPromises);
+  LOG.info('✅ Todos os módulos de configuração carregados');
+}
+
+/**
  * Inicializar página de configurações
  */
-export function initConfiguracoes() {
+export async function initConfiguracoes() {
   LOG.info('🚀 Inicializando página de configurações...');
+  
+  // Carregar módulos HTML primeiro
+  await loadConfigModules();
   
   // Inicializar tabs
   initTabs();
