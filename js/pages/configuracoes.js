@@ -319,13 +319,25 @@ export function initConfiguracoes() {
   // Buscar configurações ao carregar
   buscarConfiguracoes();
   
-  // Conectar evento de clique do botão salvar notificações
-  const botaoSalvar = document.getElementById('configuracoes-save-button');
-  if (botaoSalvar) {
-    botaoSalvar.addEventListener('click', salvarConfiguracoes);
-    LOG.debug('✅ Botão salvar conectado');
+  // Conectar evento de clique do botão salvar usando delegação de eventos
+  // O botão é carregado dinamicamente, então usamos delegação no container pai
+  const notificacoesContainer = document.getElementById('config-notificacoes-container');
+  if (notificacoesContainer) {
+    notificacoesContainer.addEventListener('click', (e) => {
+      if (e.target && e.target.id === 'configuracoes-save-button') {
+        salvarConfiguracoes();
+      }
+    });
+    LOG.debug('✅ Delegação de evento para botão salvar configurada');
   } else {
-    LOG.warn('⚠️ Botão salvar não encontrado');
+    // Fallback: tentar conectar diretamente se o botão já existir
+    const botaoSalvar = document.getElementById('configuracoes-save-button');
+    if (botaoSalvar) {
+      botaoSalvar.addEventListener('click', salvarConfiguracoes);
+      LOG.debug('✅ Botão salvar conectado diretamente');
+    } else {
+      LOG.warn('⚠️ Container de notificações não encontrado');
+    }
   }
   
   LOG.info('✅ Página de configurações inicializada');
