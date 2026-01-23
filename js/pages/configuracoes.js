@@ -348,11 +348,13 @@ export function initConfiguracoes() {
  */
 function initTabs() {
   const tabs = document.querySelectorAll('.config-tab');
-  const panels = document.querySelectorAll('.config-panel');
   
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const targetPanel = tab.dataset.tab;
+      
+      // Buscar painéis dinamicamente (eles são carregados via fetch)
+      const panels = document.querySelectorAll('.config-panel');
       
       // Atualizar tabs ativas
       tabs.forEach(t => {
