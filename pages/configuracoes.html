@@ -33,30 +33,34 @@
 <script>
 // Carrega os módulos de configuração
 (function() {
-    // Usar caminho absoluto a partir da raiz do site
-    const basePath = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '').replace(/\/pages$/, '');
-    
     const modules = [
-        { container: 'config-identidade-container', file: '/pages/configuracoes/identidade.html' },
-        { container: 'config-whatsapp-container', file: '/pages/configuracoes/whatsapp.html' },
-        { container: 'config-notificacoes-container', file: '/pages/configuracoes/notificacoes.html' },
-        { container: 'config-redes-container', file: '/pages/configuracoes/redes-sociais.html' },
-        { container: 'config-conta-container', file: '/pages/configuracoes/conta.html' }
+        { container: 'config-identidade-container', file: 'configuracoes/identidade.html' },
+        { container: 'config-whatsapp-container', file: 'configuracoes/whatsapp.html' },
+        { container: 'config-notificacoes-container', file: 'configuracoes/notificacoes.html' },
+        { container: 'config-redes-container', file: 'configuracoes/redes-sociais.html' },
+        { container: 'config-conta-container', file: 'configuracoes/conta.html' }
     ];
 
     modules.forEach(module => {
-        const url = basePath + module.file;
-        fetch(url)
+        console.log(`Tentando carregar: ${module.file}`);
+        fetch(module.file)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
+                console.log(`✅ ${module.file} carregado com sucesso`);
                 return response.text();
             })
             .then(html => {
-                document.getElementById(module.container).innerHTML = html;
+                const container = document.getElementById(module.container);
+                if (container) {
+                    container.innerHTML = html;
+                    console.log(`✅ ${module.container} preenchido`);
+                } else {
+                    console.error(`❌ Container ${module.container} não encontrado`);
+                }
             })
-            .catch(err => console.error(`Erro ao carregar ${url}:`, err));
+            .catch(err => console.error(`❌ Erro ao carregar ${module.file}:`, err));
     });
 })();
 </script>
