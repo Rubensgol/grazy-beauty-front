@@ -240,6 +240,7 @@ export function setupEventListeners(state, loadTenants) {
   
   // Logout - usa modal bonito de confirmação
   const btnLogout = document.getElementById('btn-logout');
+  const btnLogoutMobile = document.getElementById('btn-logout-mobile');
   const modalLogoutAdmin = document.getElementById('modal-logout-admin');
   const btnLogoutCancel = document.getElementById('btn-logout-admin-cancel');
   const btnLogoutConfirm = document.getElementById('btn-logout-admin-confirm');
@@ -264,6 +265,13 @@ export function setupEventListeners(state, loadTenants) {
   
   if (btnLogout) {
     btnLogout.addEventListener('click', (e) => {
+      e.preventDefault();
+      showLogoutModal();
+    });
+  }
+  
+  if (btnLogoutMobile) {
+    btnLogoutMobile.addEventListener('click', (e) => {
       e.preventDefault();
       showLogoutModal();
     });
