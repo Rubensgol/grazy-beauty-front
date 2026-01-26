@@ -118,8 +118,8 @@
 
         <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
         <aside id="mobile-sidebar"
-            class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-30 transform -translate-x-full md:hidden">
-            <div class="flex items-center justify-center h-20 border-b border-gray-100 gap-2">
+            class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-30 transform -translate-x-full md:hidden flex flex-col">
+            <div class="flex items-center justify-center h-20 border-b border-gray-100 gap-2 flex-shrink-0">
                 <div class="tenant-logo-container h-8 w-8">
                     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8">
                         <text x="100" y="145" font-family="Georgia, serif" font-size="100" font-weight="300" text-anchor="middle" fill="#b5879d" letter-spacing="-6">GB</text>
@@ -127,8 +127,19 @@
                 </div>
                 <span class="tenant-name text-lg font-playfair font-bold text-gray-800">Grazy Beauty</span>
             </div>
-            <nav id="mobile-sidebar-nav" class="flex-1 px-4 py-6 space-y-2">
+            <nav id="mobile-sidebar-nav" class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             </nav>
+            <div class="px-4 py-6 border-t flex-shrink-0">
+                <a href="#" id="btn-logout-mobile"
+                    class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span class="ml-3">Sair</span>
+                </a>
+            </div>
         </aside>
 
         <div class="flex flex-col flex-1 overflow-y-auto">
