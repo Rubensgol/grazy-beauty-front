@@ -367,6 +367,68 @@
         </div>
     </div>
 
+    <!-- Modal Logout Confirmação -->
+    <div id="modal-logout-admin" class="fixed inset-0 z-50 hidden">
+        <div class="modal-logout-overlay fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="modal-logout-content bg-white rounded-2xl shadow-2xl w-full max-w-sm transform transition-all scale-95 opacity-0">
+                <div class="p-8 text-center">
+                    <div class="mx-auto w-20 h-20 gradient-bg rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Encerrar Sessão</h3>
+                    <p class="text-gray-500 mb-8">Tem certeza que deseja sair do painel de administração?</p>
+                    
+                    <div class="flex gap-3">
+                        <button id="btn-logout-admin-cancel" 
+                            class="flex-1 px-6 py-3 text-gray-600 font-medium bg-gray-100 hover:bg-gray-200 transition-colors rounded-xl">
+                            Cancelar
+                        </button>
+                        <button id="btn-logout-admin-confirm" 
+                            class="flex-1 px-6 py-3 text-white font-medium gradient-bg hover:opacity-90 transition-all rounded-xl">
+                            Sair
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #modal-logout-admin.show .modal-logout-overlay {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+        #modal-logout-admin.show .modal-logout-content {
+            animation: scaleIn 0.2s ease-out forwards;
+        }
+        #modal-logout-admin.hiding .modal-logout-overlay {
+            animation: fadeOut 0.15s ease-in forwards;
+        }
+        #modal-logout-admin.hiding .modal-logout-content {
+            animation: scaleOut 0.15s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes scaleOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+    </style>
+
     <script src="js/configuracao/env.js"></script>
     <script type="module" src="js/admin-master.js"></script>
 </body>

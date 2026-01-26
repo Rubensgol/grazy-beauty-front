@@ -15,9 +15,20 @@
         </div>
     </div>
     <div class="card-soft">
-        <div class="p-6 border-b flex justify-between items-center">
-            <h3 class="text-xl font-semibold text-gray-800">Últimas Transações</h3>
-            <button class="px-4 py-2 text-sm font-medium rounded-full btn-accent financeiro-add-transacao">Adicionar Transação</button>
+        <div class="p-6 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h3 class="text-xl font-semibold text-gray-800">Transações</h3>
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Filtros de Período -->
+                <div class="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+                    <button class="filtro-periodo px-3 py-1.5 text-sm rounded-md transition-colors active bg-white shadow-sm text-gray-800" data-periodo="dia">Dia</button>
+                    <button class="filtro-periodo px-3 py-1.5 text-sm rounded-md transition-colors text-gray-600 hover:text-gray-800" data-periodo="mes">Mês</button>
+                    <button class="filtro-periodo px-3 py-1.5 text-sm rounded-md transition-colors text-gray-600 hover:text-gray-800" data-periodo="ano">Ano</button>
+                    <button class="filtro-periodo px-3 py-1.5 text-sm rounded-md transition-colors text-gray-600 hover:text-gray-800" data-periodo="todos">Todos</button>
+                </div>
+                <!-- Seletor de Data -->
+                <input type="date" id="filtro-data-financeiro" class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500">
+                <button class="px-4 py-2 text-sm font-medium rounded-full btn-accent financeiro-add-transacao">Adicionar</button>
+            </div>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full">
@@ -27,6 +38,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">

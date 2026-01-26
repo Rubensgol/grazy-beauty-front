@@ -328,49 +328,6 @@ function renderTenantDetails(tenant) {
         </div>
       </div>
     </div>
-    
-    <!-- Métricas de Uso -->
-    <div class="mt-6 pt-6 border-t border-gray-100">
-      <label class="text-xs text-gray-400 uppercase tracking-wider mb-3 block">Uso do Plano</label>
-      <div class="bg-gray-50 rounded-xl p-4">
-        <div class="flex justify-between text-sm mb-2">
-          <span class="text-gray-600">Agendamentos no Mês</span>
-          <span class="font-semibold ${percentUso >= 90 ? 'text-red-600' : percentUso >= 70 ? 'text-yellow-600' : 'text-green-600'}">${agendamentosNoMes} / ${limiteAgendamentos}</span>
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-2">
-          <div class="h-2 rounded-full transition-all ${percentUso >= 90 ? 'bg-red-500' : percentUso >= 70 ? 'bg-yellow-500' : 'bg-green-500'}" style="width: ${percentUso}%"></div>
-        </div>
-        <p class="text-xs text-gray-400 mt-1">${percentUso}% utilizado</p>
-      </div>
-    </div>
-    
-    <!-- Links Rápidos -->
-    <div class="mt-6 pt-6 border-t border-gray-100">
-      <label class="text-xs text-gray-400 uppercase tracking-wider mb-3 block">Links Rápidos</label>
-      <div class="flex flex-wrap gap-3">
-        <a href="https://${subdominio}.grazybeauty.com.br" target="_blank" 
-           class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-          Visitar Site
-        </a>
-        <a href="https://${subdominio}.grazybeauty.com.br/painelAdm.html" target="_blank"
-           class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
-          </svg>
-          Painel Admin
-        </a>
-        <a href="https://${subdominio}.grazybeauty.com.br/login.html" target="_blank"
-           class="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-600 rounded-lg text-sm font-medium hover:bg-purple-100 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-          </svg>
-          Login
-        </a>
-      </div>
-    </div>
   `;
 }
 

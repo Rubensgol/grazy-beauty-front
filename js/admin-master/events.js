@@ -238,15 +238,59 @@ export function setupEventListeners(state, loadTenants) {
     });
   }
   
-  // Logout - usa função centralizada do auth.js
+  // Logout - usa modal bonito de confirmação
   const btnLogout = document.getElementById('btn-logout');
+  const modalLogoutAdmin = document.getElementById('modal-logout-admin');
+  const btnLogoutCancel = document.getElementById('btn-logout-admin-cancel');
+  const btnLogoutConfirm = document.getElementById('btn-logout-admin-confirm');
+  
+  function showLogoutModal() {
+    if (modalLogoutAdmin) {
+      modalLogoutAdmin.classList.remove('hidden', 'hiding');
+      modalLogoutAdmin.classList.add('show');
+    }
+  }
+  
+  function hideLogoutModal() {
+    if (modalLogoutAdmin) {
+      modalLogoutAdmin.classList.remove('show');
+      modalLogoutAdmin.classList.add('hiding');
+      setTimeout(() => {
+        modalLogoutAdmin.classList.add('hidden');
+        modalLogoutAdmin.classList.remove('hiding');
+      }, 150);
+    }
+  }
+  
   if (btnLogout) {
-    btnLogout.addEventListener('click', () => {
-      if (confirm('Deseja sair do painel?')) {
-        clearSuperAdminAuth();
-        showLoginModal();
-      }
+    btnLogout.addEventListener('click', (e) => {
+      e.preventDefault();
+      showLogoutModal();
     });
+  }
+  
+  if (btnLogoutCancel) {
+    btnLogoutCancel.addEventListener('click', hideLogoutModal);
+  }
+  
+  if (btnLogoutConfirm) {
+    btnLogoutConfirm.addEventListener('click', () => {
+      clearSuperAdminAuth();
+      hideLogoutModal();
+      showLoginModal();
+    });
+  }
+  
+  // Fechar com ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalLogoutAdmin && modalLogoutAdmin.classList.contains('show')) {
+      hideLogoutModal();
+    }
+  });
+  
+  // Fechar ao clicar no overlay
+  if (modalLogoutAdmin) {
+    modalLogoutAdmin.querySelector('.modal-logout-overlay')?.addEventListener('click', hideLogoutModal);
   }
   
   // Login Form

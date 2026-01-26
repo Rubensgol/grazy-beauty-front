@@ -55,7 +55,7 @@ function hideLogoutModal() {
  */
 function setupLogoutButton() {
     const logoutBtn = document.getElementById('btn-logout');
-    const mobileLogoutBtn = document.querySelector('#mobile-sidebar #btn-logout-mobile');
+    const mobileLogoutBtn = document.getElementById('btn-logout-mobile');
     
     const handleLogout = (e) => {
         e.preventDefault();

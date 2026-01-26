@@ -1,9 +1,10 @@
-<!-- Modal de Adicionar Transação Financeira -->
+<!-- Modal de Adicionar/Editar Transação Financeira -->
 <div id="modal-adicionar-transacao" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
   <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
     <button id="close-modal-adicionar-transacao" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
-    <h2 class="text-xl font-semibold mb-4 text-gray-800">Adicionar Transação Financeira</h2>
+    <h2 id="modal-transacao-titulo" class="text-xl font-semibold mb-4 text-gray-800">Adicionar Transação Financeira</h2>
     <form id="form-adicionar-transacao" class="space-y-4">
+      <input type="hidden" id="transacao-id" name="id" value="">
       <div>
         <label for="data-transacao" class="block text-sm font-medium text-gray-700">Data</label>
         <input type="date" id="data-transacao" name="data" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500" required>
@@ -23,8 +24,9 @@
         <label for="valor-transacao" class="block text-sm font-medium text-gray-700">Valor</label>
         <input type="number" id="valor-transacao" name="valor" step="0.01" min="0" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-gray-500 focus:border-gray-500" required>
       </div>
-      <div class="flex justify-end">
-        <button type="submit" class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700">Adicionar</button>
+      <div class="flex justify-end gap-2">
+        <button type="button" id="btn-cancelar-transacao" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">Cancelar</button>
+        <button type="submit" id="btn-salvar-transacao" class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700">Salvar</button>
       </div>
     </form>
   </div>
