@@ -108,11 +108,11 @@ function exibirErroHero() {
   
   // Usar conteúdo padrão elegante em vez de mensagem de erro
   if (heroTitle) {
-    heroTitle.innerHTML = 'Graziella<span class="hero-title-sub">Medeiros</span>';
+    heroTitle.innerHTML = 'Vitaly<span class="hero-title-sub">Hub</span>';
   }
   
   if (heroDescription) {
-    heroDescription.textContent = 'Especialista em maquiagem profissional. Transformando beleza em arte e momentos especiais em memórias inesquecíveis.';
+    heroDescription.textContent = 'Especialista em beleza e estética. Transformando beleza em arte e momentos especiais em memórias inesquecíveis.';
   }
   
   console.log('[hero] Usando conteúdo padrão');

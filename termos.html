@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Termos de Uso - Vitaly Hub">
+  <title>Termos de Uso - Vitaly Hub</title>
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --slate-blue: #334155;
+      --sage-green: #86efac;
+      --charcoal: #1f2937;
+      --cloud-white: #f8fafc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--charcoal);
+      line-height: 1.6;
+      background: var(--cloud-white);
+    }
+
+    .header {
+      background: white;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--slate-blue);
+    }
+
+    .logo-text span {
+      color: var(--charcoal);
+      font-weight: 600;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--slate-blue);
+      color: white;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+
+    .btn-back:hover {
+      background: var(--charcoal);
+    }
+
+    .btn-back svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .page-title {
+      text-align: center;
+      padding: 2rem 0;
+      background: linear-gradient(135deg, var(--slate-blue) 0%, var(--charcoal) 100%);
+      color: white;
+    }
+
+    .page-title h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title p {
+      opacity: 0.8;
+    }
+
+    .pdf-container {
+      padding: 2rem 0;
+    }
+
+    .pdf-wrapper {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .pdf-embed {
+      width: 100%;
+      height: calc(100vh - 280px);
+      min-height: 600px;
+      border: none;
+    }
+
+    .pdf-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: #f1f5f9;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .pdf-download a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--sage-green);
+      color: var(--charcoal);
+      text-decoration: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .pdf-download a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(134, 239, 172, 0.4);
+    }
+
+    .pdf-download svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .footer {
+      background: var(--charcoal);
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .footer p {
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .page-title h1 {
+        font-size: 1.75rem;
+      }
+
+      .pdf-embed {
+        height: 500px;
+        min-height: 400px;
+      }
+
+      .pdf-download {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <a href="vitaly-hub.html" class="logo">
+        <img src="images/favicon.svg" alt="Vitaly Hub">
+        <span class="logo-text">VITALY <span>HUB</span></span>
+      </a>
+      <a href="vitaly-hub.html" class="btn-back">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Voltar
+      </a>
+    </div>
+  </header>
+
+  <section class="page-title">
+    <div class="container">
+      <h1>Termos de Uso</h1>
+      <p>Última atualização: Janeiro de 2026</p>
+    </div>
+  </section>
+
+  <main class="pdf-container">
+    <div class="container">
+      <div class="pdf-wrapper">
+        <iframe src="termos.pdf" class="pdf-embed" title="Termos de Uso"></iframe>
+        <div class="pdf-download">
+          <span>Não consegue visualizar?</span>
+          <a href="termos.pdf" download>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Baixar PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 Vitaly Hub. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+</body>
+
+</html>

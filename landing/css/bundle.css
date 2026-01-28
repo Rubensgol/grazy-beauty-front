@@ -113,7 +113,7 @@ h6 {
 
 .btn-primary {
   background: var(--color-accent);
-  color: var(--charcoal);
+  color: var(--btn-primary-text, #ffffff);
   box-shadow: var(--shadow-md);
   border: 1px solid transparent;
   font-weight: 600;
@@ -121,6 +121,7 @@ h6 {
 
 .btn-primary:hover {
   background: var(--color-accent-hover);
+  color: var(--btn-primary-text, #ffffff);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }

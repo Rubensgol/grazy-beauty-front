@@ -1,10 +1,11 @@
 import { fetchWithAuth } from '../../js/configuracao/http.js';
 import { apiUrl } from '../../js/configuracao/config.js';
 
-// Função para buscar imagens do portfolio do backend
+// Função para buscar imagens do portfolio do backend (apenas as marcadas para landing)
 async function fetchPortfolioList() {
   try {
-    const res = await fetchWithAuth('/api/images');
+    // Usar endpoint específico para landing que retorna apenas imagens marcadas para exibir
+    const res = await fetchWithAuth('/api/images/landing');
     if (!res.ok) {
       throw new Error(`Status ${res.status}`);
     }

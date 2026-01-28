@@ -234,12 +234,45 @@ function adjustColor(hex, percent) {
 }
 
 /**
+ * Calcular luminância relativa de uma cor
+ */
+function getLuminance(hexColor) {
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.substr(0, 2), 16) / 255;
+  const g = parseInt(hex.substr(2, 2), 16) / 255;
+  const b = parseInt(hex.substr(4, 2), 16) / 255;
+  
+  const linearize = (c) => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  
+  return 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
+}
+
+/**
+ * Determinar se deve usar texto escuro ou claro com base na cor de fundo
+ */
+function getContrastTextColor(bgColor) {
+  const luminance = getLuminance(bgColor);
+  // Se a luminância for alta (cor clara), usar texto escuro
+  return luminance > 0.4 ? '#1f2937' : '#ffffff';
+}
+
+/**
  * Atualizar elementos com cor de destaque
  */
 function updateAccentElements(color) {
-  // Botões primários
+  // Calcular cor de texto com contraste adequado
+  const textColor = getContrastTextColor(color);
+  
+  // Definir variável CSS global para cor do texto dos botões
+  document.documentElement.style.setProperty('--btn-primary-text', textColor);
+  document.documentElement.style.setProperty('--color-accent', color);
+  document.documentElement.style.setProperty('--color-accent-hover', adjustColor(color, -15));
+  
+  // Botões primários - aplicar cor de fundo E cor de texto
   document.querySelectorAll('.btn-primary, .cta-button').forEach(btn => {
     btn.style.backgroundColor = color;
+    btn.style.color = textColor;
+    btn.style.borderColor = color;
   });
   
   // Links de destaque
@@ -348,12 +381,19 @@ function updateTagline(tagline) {
  * Atualizar logo
  */
 function updateLogo(logoUrl) {
-  const logos = document.querySelectorAll('.logo-image, .brand-logo');
+  console.log('[main] Atualizando logo para:', logoUrl);
+  
+  // Determinar URL completa
+  const logoHref = logoUrl.startsWith('http') || logoUrl.startsWith('data:')
+    ? logoUrl
+    : apiUrl(`/api/images/download/${encodeURIComponent(logoUrl)}`);
+  
+  const logos = document.querySelectorAll('.logo-image, .brand-logo, .logo-icon');
   logos.forEach(logo => {
     if (logo.tagName === 'IMG') {
-      logo.src = logoUrl;
+      logo.src = logoHref;
     } else {
-      logo.style.backgroundImage = `url(${logoUrl})`;
+      logo.style.backgroundImage = `url(${logoHref})`;
     }
   });
 }

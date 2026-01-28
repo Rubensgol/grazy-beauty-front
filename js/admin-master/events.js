@@ -146,17 +146,6 @@ export function setupEventListeners(state, loadTenants) {
     }
   }
   
-  // Gerar senha aleatória
-  const btnGerarSenha = document.getElementById('btn-gerar-senha');
-  if (btnGerarSenha) {
-    btnGerarSenha.addEventListener('click', () => {
-      const senhaInput = document.getElementById('senha-provisoria');
-      if (senhaInput) {
-        senhaInput.value = generatePassword(10);
-      }
-    });
-  }
-  
   // Form submit
   if (elements.formNewTenant) {
     elements.formNewTenant.addEventListener('submit', async (e) => {
@@ -167,7 +156,6 @@ export function setupEventListeners(state, loadTenants) {
       
       // Remover campos vazios opcionais
       if (!data.dominioCustomizado) delete data.dominioCustomizado;
-      if (!data.senhaProvisoria) delete data.senhaProvisoria;
       if (!data.telefoneAdmin) delete data.telefoneAdmin;
       
       // Remover checkbox do payload (não faz parte do DTO do backend)
@@ -235,6 +223,50 @@ export function setupEventListeners(state, loadTenants) {
       hideTenantDetailsModal();
       renderTenantsTable(state, (id) => openTenantDetails(id, state));
       updateStats(state);
+    });
+  }
+  
+  // Gerar Pagamento
+  const btnGeneratePayment = document.getElementById('btn-generate-payment');
+  if (btnGeneratePayment) {
+    btnGeneratePayment.addEventListener('click', async () => {
+      if (!state.currentTenant) return;
+      
+      const tenant = state.currentTenant;
+      const plano = tenant.plano || tenant.plan;
+      
+      if (plano === 'GRATUITO') {
+        showToast('warning', 'Plano Gratuito', 'Tenants em plano gratuito não possuem cobrança.');
+        return;
+      }
+      
+      if (!confirm(`Deseja gerar uma cobrança para "${tenant.nomeNegocio || tenant.businessName}"?`)) return;
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`/api/admin/master/tenants/${tenant.id}/gerar-pagamento`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Erro ao gerar pagamento');
+        }
+        
+        const result = await response.json();
+        showToast('success', 'Pagamento Gerado!', `Link de pagamento criado e enviado para o tenant.`);
+        
+        // Atualizar dados do tenant
+        await loadTenants();
+        
+      } catch (error) {
+        console.error('Erro ao gerar pagamento:', error);
+        showToast('error', 'Erro', error.message || 'Erro ao gerar pagamento. Tente novamente.');
+      }
     });
   }
   

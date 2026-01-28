@@ -63,7 +63,140 @@ export function wireServicoModal() {
         submitBtn.textContent = 'Salvar';
         delete submitBtn.dataset.originalText;
       }
+      // Esconder info de lucro e botão calcular
+      const lucroInfo = document.getElementById('servico-lucro-info');
+      const calcularBtn = document.getElementById('calcular-preco-btn');
+      if (lucroInfo) lucroInfo.classList.add('hidden');
+      if (calcularBtn) calcularBtn.classList.add('hidden');
+      // Resetar select para valor padrão
+      const custoTipoSelect = document.getElementById('servico-custo-tipo');
+      if (custoTipoSelect) custoTipoSelect.value = 'absoluto';
     }, 300);
+  }
+
+  // Calcular e mostrar lucro em tempo real
+  function calcularLucro() {
+    const custoInput = document.getElementById('servico-custo');
+    const custoTipoSelect = document.getElementById('servico-custo-tipo');
+    const precoInput = document.getElementById('servico-preco');
+    const lucroInfo = document.getElementById('servico-lucro-info');
+    const lucroValor = document.getElementById('servico-lucro-valor');
+    const lucroMargem = document.getElementById('servico-lucro-margem');
+    const lucroStatus = document.getElementById('servico-lucro-status');
+    
+    if (!custoInput || !precoInput || !lucroInfo) return;
+    
+    const custoRaw = parseFloat(custoInput.value) || 0;
+    const custoTipo = custoTipoSelect?.value || 'absoluto';
+    const preco = parseFloat(precoInput.value) || 0;
+    
+    // Calcular custo real (se percentual, calcular a partir do preço)
+    let custoReal = custoRaw;
+    if (custoTipo === 'percentual' && preco > 0) {
+      custoReal = (custoRaw / 100) * preco;
+    }
+    
+    if (custoReal > 0 && preco > 0) {
+      const lucro = preco - custoReal;
+      const margem = ((lucro / preco) * 100).toFixed(1);
+      
+      lucroValor.textContent = 'R$ ' + lucro.toFixed(2).replace('.', ',');
+      lucroMargem.textContent = margem;
+      lucroInfo.classList.remove('hidden');
+      
+      // Mudar cor e status baseado na margem
+      if (margem < 20) {
+        lucroInfo.className = 'p-3 bg-red-50 border border-red-200 rounded-lg';
+        lucroStatus.textContent = 'Baixa';
+        lucroStatus.className = 'text-xs px-2 py-1 rounded-full bg-red-100 text-red-700';
+      } else if (margem < 40) {
+        lucroInfo.className = 'p-3 bg-yellow-50 border border-yellow-200 rounded-lg';
+        lucroStatus.textContent = 'Razoável';
+        lucroStatus.className = 'text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700';
+      } else {
+        lucroInfo.className = 'p-3 bg-green-50 border border-green-200 rounded-lg';
+        lucroStatus.textContent = 'Ótimo';
+        lucroStatus.className = 'text-xs px-2 py-1 rounded-full bg-green-100 text-green-700';
+      }
+    } else {
+      lucroInfo.classList.add('hidden');
+    }
+  }
+  
+  // Calcular preço sugerido a partir de custo e margem
+  function calcularPrecoSugerido() {
+    const custoInput = document.getElementById('servico-custo');
+    const custoTipoSelect = document.getElementById('servico-custo-tipo');
+    const margemInput = document.getElementById('servico-margem');
+    const precoInput = document.getElementById('servico-preco');
+    
+    if (!custoInput || !margemInput || !precoInput) return;
+    
+    const custoRaw = parseFloat(custoInput.value) || 0;
+    const custoTipo = custoTipoSelect?.value || 'absoluto';
+    const margemDesejada = parseFloat(margemInput.value) || 40;
+    
+    if (custoRaw > 0 && margemDesejada > 0 && margemDesejada < 100) {
+      if (custoTipo === 'absoluto') {
+        // Preço = Custo / (1 - Margem/100)
+        const precoSugerido = custoRaw / (1 - margemDesejada / 100);
+        precoInput.value = precoSugerido.toFixed(2);
+      } else {
+        // Se custo é percentual, não podemos calcular sem um preço base
+        // Nesse caso, deixamos o usuário definir manualmente
+      }
+      calcularLucro();
+    }
+  }
+  
+  // Mostrar/ocultar botão de calcular baseado no preenchimento
+  function atualizarBotaoCalcular() {
+    const custoInput = document.getElementById('servico-custo');
+    const custoTipoSelect = document.getElementById('servico-custo-tipo');
+    const margemInput = document.getElementById('servico-margem');
+    const calcularBtn = document.getElementById('calcular-preco-btn');
+    
+    if (!calcularBtn) return;
+    
+    const custo = parseFloat(custoInput?.value) || 0;
+    const custoTipo = custoTipoSelect?.value || 'absoluto';
+    const margem = parseFloat(margemInput?.value) || 0;
+    
+    // Mostrar botão apenas se custo absoluto e margem estiverem preenchidos
+    if (custo > 0 && margem > 0 && custoTipo === 'absoluto') {
+      calcularBtn.classList.remove('hidden');
+    } else {
+      calcularBtn.classList.add('hidden');
+    }
+  }
+
+  // Adicionar listeners para cálculo de lucro
+  const custoInput = document.getElementById('servico-custo');
+  const custoTipoSelect = document.getElementById('servico-custo-tipo');
+  const margemInput = document.getElementById('servico-margem');
+  const precoInput = document.getElementById('servico-preco');
+  const calcularBtn = document.getElementById('calcular-preco-btn');
+  
+  if (custoInput) {
+    custoInput.addEventListener('input', () => {
+      calcularLucro();
+      atualizarBotaoCalcular();
+    });
+  }
+  if (custoTipoSelect) {
+    custoTipoSelect.addEventListener('change', () => {
+      calcularLucro();
+      atualizarBotaoCalcular();
+    });
+  }
+  if (margemInput) {
+    margemInput.addEventListener('input', atualizarBotaoCalcular);
+  }
+  if (precoInput) {
+    precoInput.addEventListener('input', calcularLucro);
+  }
+  if (calcularBtn) {
+    calcularBtn.addEventListener('click', calcularPrecoSugerido);
   }
 
   if (closeBtn) closeBtn.addEventListener('click', closeServicoModal);
@@ -120,11 +253,32 @@ export function wireServicoModal() {
     const minutos = parseInt(fd.get('servico-duracao-minutos'), 10) || 0;
     const duracaoMinutos = (horas * 60) + minutos;
 
+    const exibirLandingCheckbox = document.getElementById('servico-exibir-landing');
+    const custoTipoSelect = document.getElementById('servico-custo-tipo');
+    
+    // Calcular custo real (converter percentual para absoluto)
+    const preco = parseFloat(fd.get('servico-preco')) || 0;
+    let custoRaw = parseFloat(fd.get('servico-custo')) || 0;
+    const custoTipo = custoTipoSelect?.value || 'absoluto';
+    
+    let custoFinal = null;
+    if (custoRaw > 0 && preco > 0) {
+      if (custoTipo === 'percentual') {
+        custoFinal = (custoRaw / 100) * preco;
+      } else {
+        custoFinal = custoRaw;
+      }
+    } else if (custoRaw > 0) {
+      custoFinal = custoRaw;
+    }
+
     const data = {
       nome: fd.get('servico-nome'),
       descricao: fd.get('servico-descricao') || null,
-      preco: parseFloat(fd.get('servico-preco')) || 0,
+      preco: preco,
+      custo: custoFinal,
       duracaoMinutos: duracaoMinutos,
+      exibirLanding: exibirLandingCheckbox ? exibirLandingCheckbox.checked : true,
     };
 
     const imagemFile = fd.get('servico-imagem');
@@ -206,6 +360,16 @@ export function wireServicoModal() {
     form.querySelector('#servico-nome').value = servico.nome || '';
     form.querySelector('#servico-descricao').value = servico.descricao || '';
     form.querySelector('#servico-preco').value = servico.preco || '';
+    
+    // Preencher custo
+    const custoInput = form.querySelector('#servico-custo');
+    if (custoInput) custoInput.value = servico.custo || '';
+    
+    // Preencher checkbox exibirLanding
+    const exibirLandingCheckbox = form.querySelector('#servico-exibir-landing');
+    if (exibirLandingCheckbox) {
+      exibirLandingCheckbox.checked = servico.exibirLanding !== false;
+    }
 
     // Preencher duração a partir de duracaoMinutos
     let horas = 0;
@@ -224,6 +388,16 @@ export function wireServicoModal() {
 
     form.querySelector('#servico-duracao-horas').value = horas;
     form.querySelector('#servico-duracao-minutos').value = minutos;
+    
+    // Calcular lucro após preencher campos
+    const custoVal = parseFloat(servico.custo) || 0;
+    const precoVal = parseFloat(servico.preco) || 0;
+    if (custoVal > 0 && precoVal > 0) {
+      setTimeout(() => {
+        const event = new Event('input', { bubbles: true });
+        if (custoInput) custoInput.dispatchEvent(event);
+      }, 100);
+    }
 
     openServicoModal();
   });

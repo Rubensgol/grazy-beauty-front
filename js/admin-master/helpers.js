@@ -20,13 +20,14 @@ export function getPlanLabel(plan) {
     // Novos valores (backend)
     'GRATUITO': 'Gratuito',
     'BASICO': 'Básico',
+    'INTERMEDIARIO': 'Intermediário',
     'PROFISSIONAL': 'Profissional',
-    'ENTERPRISE': 'Enterprise',
     // Valores antigos (compatibilidade)
+    'ENTERPRISE': 'Profissional',
     'trial': 'Trial',
     'basic': 'Básico',
-    'pro': 'Pro',
-    'enterprise': 'Enterprise'
+    'pro': 'Profissional',
+    'enterprise': 'Profissional'
   };
   return labels[plan] || plan;
 }
@@ -103,15 +104,38 @@ export function generatePassword(length = 10) {
 }
 
 /**
- * Preços por plano
+ * Preços por plano (em reais)
  */
 export const planPrices = { 
-  'BASICO': 49.90, 
-  'PROFISSIONAL': 99.90, 
-  'ENTERPRISE': 199.90,
-  'basic': 49.90, 
-  'pro': 99.90, 
-  'enterprise': 199.90 
+  'GRATUITO': 0,
+  'BASICO': 40.00, 
+  'INTERMEDIARIO': 50.00,
+  'PROFISSIONAL': 70.00,
+  // Compatibilidade
+  'ENTERPRISE': 70.00,
+  'basic': 40.00, 
+  'pro': 70.00, 
+  'enterprise': 70.00 
+};
+
+/**
+ * Dias de trial por plano
+ */
+export const planTrialDays = {
+  'GRATUITO': 5,
+  'BASICO': 0,
+  'INTERMEDIARIO': 0,
+  'PROFISSIONAL': 0
+};
+
+/**
+ * Recursos por plano
+ */
+export const planFeatures = {
+  'GRATUITO': ['Painel Administrativo', '5 dias de teste'],
+  'BASICO': ['Painel Administrativo', 'Agenda ilimitada', 'Gestão de clientes'],
+  'INTERMEDIARIO': ['Painel Administrativo', 'Landing Page personalizada', 'Agenda ilimitada', 'Gestão de clientes'],
+  'PROFISSIONAL': ['Painel Administrativo', 'Landing Page personalizada', 'Domínio próprio', 'Agenda ilimitada', 'Gestão de clientes', 'Suporte prioritário']
 };
 
 /**

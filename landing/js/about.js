@@ -44,6 +44,8 @@ async function carregarAbout() {
       ? `/api/conteudo/${subdomain}` 
       : '/api/conteudo';
     
+    console.log('[about] Buscando conteúdo em:', apiUrl(endpoint));
+    
     const res = await fetch(apiUrl(endpoint));
     if (!res.ok) {
       console.warn('[about] Erro ao buscar conteúdo:', res.status);
@@ -52,9 +54,12 @@ async function carregarAbout() {
     }
 
     const json = await res.json();
+    console.log('[about] Resposta JSON completa:', json);
+    
     const dados = json.data?.about || json.about;
 
-    console.log('[about] Dados recebidos:', dados);
+    console.log('[about] Dados about extraídos:', dados);
+    console.log('[about] Stats presentes:', dados?.stats);
 
     // Verificar se há dados válidos
     if (!dados || (!dados.titulo && !dados.subtitulo && !dados.texto)) {
@@ -111,18 +116,44 @@ async function carregarAbout() {
     }
 
     // Atualizar estatísticas/destaques
-    if (dados.stats && Array.isArray(dados.stats)) {
-      const cards = document.querySelectorAll('.about-card');
+    const statsContainer = document.getElementById('about-stats');
+    const cards = document.querySelectorAll('.about-card');
+    
+    if (dados.stats && Array.isArray(dados.stats) && dados.stats.length > 0) {
+      // Verificar se há pelo menos um stat válido
+      const hasValidStats = dados.stats.some(stat => stat.numero && stat.texto);
       
-      dados.stats.forEach((stat, index) => {
-        if (cards[index] && stat.numero && stat.texto) {
-          const cardNumber = cards[index].querySelector('.card-number');
-          const cardLabel = cards[index].querySelector('.card-label');
-          
-          if (cardNumber) cardNumber.textContent = stat.numero;
-          if (cardLabel) cardLabel.textContent = stat.texto;
+      if (hasValidStats) {
+        dados.stats.forEach((stat, index) => {
+          if (cards[index]) {
+            const cardNumber = cards[index].querySelector('.card-number');
+            const cardLabel = cards[index].querySelector('.card-label');
+            
+            if (stat.numero && stat.texto) {
+              if (cardNumber) cardNumber.textContent = stat.numero;
+              if (cardLabel) cardLabel.textContent = stat.texto;
+              cards[index].style.display = '';
+            } else {
+              cards[index].style.display = 'none';
+            }
+          }
+        });
+        
+        // Esconder cards extras se houver menos stats
+        for (let i = dados.stats.length; i < cards.length; i++) {
+          cards[i].style.display = 'none';
         }
-      });
+        
+        if (statsContainer) statsContainer.style.display = '';
+        console.log('[about] Stats atualizados:', dados.stats);
+      } else {
+        // Sem stats válidos - esconder container
+        if (statsContainer) statsContainer.style.display = 'none';
+        console.log('[about] Nenhum stat válido encontrado');
+      }
+    } else {
+      // Sem stats - esconder container ou mostrar padrão
+      console.log('[about] Nenhum stat no retorno, usando padrão');
     }
 
     console.log('[about] About carregado com sucesso');
@@ -146,14 +177,14 @@ function exibirErroAbout() {
   }
   
   if (aboutSubtitle) {
-    aboutSubtitle.textContent = 'Conheça minha história';
+    aboutSubtitle.textContent = 'Conheça nossa história';
   }
   
   if (aboutText) {
     aboutText.innerHTML = `
-      <p>Sou Graziella Medeiros, maquiadora profissional apaixonada por transformar beleza em arte.</p>
-      <p>Com anos de experiência no mercado da beleza, meu objetivo é realçar a beleza natural de cada cliente, criando looks personalizados para ocasiões especiais, noivas, formaturas e eventos.</p>
-      <p>Acredito que a maquiagem tem o poder de elevar a autoestima e fazer cada pessoa se sentir única e especial.</p>
+      <p>Somos a Vitaly Hub, equipe especializada em beleza e estética.</p>
+      <p>Com anos de experiência no mercado da beleza, nosso objetivo é realçar a beleza natural de cada cliente, criando visuais personalizados para ocasiões especiais.</p>
+      <p>Acreditamos que a beleza tem o poder de elevar a autoestima e fazer cada pessoa se sentir única e especial.</p>
     `;
   }
   

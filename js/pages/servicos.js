@@ -45,7 +45,13 @@ function criarCardServico(servico) {
   if (!grid) return null;
   const nome = servico.nome || servico.nomeServico || '—';
   const preco = servico.preco !== undefined ? servico.preco : servico.valor;
+  const custo = servico.custo || 0;
   const descricao = servico.descricao || servico.description || '';
+  const exibirLanding = servico.exibirLanding !== false;
+  
+  // Calcular lucro
+  const lucro = preco && custo ? preco - custo : null;
+  const margem = preco && custo && preco > 0 ? ((lucro / preco) * 100).toFixed(0) : null;
   
   // Formatar duração a partir de duracaoMinutos
   let duracao = '';
@@ -85,7 +91,7 @@ function criarCardServico(servico) {
         ${imgUrl ? `<img src="${imgUrl}" alt="${nome}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='${placeholderSvg}'; this.classList.remove('object-cover', 'group-hover:scale-110'); this.classList.add('object-contain', 'opacity-50');">` : `<img src="${placeholderSvg}" alt="Sem imagem" class="w-full h-full object-contain opacity-50">`}
       </div>
       ${!isAtivo ? '<div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center"><span class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold text-sm uppercase">Inativo</span></div>' : ''}
-      <div class="absolute top-3 right-3 flex gap-2">
+      <div class="absolute top-3 right-3 flex gap-2 z-30">
         <button class="bg-[#b5879d] hover:bg-[#9f6b7f] text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" data-editar-servico="${servico.id || ''}" title="Editar serviço">
           <i class="fas fa-edit"></i>
         </button>
@@ -96,19 +102,35 @@ function criarCardServico(servico) {
           <i class="fas fa-trash"></i>
         </button>
       </div>
-      <div class="absolute top-3 left-3 bg-gray-800 bg-opacity-70 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300" title="Arrastar para reordenar">
-        <i class="fas fa-grip-vertical text-sm"></i>
+      <div class="absolute top-3 left-3 flex flex-col gap-2 z-30">
+        <div class="bg-gray-800 bg-opacity-70 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300" title="Arrastar para reordenar">
+          <i class="fas fa-grip-vertical text-sm"></i>
+        </div>
+        <button class="servico-landing-toggle cursor-pointer ${exibirLanding ? 'bg-yellow-500' : 'bg-gray-400'} hover:bg-yellow-600 text-white text-xs px-2 py-1 rounded-full font-medium shadow transition-colors" 
+                data-servico-id="${servico.id || ''}" 
+                data-exibir-landing="${exibirLanding}"
+                title="${exibirLanding ? 'Remover da landing page' : 'Adicionar à landing page'}">
+          ${exibirLanding ? '⭐ Landing' : '👁️ Oculto'}
+        </button>
       </div>
     </div>
     <div class="p-5 flex-grow flex flex-col">
       <h4 class="text-lg font-semibold text-gray-800 truncate font-playfair mb-2" title="${nome}">${nome}</h4>
       <p class="text-sm text-gray-600 mb-4 flex-grow line-clamp-3">${descricao || 'Sem descrição'}</p>
-      <div class="border-t pt-4 flex justify-between items-end">
-        <div class="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
-          <i class="fas fa-clock text-[#b5879d]"></i>
-          <span>${duracao || 'N/A'}</span>
+      <div class="border-t pt-4">
+        <div class="flex justify-between items-end mb-2">
+          <div class="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
+            <i class="fas fa-clock text-[#b5879d]"></i>
+            <span>${duracao || 'N/A'}</span>
+          </div>
+          <span class="text-2xl font-bold text-[#b5879d]">${formatPreco(preco)}</span>
         </div>
-        <span class="text-2xl font-bold text-[#b5879d]">${formatPreco(preco)}</span>
+        ${custo > 0 ? `
+        <div class="flex justify-between items-center text-xs text-gray-500 mt-2 pt-2 border-t border-dashed">
+          <span>Custo: ${formatPreco(custo)}</span>
+          <span class="${margem >= 40 ? 'text-green-600' : margem >= 20 ? 'text-yellow-600' : 'text-red-600'} font-medium">Lucro: ${formatPreco(lucro)} (${margem}%)</span>
+        </div>
+        ` : ''}
       </div>
     </div>`;
   return card;
@@ -225,6 +247,58 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   const pagina = document.getElementById('servicos');
   if (pagina && !pagina.classList.contains('hidden')) initServicosPage();
+  
+  // Delegated click para toggle landing (exibir/ocultar na landing page)
+  document.addEventListener('click', async (e) => {
+    const btnLanding = e.target.closest && e.target.closest('.servico-landing-toggle');
+    if (btnLanding) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const id = btnLanding.dataset.servicoId;
+      if (!id) return;
+      
+      const currentValue = btnLanding.dataset.exibirLanding === 'true';
+      const newValue = !currentValue;
+      
+      try {
+        LOG.debug('[servicos] alterando exibirLanding:', id, '->', newValue);
+        const res = await fetchWithAuth(`/api/servicos/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ exibirLanding: newValue })
+        });
+
+        if (!res.ok) {
+          throw new Error('Erro ao atualizar serviço');
+        }
+
+        // Atualizar UI
+        btnLanding.dataset.exibirLanding = newValue;
+        btnLanding.innerHTML = newValue ? '⭐ Landing' : '👁️ Oculto';
+        btnLanding.title = newValue ? 'Remover da landing page' : 'Adicionar à landing page';
+        
+        if (newValue) {
+          btnLanding.classList.remove('bg-gray-400');
+          btnLanding.classList.add('bg-yellow-500');
+          adicionarNotificacao('Serviço adicionado à landing page', 'success');
+        } else {
+          btnLanding.classList.remove('bg-yellow-500');
+          btnLanding.classList.add('bg-gray-400');
+          adicionarNotificacao('Serviço removido da landing page', 'info');
+        }
+        
+        // Atualizar cache
+        const servicoNoCache = servicosCache.find(s => String(s.id) === String(id));
+        if (servicoNoCache) {
+          servicoNoCache.exibirLanding = newValue;
+        }
+      } catch (err) {
+        LOG.error('[servicos] erro ao atualizar exibirLanding:', err);
+        adicionarNotificacao('Erro ao atualizar serviço: ' + err.message, 'error');
+      }
+    }
+  });
   
   // Delegated click para editar
   document.addEventListener('click', async (e) => {
