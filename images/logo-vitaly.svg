@@ -1,0 +1,14 @@
+<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Círculo com V (ícone) -->
+  <circle cx="30" cy="30" r="28" fill="#334155"/>
+  
+  <!-- V Estilizado -->
+  <path d="M15 15 L30 45 L30 35 L22 15 Z" fill="#86efac"/>
+  <path d="M45 15 L30 45 L30 35 L38 15 Z" fill="#f8fafc"/>
+  
+  <!-- Texto VITALY -->
+  <text x="68" y="32" font-family="Montserrat, Inter, sans-serif" font-size="22" font-weight="700" fill="#1f2937">VITALY</text>
+  
+  <!-- Texto HUB -->
+  <text x="150" y="32" font-family="Montserrat, Inter, sans-serif" font-size="22" font-weight="400" fill="#334155">HUB</text>
+</svg>

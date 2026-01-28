@@ -134,7 +134,7 @@ export function renderTenantsTable(state, onViewTenant) {
       <td class="px-6 py-4">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm" 
-               style="background-color: ${tenant.corPrimaria || tenant.config?.primaryColor || '#b5879d'}">
+               style="background-color: ${tenant.corPrimaria || tenant.config?.primaryColor || '#86efac'}">
             ${nome.charAt(0).toUpperCase()}
           </div>
           <div>
@@ -252,7 +252,10 @@ function renderTenantDetails(tenant) {
   const limiteAgendamentos = tenant.limiteAgendamentosMes || 50;
   const percentUso = Math.min(100, Math.round((agendamentosNoMes / limiteAgendamentos) * 100));
   const onboardingCompleto = tenant.onboardingCompleto || false;
-  const corPrimaria = tenant.corPrimaria || '#b5879d';
+  const corPrimaria = tenant.corPrimaria || '#86efac';
+  const diaPagamento = tenant.diaPagamento || null;
+  const enviarCobrancaWhatsapp = tenant.enviarCobrancaWhatsapp || false;
+  const enviarCobrancaEmail = tenant.enviarCobrancaEmail || false;
   
   content.innerHTML = `
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -328,7 +331,104 @@ function renderTenantDetails(tenant) {
         </div>
       </div>
     </div>
+    
+    <!-- Configuração de Cobrança -->
+    <div class="mt-6 border-t pt-6">
+      <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+        </svg>
+        Configuração de Pagamento
+      </h3>
+      <form id="form-pagamento" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Dia do Pagamento</label>
+          <input type="number" 
+                 id="dia-pagamento" 
+                 name="diaPagamento"
+                 min="1" 
+                 max="31" 
+                 value="${diaPagamento || ''}"
+                 placeholder="1-31"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+          <p class="text-xs text-gray-500 mt-1">Dia do mês para enviar cobrança automática</p>
+        </div>
+        <div class="flex flex-col gap-3">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" 
+                   id="enviar-whatsapp" 
+                   name="enviarWhatsapp"
+                   ${enviarCobrancaWhatsapp ? 'checked' : ''}
+                   class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+            <span class="text-sm font-medium text-gray-700">Enviar por WhatsApp</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" 
+                   id="enviar-email" 
+                   name="enviarEmail"
+                   ${enviarCobrancaEmail ? 'checked' : ''}
+                   class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+            <span class="text-sm font-medium text-gray-700">Enviar por Email</span>
+          </label>
+        </div>
+        <div class="md:col-span-2">
+          <button type="submit" 
+                  class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Salvar Configurações
+          </button>
+        </div>
+      </form>
+    </div>
   `;
+  
+  // Adiciona event listener para salvar configurações de pagamento
+  const formPagamento = document.getElementById('form-pagamento');
+  if (formPagamento) {
+    formPagamento.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const diaPagamento = document.getElementById('dia-pagamento').value;
+      const enviarWhatsapp = document.getElementById('enviar-whatsapp').checked;
+      const enviarEmail = document.getElementById('enviar-email').checked;
+      
+      if (!diaPagamento || diaPagamento < 1 || diaPagamento > 31) {
+        window.showToast?.('Dia de pagamento deve estar entre 1 e 31', 'error');
+        return;
+      }
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`/api/admin/master/tenants/${tenant.id}/dia-pagamento`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            diaPagamento: parseInt(diaPagamento),
+            enviarWhatsapp,
+            enviarEmail
+          })
+        });
+        
+        if (!response.ok) throw new Error('Erro ao salvar configurações');
+        
+        window.showToast?.('Configurações de pagamento atualizadas com sucesso!', 'success');
+        
+        // Atualiza o tenant no estado
+        tenant.diaPagamento = parseInt(diaPagamento);
+        tenant.enviarCobrancaWhatsapp = enviarWhatsapp;
+        tenant.enviarCobrancaEmail = enviarEmail;
+        
+      } catch (error) {
+        console.error('Erro ao salvar configurações de pagamento:', error);
+        window.showToast?.('Erro ao salvar configurações. Tente novamente.', 'error');
+      }
+    });
+  }
 }
 
 /**

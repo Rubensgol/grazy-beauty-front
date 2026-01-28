@@ -1,8 +1,13 @@
 :root {
-  /* Colors */
-  --color-primary: #b5879d;
-  --color-primary-hover: #a77e92;
-  --color-secondary: #2d3748;
+  /* Vitaly Hub Brand Colors */
+  --color-primary: #334155;       /* Slate Blue - professionalism, technology */
+  --color-accent: #86efac;        /* Sage Green - CTA, renewal, health */
+  --color-secondary: #1f2937;     /* Charcoal - authority, text */
+  --color-light: #f8fafc;         /* Cloud White - backgrounds, clean */
+  
+  /* Extended Palette */
+  --color-primary-hover: #475569;
+  --color-accent-hover: #77d99b;
   --color-dark: #1f2937;
   --color-gray-900: #111827;
   --color-gray-800: #1f2937;
@@ -16,8 +21,9 @@
   --color-gray-50: #f9fafb;
   --color-white: #ffffff;
   
-  --font-display: 'Playfair Display', serif;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Typography */
+  --font-display: 'Montserrat', 'Inter', sans-serif;
+  --font-sans: 'Open Sans', 'Roboto', 'Inter', system-ui, -apple-system, sans-serif;
   
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);

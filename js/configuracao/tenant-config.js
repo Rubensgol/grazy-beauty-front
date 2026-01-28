@@ -15,17 +15,17 @@ import { getAuthToken } from './auth.js';
 let cachedConfig = null;
 let configPromise = null;
 
-// Configuração padrão
+// Configuração padrão - Vitaly Hub Brand
 const DEFAULT_CONFIG = {
-  primaryColor: '#b5879d',
-  primaryColorHover: '#a77e92',
-  businessName: 'Grazy Beauty',
+  primaryColor: '#86efac',
+  primaryColorHover: '#77d99b',
+  businessName: 'Vitaly Hub',
   businessTagline: 'Beleza & Estética',
   logoUrl: null,
   faviconUrl: null,
   whatsappNumber: '5521976180101',
-  instagramUrl: 'https://instagram.com/grazyellamakeup',
-  facebookUrl: 'https://www.facebook.com/grazyellamakeup',
+  instagramUrl: 'https://instagram.com/vitalityhub',
+  facebookUrl: 'https://www.facebook.com/vitalityhub',
   email: 'contato@grazybeauty.com.br',
   address: '',
   onboardingCompleted: false
@@ -71,7 +71,13 @@ function applyCSSVariables(config) {
   const light = calculateLightColor(primary, 90);
   const extraLight = calculateLightColor(primary, 95);
   
-  // Cores principais
+  // Cores do tenant (variáveis base)
+  root.style.setProperty('--tenant-primary', primary);
+  root.style.setProperty('--tenant-primary-hover', hover);
+  root.style.setProperty('--tenant-primary-light', light);
+  root.style.setProperty('--tenant-primary-extra-light', extraLight);
+  
+  // Cores principais (compatibilidade)
   root.style.setProperty('--accent', primary);
   root.style.setProperty('--accent-hover', hover);
   root.style.setProperty('--accent-light', light);
@@ -111,7 +117,7 @@ function applyBranding(config) {
     // Update page title
     const currentTitle = document.title;
     if (!currentTitle.includes(config.businessName)) {
-      document.title = currentTitle.replace('Grazy Beauty', config.businessName);
+      document.title = currentTitle.replace('Vitality Hub', config.businessName);
     }
   }
   
@@ -155,7 +161,7 @@ function applyBranding(config) {
   if (config.instagramUrl) {
     const igLinks = document.querySelectorAll('[data-tenant-instagram], a[href*="instagram.com"]');
     igLinks.forEach(el => {
-      if (el.href && !el.href.includes('grazyella')) {
+      if (el.href && !el.href.includes('Vitality Hub')) {
         el.href = config.instagramUrl;
       }
     });
@@ -173,7 +179,7 @@ function mapBackendToFrontend(backendConfig) {
   return {
     primaryColor: backendConfig.corPrimaria || backendConfig.primaryColor,
     secondaryColor: backendConfig.corSecundaria || backendConfig.secondaryColor || '#2d3748',
-    primaryColorHover: backendConfig.primaryColorHover || calculateHoverColor(backendConfig.corPrimaria || '#b5879d'),
+    primaryColorHover: backendConfig.primaryColorHover || calculateHoverColor(backendConfig.corPrimaria || '#86efac'),
     businessName: backendConfig.nomeExibicao || backendConfig.nomeNegocio || backendConfig.businessName,
     businessTagline: backendConfig.slogan || backendConfig.businessTagline,
     tagline: backendConfig.slogan || backendConfig.tagline,

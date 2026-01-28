@@ -17,7 +17,7 @@ let configAtual = {
 let identityConfig = {
   businessName: '',
   tagline: '',
-  primaryColor: '#b5879d',
+  primaryColor: '#86efac',
   secondaryColor: '#2d3748',
   logoUrl: null,
   faviconUrl: null
@@ -533,7 +533,7 @@ async function loadIdentityConfig() {
       identityConfig = {
         businessName: config.businessName || '',
         tagline: config.tagline || '',
-        primaryColor: config.primaryColor || '#b5879d',
+        primaryColor: config.primaryColor || '#86efac',
         secondaryColor: config.secondaryColor || '#2d3748',
         logoUrl: config.logoUrl || null,
         faviconUrl: config.faviconUrl || null
@@ -1393,7 +1393,7 @@ async function sendWhatsappTest() {
       },
       body: JSON.stringify({
         phoneNumber: phoneNumber,
-        message: '✅ Teste de integração WhatsApp - Grazy Beauty\n\nSe você recebeu esta mensagem, a conexão está funcionando corretamente!'
+        message: '✅ Teste de integração WhatsApp - Vitality Hub\n\nSe você recebeu esta mensagem, a conexão está funcionando corretamente!'
       })
     });
     

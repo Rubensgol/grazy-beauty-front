@@ -1,11 +1,18 @@
 :root {
-  /* Colors */
-  --color-primary: #b5879d;
-  --color-primary-dark: #966b82;
-  --color-primary-light: #d4b0c2;
-  --color-primary-hover: #a77e92;
-  --color-secondary: #2d3748;
-  --color-accent: #db2777;
+  /* Vitaly Hub - Identidade Visual */
+  --slate-blue: #334155;
+  --sage-green: #86efac;
+  --charcoal: #1f2937;
+  --cloud-white: #f8fafc;
+  
+  /* Colors (Vitaly Hub Palette) */
+  --color-primary: #334155;
+  --color-primary-dark: #1f2937;
+  --color-primary-light: #475569;
+  --color-primary-hover: #475569;
+  --color-secondary: #1f2937;
+  --color-accent: #86efac;
+  --color-accent-hover: #77d99b;
 
   --color-dark: #1f2937;
   --color-gray-900: #111827;
@@ -20,8 +27,8 @@
   --color-gray-50: #f9fafb;
   --color-white: #ffffff;
 
-  --font-display: 'Playfair Display', serif;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Montserrat', 'Inter', sans-serif;
+  --font-sans: 'Inter', 'Open Sans', system-ui, -apple-system, sans-serif;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -105,15 +112,15 @@ h6 {
 }
 
 .btn-primary {
-  background: var(--color-primary);
-  color: var(--color-white);
+  background: var(--color-accent);
+  color: var(--charcoal);
   box-shadow: var(--shadow-md);
   border: 1px solid transparent;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: var(--color-primary);
-  filter: brightness(0.9);
+  background: var(--color-accent-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }

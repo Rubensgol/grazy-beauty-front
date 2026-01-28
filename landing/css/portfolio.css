@@ -1,5 +1,5 @@
 .portfolio {
-  background-color: var(--color-gray-50);
+  background-color: #f1f5f9;
 }
 
 .portfolio-grid {
@@ -16,7 +16,7 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--border-radius-xl);
-  background-color: var(--color-white);
+  background-color: #ffffff;
   box-shadow: var(--shadow-lg);
 }
 
@@ -35,7 +35,7 @@
 .portfolio-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  background: linear-gradient(to top, rgba(31, 41, 55, 0.85), transparent);
   opacity: 0;
   transition: var(--transition);
   display: flex;
@@ -48,26 +48,28 @@
 }
 
 .portfolio-info {
-  color: var(--color-white);
+  color: #f8fafc;
 }
 
 .portfolio-category {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--color-gray-200);
+  color: #86efac;
   margin-bottom: 0.5rem;
 }
 
 .portfolio-title {
   font-size: 1.5rem;
-  color: var(--color-white);
+  color: #f8fafc;
   letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
 }
 
 .portfolio-description {
-  color: var(--color-gray-200);
+  color: #e2e8f0;
 }
 
 .portfolio-caption {
@@ -78,14 +80,16 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--color-gray-500);
+  color: #334155;
   margin-bottom: 0.5rem;
 }
 
 .portfolio-caption h3 {
   font-size: 1.125rem;
-  color: var(--color-gray-900);
+  color: #1f2937;
   letter-spacing: -0.02em;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
 }
 
 .portfolio-more {

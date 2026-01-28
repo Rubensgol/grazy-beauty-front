@@ -15,7 +15,7 @@ export function preloadImages() {
 }
 
 export function logConsoleMessage() {
-  console.log('%c Grazy Beauty 💄', 'color: #b5879d; font-size: 24px; font-weight: bold;');
+  console.log('%c Vitality Hub 💄', 'color: #b5879d; font-size: 24px; font-weight: bold;');
   console.log('%c Desenvolvido com ♥ ', 'color: #6b7280; font-size: 12px;');
 }
 

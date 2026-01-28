@@ -4,7 +4,7 @@
   justify-content: center;
   padding: 0.75rem 1.5rem;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   border: none;
@@ -12,50 +12,51 @@
   cursor: pointer;
   transition: var(--transition);
   text-decoration: none;
-  font-family: var(--font-sans);
+  font-family: 'Open Sans', 'Roboto', var(--font-sans);
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background-color: #86efac;
+  color: #1f2937;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary);
-  filter: brightness(0.9);
+  background-color: #77d99b;
+  filter: brightness(1);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
 
 .btn-outline {
   background-color: transparent;
-  color: var(--color-gray-700);
-  border: 1px solid var(--color-gray-300);
+  color: #334155;
+  border: 1px solid #334155;
 }
 
 .btn-outline:hover {
-  background-color: var(--color-gray-50);
-  border-color: var(--color-gray-900);
+  background-color: #334155;
+  color: #f8fafc;
+  border-color: #334155;
 }
 
 .btn-outline-light {
   background-color: transparent;
-  color: var(--color-white);
-  border: 1px solid var(--color-white);
+  color: #f8fafc;
+  border: 1px solid #f8fafc;
 }
 
 .btn-outline-light:hover {
-  background-color: var(--color-white);
-  color: var(--color-gray-900);
+  background-color: #f8fafc;
+  color: #1f2937;
 }
 
 .btn-light {
-  background-color: var(--color-white);
-  color: var(--color-gray-900);
+  background-color: #f8fafc;
+  color: #1f2937;
 }
 
 .btn-light:hover {
-  background-color: var(--color-gray-100);
+  background-color: #f1f5f9;
 }
 
 .btn-lg {
@@ -70,18 +71,18 @@
 .link-button {
   background: none;
   border: none;
-  color: var(--color-gray-600);
+  color: #334155;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-size: 0.875rem;
   cursor: pointer;
-  border-bottom: 1px solid var(--color-gray-300);
+  border-bottom: 1px solid #334155;
   padding-bottom: 0.25rem;
   transition: var(--transition);
-  font-family: var(--font-sans);
+  font-family: 'Open Sans', 'Roboto', var(--font-sans);
 }
 
 .link-button:hover {
-  color: var(--color-gray-900);
-  border-color: var(--color-gray-900);
+  color: #1f2937;
+  border-color: #1f2937;
 }

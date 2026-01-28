@@ -1,17 +1,33 @@
 :root {
-    --accent: #b5879d;
-    --accent-hover: #a77e92;
-    --bg-soft: #f7f3f0;
-    --text-color: #333333;
+    /* Vitaly Hub - Identidade Visual (Padrão/Fallback) */
+    --slate-blue: #334155;
+    --sage-green: #86efac;
+    --charcoal: #1f2937;
+    --cloud-white: #f8fafc;
+    
+    /* Cores dinâmicas - Sobrescritas pelo tenant-config.js */
+    --accent: var(--tenant-primary, #86efac);
+    --accent-hover: var(--tenant-primary-hover, #77d99b);
+    --accent-light: var(--tenant-primary-light, #e8fdf0);
+    --accent-extra-light: var(--tenant-primary-extra-light, #f3fef7);
+    
+    /* Layout */
+    --bg-soft: #f8fafc;
+    --text-color: #1f2937;
+    
+    /* Cores do sistema */
+    --primary: var(--tenant-primary, #86efac);
+    --primary-hover: var(--tenant-primary-hover, #77d99b);
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'Open Sans', sans-serif;
     background-color: var(--bg-soft);
     color: var(--text-color);
 }
 h1, h2, h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', 'Inter', sans-serif;
+    font-weight: 600;
 }
 
 .sidebar-link.active {
@@ -20,7 +36,7 @@ h1, h2, h3 {
     border-radius: 1rem;
 }
 .sidebar-link:not(.active):hover {
-    background-color: rgba(181, 135, 157, 0.15);
+    background-color: var(--accent-extra-light, rgba(134, 239, 172, 0.15));
     color: var(--accent);
 }
 

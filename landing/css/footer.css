@@ -1,6 +1,6 @@
 .footer {
-  background-color: var(--color-secondary, var(--color-gray-900));
-  color: var(--color-white);
+  background-color: #1f2937;
+  color: #f8fafc;
   padding: 4rem 0;
 }
 
@@ -12,24 +12,27 @@
 }
 
 .footer-logo {
-  font-size: 2rem;
+  font-size: 1.5rem;
   letter-spacing: 0.05em;
   margin-bottom: 1.5rem;
-  font-family: var(--font-display);
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
 }
 
 .footer-logo .logo-main {
-  font-weight: 500;
+  font-weight: 700;
+  color: #f8fafc;
 }
 
 .footer-logo .logo-sub {
-  color: var(--color-gray-400);
-  margin-left: 0.5rem;
-  font-weight: 300;
+  color: #86efac;
+  margin-left: 0.25rem;
+  font-weight: 600;
 }
 
 .footer-description {
-  color: var(--color-gray-400);
+  color: #94a3b8;
   line-height: 1.7;
   margin-bottom: 1.5rem;
 }
@@ -42,17 +45,18 @@
 .footer-social a {
   width: 48px;
   height: 48px;
-  background-color: var(--color-gray-800);
+  background-color: #334155;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-white);
+  color: #f8fafc;
   transition: var(--transition);
 }
 
 .footer-social a:hover {
-  background-color: var(--color-primary);
+  background-color: #86efac;
+  color: #1f2937;
   transform: translateY(-2px);
 }
 
@@ -60,8 +64,10 @@
   font-size: 1.25rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-white);
+  color: #f8fafc;
   margin-bottom: 1.5rem;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
 }
 
 .footer-links {
@@ -72,7 +78,7 @@
 }
 
 .footer-links a {
-  color: var(--color-gray-400);
+  color: #94a3b8;
   text-decoration: none;
   text-transform: uppercase;
   font-size: 0.875rem;
@@ -82,7 +88,7 @@
 }
 
 .footer-links a:hover {
-  color: var(--color-primary);
+  color: #86efac;
   transform: translateX(4px);
 }
 
@@ -96,7 +102,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: var(--color-gray-400);
+  color: #94a3b8;
   font-size: 0.875rem;
   text-decoration: none;
   transition: var(--transition);
@@ -104,7 +110,7 @@
 }
 
 .footer-contact-item:hover {
-  color: var(--color-primary);
+  color: #86efac;
   transform: translateX(4px);
 }
 
@@ -113,19 +119,19 @@
 }
 
 .footer-bottom {
-  border-top: 1px solid var(--color-gray-800);
+  border-top: 1px solid #334155;
   padding-top: 2rem;
   text-align: center;
 }
 
 .footer-bottom p {
-  color: var(--color-gray-400);
+  color: #94a3b8;
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
 
 .footer-credit {
-  color: var(--color-gray-500);
+  color: #64748b;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;

@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bem-vindo! Configure seu Sistema</title>
     <link rel="stylesheet" href="css/tailwind.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/painelAdm.css">
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <meta name="api-base" content="https://grazybeauty.com.br">
     <style>
         :root {
-            --wizard-primary: #b5879d;
-            --wizard-primary-hover: #a77e92;
+            --wizard-primary: #86efac;
+            --wizard-primary-hover: #77d99b;
         }
         
         .wizard-gradient {
-            background: linear-gradient(135deg, var(--wizard-primary) 0%, #d4a5b9 100%);
+            background: linear-gradient(135deg, #334155 0%, #1f2937 100%);
         }
         
         .step-indicator {
@@ -33,11 +33,11 @@
         .step-indicator.active {
             background: var(--wizard-primary);
             color: white;
-            box-shadow: 0 4px 14px -3px rgba(181, 135, 157, 0.5);
+            box-shadow: 0 4px 14px -3px rgba(134, 239, 172, 0.5);
         }
         
         .step-indicator.completed {
-            background: #10b981;
+            background: #86efac;
             color: white;
         }
         
@@ -54,7 +54,7 @@
         }
         
         .step-line.completed {
-            background: #10b981;
+            background: #86efac;
         }
         
         .wizard-step {
@@ -100,12 +100,12 @@
         
         .logo-upload-area:hover {
             border-color: var(--wizard-primary);
-            background: rgba(181, 135, 157, 0.05);
+            background: rgba(134, 239, 172, 0.05);
         }
         
         .logo-upload-area.dragover {
             border-color: var(--wizard-primary);
-            background: rgba(181, 135, 157, 0.1);
+            background: rgba(134, 239, 172, 0.1);
         }
         
         .preview-card {
@@ -200,25 +200,19 @@
                         <div class="card-soft p-6">
                             <h3 class="font-semibold text-gray-700 mb-4">Cores Sugeridas</h3>
                             <div class="grid grid-cols-6 gap-3 mb-6">
-                                <div class="color-option selected" style="background: #b5879d" data-color="#b5879d" title="Rosa Elegante"></div>
-                                <div class="color-option" style="background: #9c6cba" data-color="#9c6cba" title="Roxo"></div>
-                                <div class="color-option" style="background: #61b3d7" data-color="#61b3d7" title="Azul"></div>
-                                <div class="color-option" style="background: #10b981" data-color="#10b981" title="Verde"></div>
-                                <div class="color-option" style="background: #f59e0b" data-color="#f59e0b" title="Amarelo"></div>
-                                <div class="color-option" style="background: #ef4444" data-color="#ef4444" title="Vermelho"></div>
-                                <div class="color-option" style="background: #ec4899" data-color="#ec4899" title="Pink"></div>
-                                <div class="color-option" style="background: #8b5cf6" data-color="#8b5cf6" title="Violeta"></div>
-                                <div class="color-option" style="background: #06b6d4" data-color="#06b6d4" title="Ciano"></div>
-                                <div class="color-option" style="background: #84cc16" data-color="#84cc16" title="Lima"></div>
-                                <div class="color-option" style="background: #f97316" data-color="#f97316" title="Laranja"></div>
-                                <div class="color-option" style="background: #6366f1" data-color="#6366f1" title="Indigo"></div>
+                                <div class="color-option selected" style="background: #86efac" data-color="#86efac" title="Sage Green"></div>
+                                <div class="color-option" style="background: #334155" data-color="#334155" title="Slate Blue"></div>
+                                <div class="color-option" style="background: #1f2937" data-color="#1f2937" title="Charcoal"></div>
+                                <div class="color-option" style="background: #f8fafc" data-color="#f8fafc" title="Cloud White"></div>
+                                <div class="color-option" style="background: #94a3b8" data-color="#94a3b8" title="Slate 400"></div>
+                                <div class="color-option" style="background: #e2e8f0" data-color="#e2e8f0" title="Slate 200"></div>
                             </div>
                             
                             <h3 class="font-semibold text-gray-700 mb-3">Ou escolha uma cor personalizada</h3>
                             <div class="flex items-center gap-3">
-                                <input type="color" id="custom-color" value="#b5879d" 
+                                <input type="color" id="custom-color" value="#86efac" 
                                     class="w-12 h-12 rounded-lg cursor-pointer border-0">
-                                <input type="text" id="color-hex" value="#b5879d" placeholder="#000000"
+                                <input type="text" id="color-hex" value="#86efac" placeholder="#000000"
                                     class="flex-1 px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-1"
                                     pattern="^#([A-Fa-f0-9]{6})$">
                             </div>
@@ -370,8 +364,8 @@
                                 <div class="flex items-center justify-between py-2 border-b border-gray-100">
                                     <span class="text-gray-500">Cor Principal</span>
                                     <div class="flex items-center gap-2">
-                                        <div id="summary-color" class="w-6 h-6 rounded" style="background: #b5879d"></div>
-                                        <span id="summary-color-hex" class="text-gray-700 font-medium">#b5879d</span>
+                                        <div id="summary-color" class="w-6 h-6 rounded" style="background: #86efac"></div>
+                                        <span id="summary-color-hex" class="text-gray-700 font-medium">#86efac</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between py-2 border-b border-gray-100">

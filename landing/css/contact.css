@@ -1,5 +1,5 @@
 .contact {
-  background-color: var(--color-white);
+  background-color: #f8fafc;
 }
 
 .contact-grid {
@@ -34,13 +34,13 @@
 .contact-icon {
   width: 64px;
   height: 64px;
-  background-color: var(--color-gray-100);
+  background-color: #f1f5f9;
   border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--color-primary);
+  color: #334155;
 }
 
 .contact-details h3 {
@@ -48,16 +48,19 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 0.5rem;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .contact-details p {
-  color: var(--color-gray-600);
+  color: #334155;
   margin-bottom: 0.25rem;
 }
 
 .contact-details small {
   font-size: 0.875rem;
-  color: var(--color-gray-500);
+  color: #64748b;
 }
 
 .social-section h3 {
@@ -65,6 +68,9 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 1.5rem;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .social-grid {
@@ -74,7 +80,7 @@
 }
 
 .social-card {
-  background-color: var(--color-gray-50);
+  background-color: #f1f5f9;
   border-radius: var(--border-radius-lg);
   padding: 1.5rem;
   text-align: center;
@@ -84,7 +90,13 @@
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  color: var(--color-gray-600);
+  color: #334155;
+}
+
+.social-card:hover {
+  background-color: #86efac;
+  color: #1f2937;
+  transform: translateY(-4px);
 }
 
 .form-header {
@@ -97,10 +109,13 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 0.5rem;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .form-header p {
-  color: var(--color-gray-600);
+  color: #334155;
 }
 
 .contact-form {
@@ -122,7 +137,7 @@
 }
 
 .form-group label {
-  color: var(--color-gray-700);
+  color: #334155;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-size: 0.875rem;
@@ -130,20 +145,20 @@
 }
 
 .form-group label .required {
-  color: var(--color-primary);
+  color: #86efac;
   margin-left: 0.25rem;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-gray-200);
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: var(--border-radius);
   padding: 0.75rem 1rem;
-  font-family: var(--font-sans);
+  font-family: 'Open Sans', 'Roboto', var(--font-sans);
   font-size: 1rem;
-  color: var(--color-gray-700);
+  color: #334155;
   transition: var(--transition);
 }
 
@@ -151,8 +166,8 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--color-gray-900);
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  border-color: #334155;
+  box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
 }
 
 .form-group input:invalid:not(:placeholder-shown),

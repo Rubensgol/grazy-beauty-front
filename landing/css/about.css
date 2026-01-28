@@ -1,5 +1,5 @@
 .about {
-  background-color: var(--color-white);
+  background-color: #f8fafc;
 }
 
 .about-grid {
@@ -19,7 +19,7 @@
 .about-text p {
   font-size: 1.125rem;
   line-height: 1.8;
-  color: var(--color-gray-600);
+  color: #334155;
 }
 
 .certifications h3 {
@@ -27,6 +27,9 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 1.5rem;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .cert-list {
@@ -44,20 +47,20 @@
 .cert-dot {
   width: 8px;
   height: 8px;
-  background-color: var(--color-primary);
+  background-color: #86efac;
   border-radius: 50%;
   margin-top: 0.75rem;
   flex-shrink: 0;
 }
 
 .cert-name {
-  color: var(--color-gray-900);
+  color: #1f2937;
   font-weight: 500;
 }
 
 .cert-org {
   font-size: 0.875rem;
-  color: var(--color-gray-500);
+  color: #64748b;
 }
 
 .about-images {
@@ -79,22 +82,22 @@
 }
 
 .about-card {
-  background-color: var(--color-gray-50);
+  background-color: #f1f5f9;
   padding: 2rem;
   border-radius: var(--border-radius-lg);
 }
 
 .card-number {
   font-size: 2rem;
-  font-weight: 600;
-  color: var(--color-gray-900);
+  font-weight: 700;
+  color: #1f2937;
   margin-bottom: 0.5rem;
-  font-family: var(--font-display);
+  font-family: 'Montserrat', 'Inter', sans-serif;
 }
 
 .card-label {
   font-size: 0.875rem;
-  color: var(--color-gray-600);
+  color: #334155;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
